@@ -1,0 +1,40 @@
+import argparse
+import configparser
+import os
+import pprint
+
+from LoadJob import LoadJob
+
+
+def get_config():
+    project_root = os.environ['PROJECT_ROOT']
+    config_file = "{project_root}/resources/config.ini".format(project_root=project_root)
+    config = configparser.ConfigParser()
+    config.read(config_file)
+    return config
+
+
+if __name__ == '__main__':
+    parser_args = {
+            '-d': {
+                    'help':           'Directory containing mapping files',
+                    'type':           str,
+                    'argument_count': 1
+                    }
+            }
+    cmdparser = argparse.ArgumentParser()
+    for argument_flag, argument_settings in parser_args.items():
+        cmdparser.add_argument(
+                argument_flag, type=argument_settings['type'],
+                nargs=argument_settings['argument_count'],
+                help=argument_settings['help'])
+    args = cmdparser.parse_args()
+    config = get_config()
+    loadjob = LoadJob.generate_load_job_from_folder(directory=args.d[0], connection_config=config)
+    loadjob.process_all_load_operations()
+    operations = loadjob.get_load_operation_names()
+    for operation in operations:
+        print("------------")
+        print(operation)
+        status = loadjob.get_load_job_status(operation)
+        pprint.pprint(status)

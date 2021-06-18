@@ -1,0 +1,22 @@
+{
+  "source_setting": {
+    "source": "SELECT u.* from (select * from patent.patent where id=10524402)p  join patent.uspatentcitation u on p.id = u.patent_id where year(p.date)=2020 order by u.uuid limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "patent_number": 1,
+      "cited_patent_number": 2,
+      "citation_date": 3,
+      "citation_kind": 5,
+      "citation_country": 6,
+      "citation_category": 7,
+      "citation_sequence": 8
+    },
+    "count_source": "SELECT count(1) from (select * from patent.patent where id=10524402)p  join patent.uspatentcitation u on p.id = u.patent_id where year(p.date)=2020 ",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "patent_citations_test",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}
