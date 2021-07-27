@@ -1,0 +1,21 @@
+{
+  "source_setting": {
+    "source": "select uuid(),citing_patent_id  as patent_number,  c.cited_application_id,  a.application_number as cited_application_number,  category,  c.`date`,  sequence from PatentsView_20210330.usapplicationcitation c  join (select * from PatentsView_20210330.patent where year=2020  and month(p.date) = 12)p on p.patent_id = c.citing_patent_id  left join pregrant_publications.application a  on a.document_number = SUBSTRING_INDEX(cited_application_id, '/', -1) where p.year = 2020  and month(p.date) = 12 order by p.patent_id limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "patent_number": 1,
+      "cited_application_number": 2,
+      "cited_application_document_number": 3,
+      "citation_date": 5,
+      "citation_category": 4,
+      "citation_sequence": 6
+    },
+    "count_source": "SELECT count(1) from  PatentsView_20210330.usapplicationcitation c  join (select * from PatentsView_20210330.patent where year=2020  and month(p.date) = 12 )p on p.patent_id = c.citing_patent_id",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "application_citations",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "source_setting": {
+    "source": "select u.id, u.id, um.id, u.title from PatentsView_20210330.uspc_subclass u left join PatentsView_20210330.uspc_mainclass um on SUBSTR(u.id, 1, INSTR(u.id, '/') - 1) = um.id order by u.id limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "uspc_subclass_title": 3,
+      "uspc_mainclass_id": 2,
+      "uspc_subclass_id": 1
+    },
+    "count_source": "SELECT count(1) from  PatentsView_20210330.uspc_subclass",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "uspc_subclasses",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}

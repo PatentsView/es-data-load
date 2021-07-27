@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "SELECT u.* from patent.patent p join patent.uspatentcitation u on p.id = u.patent_id where year(p.date)=2020 order by u.uuid limit {limit} offset {offset};",
+    "source": "SELECT u.* from patent.patent p join patent.uspatentcitation u on p.id = u.patent_id where year(p.date)=2020 and month(p.date) = 12 order by u.uuid limit {limit} offset {offset};",
     "field_mapping": {
       "uuid": 0,
       "patent_number": 1,
@@ -11,7 +11,7 @@
       "citation_category": 7,
       "citation_sequence": 8
     },
-    "count_source": "SELECT count(1) from patent.patent p join patent.uspatentcitation u on p.id = u.patent_id where year(p.date)=2020",
+    "count_source": "SELECT count(1) from  patent.patent p join patent.uspatentcitation u on p.id = u.patent_id where year(p.date)=2020  and month(p.date) = 12",
     "chunksize": 10000
   },
   "target_setting": {

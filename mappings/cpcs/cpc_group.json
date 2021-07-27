@@ -1,0 +1,24 @@
+{
+  "source_setting": {
+    "source": "select id, SUBSTR(id, 1, 3), id, title, num_assignees, num_inventors, num_patents, first_seen_date, last_seen_date, years_active from PatentsView_20210330.cpc_group  order by id limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "cpc_subsection_id": 1,
+      "cpc_group_id": 2,
+      "cpc_group_title": 3,
+      "cpc_group_num_assignees": 4,
+      "cpc_group_num_patents": 6,
+      "cpc_group_num_inventors": 5,
+      "cpc_group_first_seen_date": 7,
+      "cpc_group_last_seen_date": 8,
+      "cpc_group_years_active": 9
+    },
+    "count_source": "SELECT count(1) from  PatentsView_20210330.cpc_group",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "cpc_groups",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}

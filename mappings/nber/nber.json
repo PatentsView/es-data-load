@@ -1,0 +1,24 @@
+{
+  "source_setting": {
+    "source": "select n.id, nc.id, n.id, n.title, num_assignees, num_inventors, num_patents, first_seen_date, last_seen_date, years_active from PatentsView_20210330.nber_subcategory n left join PatentsView_20210330.nber_category nc on SUBSTR(n.id, 1, 1) = nc.id order by n.id limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "nber_category_id": 2,
+      "nber_subcategory_id": 1,
+      "nber_subcategory_title": 3,
+      "nber_subcategory_num_assignees": 4,
+      "nber_subcategory_num_patents": 6,
+      "nber_subcategory_num_inventors": 5,
+      "nber_subcategory_first_seen_date": 7,
+      "nber_subcategory_last_seen_date": 8,
+      "nber_subcategory_years_active": 9
+    },
+    "count_source": "SELECT count(1) from  PatentsView_20210330.nber_subcategory",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "nber_subcategories",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}

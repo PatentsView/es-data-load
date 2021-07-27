@@ -1,0 +1,17 @@
+{
+  "source_setting": {
+    "source": "select id,id,title from PatentsView_20210330.nber_category order by id limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "nber_category_title": 2,
+      "nber_category_id": 1
+    },
+    "count_source": "SELECT count(1) from  PatentsView_20210330.nber_category",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "nber_categories",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}
