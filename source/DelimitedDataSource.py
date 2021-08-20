@@ -26,4 +26,4 @@ class DelimitedDataSource(TabularDataSource):
         with open(filename) as fp:
             reader = csv.reader(fp, delimiter=self.delimiter)
             for line in reader:
-                yield {field_name: line[idx] for idx, field_name in field_mapping}
+                yield {field_name: line[idx] for idx, field_name in field_mapping.items()}
