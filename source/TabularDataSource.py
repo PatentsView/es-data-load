@@ -24,7 +24,7 @@ class TabularDataSource(ABC):
             for data_row in self.generate_source_chunk(source, offset=offset, **kwargs):
                 exists = True
                 pbar.update(1)
-                yield {field_name: data_row[idx] for field_name, idx in field_mapping.items()}
+                yield {field_name: data_row[idx] for idx, field_name in field_mapping.items()}
             if not exists or chunksize is None:
                 break
             offset = offset + chunksize
