@@ -12,8 +12,10 @@ class DelimitedDataSource(TabularDataSource):
         if config['SOURCE']['TYPE'] != 'delimited':
             raise Exception("Source type should be delimited")
         self.delimiter = config["SOURCE"]['DELIMITER']
+        if self.delimiter == 'tab':
+            self.delimiter = "\t"
 
-    def get_document_count(self,count_source):
+    def get_document_count(self, count_source):
         filename = count_source
         return csv_lines(filename, delimiter=self.delimiter)
 
