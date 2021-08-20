@@ -1,4 +1,5 @@
 import csv
+import sys
 
 
 def csv_lines(filename, *args, **kwargs):
