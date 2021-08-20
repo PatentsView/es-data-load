@@ -31,10 +31,11 @@ def generate_load_statistics(responses):
 
 
 class LoadJob:
-    def __init__(self, load_job_config, connection_config, source_type='mysql'):
+    def __init__(self, load_job_config, connection_config):
         self.load_operations = {}
         self.searchtarget = PatentsViewElasticSearch(connection_config)
-        self.data_source = get_source(connection_config)
+        source_type = connection_config['SOURCE']['TYPE']
+        self.data_source = get_source(connection_config, source_type)
         for load_job in load_job_config:
             self.add_load_operation(load_job, load_job_config[load_job])
 

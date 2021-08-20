@@ -11,7 +11,7 @@ class DelimitedDataSource(TabularDataSource):
         super().__init__()
         if config['SOURCE']['TYPE'] != 'delimited':
             raise Exception("Source type should be delimited")
-        self.delimiter = config["SOURCE"]['TYPE']
+        self.delimiter = config["SOURCE"]['DELIMITER']
 
     def get_document_count(self,count_source):
         filename = count_source
