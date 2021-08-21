@@ -21,7 +21,6 @@ class DelimitedDataSource(TabularDataSource):
 
     def generate_source_chunk(self, *args, **kwargs):
         filename = args[0]
-        field_mapping = kwargs.get('field_mapping')
         csv.field_size_limit(sys.maxsize)
         with open(filename) as fp:
             reader = csv.reader(fp, delimiter=self.delimiter)

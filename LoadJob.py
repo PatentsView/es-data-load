@@ -16,10 +16,17 @@ def get_source(config, source_type='mysql'):
 
 
 def generate_load_statistics(responses):
-    batch_count = len(responses)
-    record_count = sum([len(x['items']) for x in responses])
-    total_duration = sum([x['took'] for x in responses])
-    error_status = any([response['errors'] for response in responses])
+    batch_count = 0
+    record_count = 0
+    total_duration = 0
+    error_status = False
+    for response in responses:
+        batch_count += 1
+        record_count = record_count + len(response['items'])
+        total_duration += response['took']
+        if not error_status:
+            if response['errors']:
+                error_status = True
 
     return {
             'batches':      batch_count,
