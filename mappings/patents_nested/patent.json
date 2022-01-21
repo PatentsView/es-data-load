@@ -1,0 +1,23 @@
+{
+  "source_setting": {
+    "source": "SELECT p.patent_id as patent_number, p.title, p.type, p.country, p.date, p.year, p.abstract, p.kind, cpc.subgroup_id as first_cpc_subgroup_id FROM PatentsView_20210330.patent as p join (select patent_id, subgroup_id from PatentsView_20210330.cpc_current where sequence=0) as cpc on p.patent_id = cpc.patent_id where year(p.date)=2020 and month(p.date)>=9 order by p.patent_id limit {limit} offset {offset};",
+    "field_mapping": {
+      "patent_number": 0,
+      "title": 1,
+      "type": 2,
+      "country": 3,
+      "date": 4,
+      "year": 5,
+      "abstract": 6,
+      "kind": 7,
+      "first_cpc_subgroup_id": 8
+    },
+    "count_source": "SELECT count(1) FROM PatentsView_20210330.patent as p where year(p.date)=2020 and month(p.date)>=9;",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "patents_nested",
+    "indexing_batch_size": 10000,
+    "id_field": "patent_number"
+  }
+}

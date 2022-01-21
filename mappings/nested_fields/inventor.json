@@ -1,0 +1,24 @@
+{
+    "source_setting": {
+      "source": "SELECT i.inventor_id, i.name_first, i.name_last, l.city, l.state, l.country, l.latitude, l.longitude, pi.patent_id as patent_number from PatentsView_20210330.inventor as i join PatentsView_20210330.patent_inventor as pi on i.inventor_id = pi.inventor_id join PatentsView_20210330.location as l on pi.location_id = l.location_id where pi.patent_id in (select p.patent_id from PatentsView_20210330.patent as p where year(p.date)=2020 and month(p.date)>=9) ORDER BY i.inventor_id LIMIT {limit} offset {offset};",
+      "field_mapping": {
+        "inventor_id": 0,
+        "name_first": 1,
+        "name_last": 2,
+        "city": 3,
+        "state": 4,
+        "country": 5,
+        "latitude": 6,
+        "longitude": 7,
+        "patent_number": 8
+      },
+      "count_source": "SELECT count(i.inventor_id) FROM PatentsView_20210330.inventor as i join PatentsView_20210330.patent_inventor as pi on i.inventor_id = pi.inventor_id where pi.patent_id in (select p.patent_id FROM PatentsView_20210330.patent as p where year(p.date)=2020 and month(p.date)>=9);",
+      "chunksize": 10000
+    },
+    "target_setting": {
+      "index": "patents_nested",
+      "indexing_batch_size": 10000,
+      "id_field": "patent_number",
+      "nested_field": "inventors"
+    }
+  }

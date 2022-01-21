@@ -69,18 +69,19 @@ class LoadJob:
     def get_load_operation_names(self):
         return self.load_operations.keys()
 
-    def process_load_operation(self, name):
+    def process_load_operation(self, name, operation_type):
         operation = self.load_operations[name]
         document_source = self.data_source.document_generator(**operation['source_setting'])
         responses = self.searchtarget.bulk_load_es_documents(
                 documents=document_source,
-                load_config=operation['target_setting'])
+                load_config=operation['target_setting'],
+                verb=operation_type)
         load_stats = generate_load_statistics(responses)
         self.load_operations[name].update(load_stats)
 
-    def process_all_load_operations(self):
+    def process_all_load_operations(self, operation_type):
         for load_operation in self.load_operations:
-            self.process_load_operation(load_operation)
+            self.process_load_operation(load_operation, operation_type)
 
     def get_load_job_status(self, name=None):
         if name is None or name not in self.load_operations:

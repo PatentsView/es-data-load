@@ -1,0 +1,26 @@
+{
+    "source_setting": {
+      "source": "SELECT a.assignee_id, a.type, a.name_first, a.name_last, a.organization, l.city, l.state, l.country, l.latitude, l.longitude, pa.patent_id as patent_number from PatentsView_20210330.assignee as a join PatentsView_20210330.patent_assignee as pa on a.assignee_id = pa.assignee_id join PatentsView_20210330.location as l on pa.location_id = l.location_id where pa.patent_id in (select p.patent_id from PatentsView_20210330.patent as p where year(p.date)=2020 and month(p.date)>=9) ORDER BY a.assignee_id LIMIT {limit} offset {offset};",
+      "field_mapping": {
+        "assignee_id": 0,
+        "type": 1,
+        "name_first": 2,
+        "name_last": 3,
+        "organization": 4,
+        "city": 5,
+        "state": 6,
+        "country": 7,
+        "latitude": 8,
+        "longitude": 9,
+        "patent_number": 10
+      },
+      "count_source": "SELECT count(a.assignee_id) FROM PatentsView_20210330.assignee as a join PatentsView_20210330.patent_assignee as pa on a.assignee_id = pa.assignee_id where pa.patent_id in (select p.patent_id FROM PatentsView_20210330.patent as p where year(p.date)=2020 and month(p.date)>=9);",
+      "chunksize": 10000
+    },
+    "target_setting": {
+      "index": "patents_nested",
+      "indexing_batch_size": 10000,
+      "id_field": "patent_number",
+      "nested_field": "assignees"
+    }
+  }

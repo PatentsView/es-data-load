@@ -7,8 +7,8 @@ from LoadJob import LoadJob
 
 
 def get_config():
-    project_root = os.environ['PROJECT_ROOT']
-    config_file = "{project_root}/resources/config.ini".format(project_root=project_root)
+    #project_root = os.environ['PROJECT_ROOT']
+    config_file = "./resources/config.ini"
     config = configparser.ConfigParser()
     config.read(config_file)
     return config
@@ -20,7 +20,12 @@ if __name__ == '__main__':
                     'help':           'Directory containing mapping files',
                     'type':           str,
                     'argument_count': 1
-                    }
+                    },
+            '-o': {
+                    'help':             'Type of operation (create or update)',
+                    'type':             str,
+                    'argument_count':   1
+            }
             }
     cmdparser = argparse.ArgumentParser()
     for argument_flag, argument_settings in parser_args.items():
@@ -31,7 +36,7 @@ if __name__ == '__main__':
     args = cmdparser.parse_args()
     config = get_config()
     loadjob = LoadJob.generate_load_job_from_folder(directory=args.d[0], connection_config=config)
-    loadjob.process_all_load_operations()
+    loadjob.process_all_load_operations(args.o[0])
     operations = loadjob.get_load_operation_names()
     for operation in operations:
         print("------------")
