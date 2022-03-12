@@ -6,7 +6,6 @@ from source.TabularDataSource import TabularDataSource
 
 
 class DelimitedDataSource(TabularDataSource):
-
     def __init__(self, config):
         super().__init__()
         if config['SOURCE']['TYPE'] != 'delimited':
@@ -21,8 +20,9 @@ class DelimitedDataSource(TabularDataSource):
 
     def generate_source_chunk(self, *args, **kwargs):
         filename = args[0]
+        field_mapping = args[1]
         csv.field_size_limit(sys.maxsize)
         with open(filename) as fp:
             reader = csv.reader(fp, delimiter=self.delimiter)
             for line in reader:
-                yield line
+                yield {field_name: line[idx] for field_name, idx in field_mapping.items()}
