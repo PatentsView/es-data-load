@@ -1,0 +1,80 @@
+{
+  "source_setting": {
+    "source": "SELECT patent_number, title, type, country, date, year, abstract, kind, first_cpc_subgroup_id,num_foreign_documents_cited, num_us_applications_cited, num_us_patents_cited,num_total_documents_cited, num_times_cited_by_us_patents, earliest_application_date,patent_processing_days, uspc_current_mainclass_average_patent_processing_days,cpc_current_group_average_patent_processing_days, term_extension, detail_desc_length from tmp.es_patents where year(date)=2020 and month(date)  > 9 order by patent_number limit {limit} offset {offset};",
+    "field_mapping": {
+      "patent_number": 0,
+      "patent_title": 1,
+      "patent_type": 2,
+      "patent_country": 3,
+      "patent_date": 4,
+      "patent_year": 5,
+      "patent_abstract": 6,
+      "patent_kind": 7,
+      "patent_first_cpc_subgroup_id": 8,
+      "patent_num_foreign_documents_cited": 9,
+      "patent_num_us_applications_cited": 10,
+      "patent_num_us_patents_cited": 11,
+      "patent_num_total_documents_cited": 12,
+      "patent_num_times_cited_by_us_patents": 13,
+      "patent_earliest_application_date": 14,
+      "patent_patent_processing_days": 15,
+      "patent_uspc_current_mainclass_average_patent_processing_days": 16,
+      "patent_cpc_current_group_average_patent_processing_days": 17,
+      "patent_term_extension": 18,
+      "patent_detail_desc_length": 19
+    },
+    "key_field": "patent_number",
+    "nested_fields": {
+      "assignees_at_grant": {
+        "source": "SELECT assignee_id, type, name_first, name_last, organization, city, state, country,latitude, longitude, a.patent_number, sequence from tmp.es_assignees a join (select patent_number from tmp.es_patents where year(date)=2020 and month(date)  > 9 order by patent_number limit {limit} offset {offset})p on p.patent_number=a.patent_number",
+        "field_mapping": {
+          "assignee_id": 0,
+          "type": 1,
+          "name_first": 2,
+          "name_last": 3,
+          "organization": 4,
+          "city": 5,
+          "state": 6,
+          "country": 7,
+          "latitude": 8,
+          "longitude": 9,
+          "patent_number": 10,
+          "sequence": 11
+        }
+      },
+      "inventors_at_grant": {
+        "source": "select inventor_id, name_first, name_last, city, state, country, latitude, longitude, p.patent_number, sequence from tmp.es_inventors i join (select patent_number from tmp.es_patents where year(date)=2020 and month(date)  > 9 order by patent_number limit {limit} offset {offset})p on p.patent_number=i.patent_number",
+        "field_mapping": {
+          "inventor_id": 0,
+          "name_first": 1,
+          "name_last": 2,
+          "city": 3,
+          "state": 4,
+          "country": 5,
+          "latitude": 6,
+          "longitude": 7,
+          "patent_number": 8,
+          "sequence": 9
+        }
+      },
+      "cpc_current": {
+        "source": "select cpc.sequence, cpc.section_id, cpc.subsection_id, cpc.group_id, cpc.subgroup_id, patent_id as patent_number from PatentsView_20210930.cpc_current as cpc join (select patent_number from tmp.es_patents where year(date)=2020 and month(date)  > 9  order by patent_number limit {limit} offset {offset})p on p.patent_number=cpc.patent_id",
+        "field_mapping": {
+          "sequence": 0,
+          "section_id": 1,
+          "subsection_id": 2,
+          "group_id": 3,
+          "subgroup_id": 4,
+          "patent_number": 5
+        }
+      }
+    },
+    "count_source": "SELECT count(1) FROM tmp.es_patents where year(date)=2020 and month(date)  > 9",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "patents",
+    "indexing_batch_size": 10000,
+    "id_field": "patent_number"
+  }
+}
