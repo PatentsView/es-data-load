@@ -1,0 +1,38 @@
+{
+  "source_setting": {
+    "source": "select inventor_id, name_first, name_last, num_patents, num_assignees,  lastknown_city, lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude, first_seen_date, last_seen_date, years_active from PatentsView_20210930.inventor order by inventor_id LIMIT {limit} offset {offset};",
+    "field_mapping": {
+      "first_seen_date": 10,
+      "inventor_id": 0,
+      "last_seen_date": 11,
+      "lastknown_city": 5,
+      "lastknown_country": 7,
+      "lastknown_latitude": 8,
+      "lastknown_longitude": 9,
+      "lastknown_state": 6,
+      "name_first": 1,
+      "name_last": 2,
+      "num_assignees": 4,
+      "num_patents": 3,
+      "years_active": 12
+    },
+    "key_field": "inventor_id",
+    "nested_fields": {
+      "inventor_years": {
+        "source": "select d.inventor_id,d.patent_year, d.num_patents from PatentsView_20210930.inventor_year d join (select inventor_id from PatentsView_20210930.inventor order by inventor_id LIMIT {limit} offset {offset}) p on p.inventor_id=d.inventor_id",
+        "field_mapping": {
+          "inventor_id": 0,
+          "inventor_years.year": 1,
+          "inventor_years.num_patents": 2
+        }
+      }
+    },
+    "count_source": "select count(1) from  PatentsView_20210930.inventor",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "inventors",
+    "indexing_batch_size": 10000,
+    "id_field": "inventor_id"
+  }
+}

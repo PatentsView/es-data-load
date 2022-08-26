@@ -4,6 +4,24 @@ from source.TabularDataSource import TabularDataSource
 
 
 class MySQLDataSource(TabularDataSource):
+    def execute_query(self, query):
+        attempt = 0
+        while True:
+            try:
+                with self.connection.cursor() as source_cursor:
+                    source_cursor.execute(query=query)
+                    yield from source_cursor
+                break
+            except BrokenPipeError:
+                attempt += 1
+                if attempt > 3:
+                    raise
+                self.connect()
+                continue
+            except pymysql.Error as e:
+                print(query)
+                raise e
+
     def __init__(self, config):
         if config['SOURCE']['TYPE'] != 'mysql':
             raise Exception("Source type should be mysql")
@@ -29,18 +47,7 @@ class MySQLDataSource(TabularDataSource):
         limit = int(kwargs.get('chunksize', 10000))
         offset = int(kwargs.get('offset'))
         query_template = args[0]
+        mapping = args[1]
         query = query_template.format(limit=limit, offset=offset)
-        attempt = 0
-        while True:
-            try:
-                with self.connection.cursor() as source_cursor:
-                    source_cursor.execute(query=query)
-                    for data_row in source_cursor:
-                        yield data_row
-                break
-            except BrokenPipeError:
-                attempt += 1
-                if attempt > 3:
-                    raise
-                self.connect()
-                continue
+        for record in self.execute_query(query=query):
+            yield {field_name: record[idx] for field_name, idx in mapping.items()}

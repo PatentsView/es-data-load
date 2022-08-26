@@ -29,12 +29,12 @@ def generate_load_statistics(responses):
                 error_status = True
 
     return {
-            'batches':      batch_count,
-            'record_count': record_count,
-            'complete':     True,
-            'success':      not error_status,
-            'duration':     total_duration
-            }
+        'batches': batch_count,
+        'record_count': record_count,
+        'complete': True,
+        'success': not error_status,
+        'duration': total_duration
+    }
 
 
 class LoadJob:
@@ -61,9 +61,9 @@ class LoadJob:
 
     def add_load_operation(self, name, setting: dict):
         setting.update({
-                'complete': False,
-                'success':  False
-                })
+            'complete': False,
+            'success': False
+        })
         self.load_operations[name] = setting.copy()
 
     def get_load_operation_names(self):
@@ -73,8 +73,8 @@ class LoadJob:
         operation = self.load_operations[name]
         document_source = self.data_source.document_generator(**operation['source_setting'])
         responses = self.searchtarget.bulk_load_es_documents(
-                documents=document_source,
-                load_config=operation['target_setting'])
+            document_source=document_source,
+            load_config=operation['target_setting'])
         load_stats = generate_load_statistics(responses)
         self.load_operations[name].update(load_stats)
 
