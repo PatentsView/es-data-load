@@ -22,8 +22,8 @@
         "source": "select d.inventor_id,d.patent_year, d.num_patents from PatentsView_20210930.inventor_year d join (select inventor_id from PatentsView_20210930.inventor order by inventor_id LIMIT {limit} offset {offset}) p on p.inventor_id=d.inventor_id",
         "field_mapping": {
           "inventor_id": 0,
-          "inventor_years.year": 1,
-          "inventor_years.num_patents": 2
+          "year": 1,
+          "num_patents": 2
         }
       }
     },

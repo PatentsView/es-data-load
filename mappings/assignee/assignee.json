@@ -24,8 +24,8 @@
         "source": "select d.assignee_id,d.patent_year, d.num_patents from PatentsView_20210930.assignee_year d join (select assignee_id from PatentsView_20210930.assignee order by assignee_id LIMIT {limit} offset {offset}) p on p.assignee_id=d.assignee_id",
         "field_mapping": {
           "assignee_id": 0,
-          "assignee_years.year": 1,
-          "assignee_years.num_patents": 2
+          "year": 1,
+          "num_patents": 2
         }
       }
     },
