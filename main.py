@@ -48,4 +48,5 @@ if __name__ == '__main__':
         print("------------")
         print(operation)
         status = loadjob.get_load_job_status(operation)
+        del status['source_setting']
         pprint.pprint(status)
