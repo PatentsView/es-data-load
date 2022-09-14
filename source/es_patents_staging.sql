@@ -444,6 +444,7 @@ from
                   patent_id) x on x.patent_id = a.patent_id
         join elastic_staging.patents p on p.patent_id = a.patent_id;
 
+TRUNCATE table elastic_staging.patent_assignee;
 
 
 INSERT INTO elastic_staging.patent_assignee( assignee_id, type, name_first, name_last, organization, city, state
@@ -469,10 +470,10 @@ from
         join elastic_staging.patents p on p.patent_id = pa.patent_id
         join PatentsView_20211230.assignee a on a.assignee_id = pa.assignee_id
         join PatentsView_20211230.temp_id_mapping_assignee tima on tima.new_assignee_id = a.assignee_id
-        join PatentsView_20211230.location l on l.location_id = pa.location_id
-        join PatentsView_20211230.temp_id_mapping_location timl on timl.new_location_id = l.location_id;
+        left join PatentsView_20211230.location l on l.location_id = pa.location_id
+        left join PatentsView_20211230.temp_id_mapping_location timl on timl.new_location_id = l.location_id;
 
-
+TRUNCATE table elastic_staging.patent_inventor;
 
 insert into elastic_staging.patent_inventor ( inventor_id, patent_id, sequence, name_first, name_last, city, state
                                             , country, location_id, persistent_inventor_id, persistent_location_id)
@@ -493,8 +494,8 @@ from
     PatentsView_20211230.patent_inventor pi
         join PatentsView_20211230.inventor i on i.inventor_id = pi.inventor_id
         join PatentsView_20211230.temp_id_mapping_inventor timi on timi.new_inventor_id = i.inventor_id
-        join PatentsView_20211230.location l on l.location_id = pi.location_id
-        join PatentsView_20211230.temp_id_mapping_location timl on timl.new_location_id = l.location_id
+        left join PatentsView_20211230.location l on l.location_id = pi.location_id
+        left join PatentsView_20211230.temp_id_mapping_location timl on timl.new_location_id = l.location_id
         join elastic_staging.patents p on p.patent_id = pi.patent_id;
 
 
@@ -839,37 +840,17 @@ update
         left join patent.patent_to_eight_char pe on pe.id = p.patent_id
 set p.patent_zero_prefix =pe.patent_id_eight_char;
 
-
-select
-    max(char_length(application_id))
-  , max(char_length(patent_id))
-  , max(char_length(type))
-  , max(char_length(number))
-  , max(char_length(country))
-  , max(char_length(date))
-  , max(char_length(series_code))
-  , max(char_length(rule_47_flag))
-from
-    elastic_staging.patent_application a;
-
-select
-    max(char_length(patent_id))
-  , max(char_length(lname))
-  , max(char_length(fname))
-  , max(char_length(organization))
-  , max(char_length(sequence))
-  , max(char_length(designation))
-  , max(char_length(applicant_type))
-  , max(char_length(location_id))
-  , max(char_length(persistent_location_id))
-from
-    elastic_staging.patent_applicant a;
-
 update elastic_staging.patent_applicant pa
     join patent.non_inventor_applicant nia on nia.patent_id = pa.patent_id
     join elastic_staging.selected_rawlocations rl on rl.id = nia.rawlocation_id
     join PatentsView_20211230.temp_id_mapping_location timl on timl.old_location_id = rl.location_id
 set pa.location_id=timl.new_location_id
-  , pa.persistent_location_id=timl.old_location_id
+  , pa.persistent_location_id=timl.old_location_id;
+
+
+select
+    title
+from
+    elastic_staging.patents;
 
 

@@ -8,7 +8,7 @@
       "patent_date": 2,
       "patent_year": 3,
       "patent_abstract": 5,
-      "patent_kind": 6,
+      "wipo_kind": 6,
       "patent_num_foreign_documents_cited": 8,
       "patent_num_us_applications_cited": 10,
       "patent_num_us_patents_cited": 9,
@@ -20,7 +20,7 @@
       "patent_cpc_current_group_average_patent_processing_days": 13,
       "patent_term_extension": 17,
       "patent_detail_desc_length": 7,
-      "gi_statement": 18,
+      "gov_interest_statement": 18,
       "patent_zero_prefix": 19
     },
     "key_field": "patent_id",
@@ -38,13 +38,22 @@
         }
       },
       "attorneys": {
-        "source": "select a.persistent_lawyer_id, a.name_first, a.name_last,a.organization, a.patent_id from elastic_staging.patent_attorneys a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=a.patent_id",
+        "source": "select a.persistent_lawyer_id, a.name_first, a.name_last,a.organization,a.sequence, a.patent_id from elastic_staging.patent_attorneys a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=a.patent_id",
         "field_mapping": {
           "attorney_id": 0,
           "attorney_name_first": 1,
           "attorney_name_last": 2,
           "attorney_organization": 3,
-          "patent_id": 4
+          "attorney_sequence": 4,
+          "patent_id": 5
+        }
+      },
+      "botanic": {
+        "source": "select b.latin_name, b.variety, b.patent_id from elastic_staging.patent_botanic b join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=b.patent_id",
+        "field_mapping": {
+          "latin_name": 0,
+          "variety": 1,
+          "patent_id": 2
         }
       },
       "cpc_at_issue": {
@@ -80,6 +89,14 @@
           "document_number": 1,
           "pgpubs_document_number": 2,
           "application_number": 3
+        }
+      },
+      "figures": {
+        "source": "select f.num_figures, f.num_sheets, f.patent_id from elastic_staging.patent_figures f join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=f.patent_id",
+        "field_mapping": {
+          "num_figures": 0,
+          "num_sheets": 1,
+          "patent_id": 2
         }
       },
       "foreign_priority": {
@@ -188,11 +205,12 @@
         }
       },
       "wipo": {
-        "source": "select w.field_id,w.sequence,w.patent_id from elastic_staging.patent_wipo  w join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on w.patent_id = p.patent_id;",
+        "source": "select w.field_id,w.field_id,w.sequence,w.patent_id from elastic_staging.patent_wipo  w join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on w.patent_id = p.patent_id;",
         "field_mapping": {
           "wipo_field_id": 0,
-          "wipo_sequence": 1,
-          "patent_id": 2
+          "wipo_field": 1,
+          "wipo_sequence": 2,
+          "patent_id": 3
         }
       },
       "assignees": {
@@ -246,7 +264,7 @@
   },
   "target_setting": {
     "index": "patents",
-    "indexing_batch_size": 5000,
+    "indexing_batch_size": 7500,
     "id_field": "patent_id"
   }
 }
