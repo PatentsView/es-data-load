@@ -131,3 +131,6 @@ dmypy.json
 .idea
 configs
 resources/config.ini
+
+**/__pycache__/
+**/.DS_Store

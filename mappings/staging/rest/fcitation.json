@@ -1,0 +1,24 @@
+{
+  "source_setting": {
+    "source": "select\n    uuid, patent_id, date, number, country, category, sequence, patent_zero_prefix\nfrom elastic_staging.foreign_citations\n order by patent_zero_prefix limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "patent_id": 1,
+      "patent": 1,
+      "citation_number": 3,
+      "citation_sequence": 6,
+      "citation_date": 2,
+      "citation_category": 5,
+      "citation_country": 4,
+      "patent_zero_prefix": 7
+    },
+    "key_field": "uuid",
+    "count_source": "SELECT count(1) FROM elastic_staging.foreign_citations",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "foreign_citations",
+    "indexing_batch_size": 7500,
+    "id_field": "uuid"
+  }
+}

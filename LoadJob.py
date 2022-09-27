@@ -71,7 +71,7 @@ class LoadJob:
 
     def process_load_operation(self, name):
         operation = self.load_operations[name]
-        document_source = self.data_source.document_generator(**operation['source_setting'])
+        document_source = self.data_source.document_generator(**operation['source_setting'], load_name=name)
         responses = self.searchtarget.bulk_load_es_documents(
             document_source=document_source,
             load_config=operation['target_setting'])

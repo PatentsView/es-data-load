@@ -29,7 +29,7 @@ class PatentsViewElasticSearch:
         for data_row in document_source:
             if current_batch_size >= indexing_batch_size:
                 current_batch_size = 0
-                r = self.es.bulk(action_data_pairs)
+                r = self.es.bulk(operations=action_data_pairs)
                 yield r
                 action_data_pairs = []
             action_data_pairs.append({
@@ -40,5 +40,5 @@ class PatentsViewElasticSearch:
             })
             action_data_pairs.append(data_row)
             current_batch_size += 2
-        r = self.es.bulk(action_data_pairs)
+        r = self.es.bulk(operations=action_data_pairs)
         yield r

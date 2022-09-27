@@ -19,7 +19,7 @@ class TabularDataSource(ABC):
         offset = 0
         nested_field_source_settings = kwargs.get('nested_fields', {})
         total_count = self.get_document_count(count_source=kwargs.get('count_source'))
-        pbar = tqdm(total=total_count)
+        pbar = tqdm(total=total_count, desc=kwargs.get('load_name', 'Load:'))
         key_field = kwargs.get('key_field')
         while True:
             exists = False
