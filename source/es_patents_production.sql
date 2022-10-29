@@ -1,8 +1,8 @@
-drop database elastic_staging;
+drop database elastic_production;
 
-create database elastic_staging;
+create database elastic_production;
 
-use elastic_staging;
+use elastic_production;
 
 -- Create syntax for TABLE 'patent_gov_contract'
 CREATE TABLE `patent_gov_contract`
@@ -376,16 +376,17 @@ CREATE TABLE `patent_wipo`
   COLLATE = utf8mb4_unicode_ci;
 
 
-insert into elastic_staging.patents ( patent_id, type, number, country, date, year, abstract, title, kind, num_claims
-                                    , num_foreign_documents_cited, num_us_applications_cited, num_us_patents_cited
-                                    , num_total_documents_cited, num_times_cited_by_us_patents
-                                    , earliest_application_date, patent_processing_days
-                                    , uspc_current_mainclass_average_patent_processing_days
-                                    , cpc_current_group_average_patent_processing_days, term_extension
-                                    , detail_desc_length, gi_statement, patent_zero_prefix)
+-- 47mins
+insert into elastic_production.patents ( patent_id, type, number, country, date, year, abstract, title, kind, num_claims
+                                       , num_foreign_documents_cited, num_us_applications_cited, num_us_patents_cited
+                                       , num_total_documents_cited, num_times_cited_by_us_patents
+                                       , earliest_application_date, patent_processing_days
+                                       , uspc_current_mainclass_average_patent_processing_days
+                                       , cpc_current_group_average_patent_processing_days, term_extension
+                                       , detail_desc_length, gi_statement, patent_zero_prefix)
 select
     p.patent_id
-  , type
+  , p.type
   , number
   , country
   , date
@@ -408,21 +409,16 @@ select
   , gi_statement
   , pe.patent_id_eight_char
 from
-    PatentsView_20211230.patent p
-        left join PatentsView_20211230.government_interest gi on gi.patent_id = p.patent_id
-        join patent.patent_to_eight_char pe on pe.id = p.patent_id
-where
-     (p.year = 2021
-         and month(p.date) = 12)
-  or (p.year = 2012
-    and month(p.date) = 1);
+    PatentsView_20220630.patent p
+        left join PatentsView_20220630.government_interest gi on gi.patent_id = p.patent_id
+        join patent.patent_to_eight_char pe on pe.id = p.patent_id;
 
-
-INSERT INTO elastic_staging.patent_application( application_id, patent_id, type, number, country, date, series_code
-                                              , rule_47_flag)
+explain extended
+INSERT INTO elastic_production.patent_application( application_id, patent_id, type, number, country, date, series_code
+                                                 , rule_47_flag)
 select
     a.application_id
-  , p.patent_id
+  , a.patent_id
   , a.type
   , a.number
   , a.country
@@ -430,7 +426,7 @@ select
   , pa.series_code_transformed_from_type
   , x.rule_47_flag
 from
-    PatentsView_20211230.application a
+    PatentsView_20220630.application a
         join patent.application pa on pa.patent_id = a.patent_id
         join (select
                   patent_id
@@ -441,15 +437,14 @@ from
               from
                   patent.rawinventor ri
               group by
-                  patent_id) x on x.patent_id = a.patent_id
-        join elastic_staging.patents p on p.patent_id = a.patent_id;
+                  patent_id) x on x.patent_id = a.patent_id;
 
-TRUNCATE table elastic_staging.patent_assignee;
+TRUNCATE table elastic_production.patent_assignee;
 
 
-INSERT INTO elastic_staging.patent_assignee( assignee_id, type, name_first, name_last, organization, city, state
-                                           , country, sequence, location_id, patent_id, persistent_location_id
-                                           , persistent_assignee_id)
+INSERT INTO elastic_production.patent_assignee( assignee_id, type, name_first, name_last, organization, city, state
+                                              , country, sequence, location_id, patent_id, persistent_location_id
+                                              , persistent_assignee_id)
 
 select
     pa.assignee_id
@@ -466,17 +461,17 @@ select
   , tima.old_assignee_id
   , timl.old_location_id
 from
-    PatentsView_20211230.patent_assignee pa
-        join elastic_staging.patents p on p.patent_id = pa.patent_id
-        join PatentsView_20211230.assignee a on a.assignee_id = pa.assignee_id
-        join PatentsView_20211230.temp_id_mapping_assignee tima on tima.new_assignee_id = a.assignee_id
-        left join PatentsView_20211230.location l on l.location_id = pa.location_id
-        left join PatentsView_20211230.temp_id_mapping_location timl on timl.new_location_id = l.location_id;
+    PatentsView_20220630.patent_assignee pa
+        join elastic_production.patents p on p.patent_id = pa.patent_id
+        join PatentsView_20220630.assignee a on a.assignee_id = pa.assignee_id
+        join PatentsView_20220630.temp_id_mapping_assignee tima on tima.new_assignee_id = a.assignee_id
+        left join PatentsView_20220630.location l on l.location_id = pa.location_id
+        left join PatentsView_20220630.temp_id_mapping_location timl on timl.new_location_id = l.location_id;
 
-TRUNCATE table elastic_staging.patent_inventor;
+TRUNCATE table elastic_production.patent_inventor;
 
-insert into elastic_staging.patent_inventor ( inventor_id, patent_id, sequence, name_first, name_last, city, state
-                                            , country, location_id, persistent_inventor_id, persistent_location_id)
+insert into elastic_production.patent_inventor ( inventor_id, patent_id, sequence, name_first, name_last, city, state
+                                               , country, location_id, persistent_inventor_id, persistent_location_id)
 
 select
     pi.inventor_id
@@ -491,44 +486,354 @@ select
   , timi.old_inventor_id
   , timl.old_location_id
 from
-    PatentsView_20211230.patent_inventor pi
-        join PatentsView_20211230.inventor i on i.inventor_id = pi.inventor_id
-        join PatentsView_20211230.temp_id_mapping_inventor timi on timi.new_inventor_id = i.inventor_id
-        left join PatentsView_20211230.location l on l.location_id = pi.location_id
-        left join PatentsView_20211230.temp_id_mapping_location timl on timl.new_location_id = l.location_id
-        join elastic_staging.patents p on p.patent_id = pi.patent_id;
+    PatentsView_20220630.patent_inventor pi
+        join PatentsView_20220630.inventor i on i.inventor_id = pi.inventor_id
+        join PatentsView_20220630.temp_id_mapping_inventor timi on timi.new_inventor_id = i.inventor_id
+        left join PatentsView_20220630.location l on l.location_id = pi.location_id
+        left join PatentsView_20220630.temp_id_mapping_location timl on timl.new_location_id = l.location_id
+        join elastic_production.patents p on p.patent_id = pi.patent_id;
 
 
 
-insert into elastic_staging.patent_cpc_current( patent_id, sequence, cpc_section, cpc_class, cpc_subclass, cpc_group
-                                              , cpc_type)
-SELECT
+create or replace sql security invoker view elastic_production.patent_cpc_current as
+select
+
     c.patent_id
   , c.sequence
-  , c.section_id
-  , c.subsection_id
-  , c.group_id
-  , c.subgroup_id
-  , c.category ``
+  , c.section_id    as cpc_section
+  , c.subsection_id as cpc_class
+  , c.group_id      as cpc_subclass
+  , c.subgroup_id   as cpc_group
+  , c.category         cpc_type
 from
-    PatentsView_20211230.cpc_current c
-        join elastic_staging.patents p on p.patent_id = c.patent_id;
+    PatentsView_20220630.cpc_current c;
 
-
-insert into elastic_staging.granted_pregrant_crosswalk(patent_id, document_number, application_number)
+create sql security invoker view elastic_production.granted_pregrant_crosswalk as
 
 select
-    p.patent_id
+    gpc.patent_number as patent_id
   , gpc.document_number
   , gpc.application_number
 from
-    elastic_staging.patents p
-        join pregrant_publications.granted_patent_crosswalk gpc on gpc.patent_number = p.patent_id;
+    pregrant_publications.granted_patent_crosswalk gpc;
 
 
 
-insert into elastic_staging.patent_cpc_at_issue( patent_id, sequence, cpc_section, cpc_class, cpc_subclass, cpc_group
-                                               , cpc_type)
+insert into elastic_production.patent_cpc_at_issue( patent_id, sequence, cpc_section, cpc_class, cpc_subclass, cpc_group
+                                                  , cpc_type)
+select
+    x.patent_id
+  , row_number() over (partition by x.patent_id order by x.source desc,x.sequence) - 1
+  , x.section_id
+  , x.subsection_id
+  , x.group_id
+  , x.subgroup_id
+  , x.category
+from
+    (SELECT
+         c.patent_id
+       , c.sequence
+       , section                                                          as section_id
+       , concat(section, class)                                           as subsection_id
+       , concat(section, class, subclass)                                 as group_id
+       , concat(section, class, subclass, main_group, '/', subgroup)      as subgroup_id
+       , case when c.value = 'I' then 'inventional' else 'additional' end as category
+       , 'main'                                                           as source
+     from
+         patent.main_cpc c
+             join elastic_production.patents p
+                  on p.patent_id = c.patent_id
+     union
+     SELECT
+         c.patent_id
+       , c.sequence
+       , section                                                          as section_id
+       , concat(section, class)                                           as subsection_id
+       , concat(section, class, subclass)                                 as group_id
+       , concat(section, class, subclass, main_group, '/', subgroup)      as subgroup_id
+       , case when c.value = 'I' then 'inventional' else 'additional' end as category
+       , 'further'                                                        as source
+     from
+         patent.further_cpc c
+             join elastic_production.patents p
+                  on p.patent_id = c.patent_id) x;
+
+
+
+create sql security invoker view elastic_production.patent_foreign_priority as
+
+select
+    f.patent_id
+  , f.sequence
+  , f.foreign_doc_number
+  , f.date
+  , f.country
+  , f.kind
+from
+    PatentsView_20220630.foreignpriority f;
+
+
+create or replace sql security invoker view elastic_production.patent_ipcr as
+select
+    i.patent_id
+  , i2.ipcr_id as ipcr_id
+  , i.sequence
+  , i.section
+  , i.ipc_class
+  , i.subclass
+  , i.main_group
+  , i.subgroup
+  , i.symbol_position
+  , i.classification_value
+  , i.classification_data_source
+  , i.action_date
+from
+    PatentsView_20220630.ipcr i
+        join elastic_production.ipcr i2
+             on i2.ipc_class = i.ipc_class and i2.section = i.section and i2.subclass = i.subclass;
+
+
+insert into elastic_production.patent_applicant( patent_id, lname, fname, organization, sequence, designation
+                                               , applicant_type
+                                               , location_id, persistent_location_id)
+
+select
+    nia.patent_id
+  , nia.lname
+  , nia.fname
+  , nia.organization
+  , nia.sequence
+  , nia.designation
+  , nia.applicant_type
+  , l.location_id
+  , timl.old_location_id
+from
+    patent.non_inventor_applicant nia
+        join elastic_production.patents p on nia.patent_id = p.patent_id
+        left join patent.rawlocation rl on rl.id = nia.rawlocation_id
+        left join PatentsView_20220630.temp_id_mapping_location timl on timl.old_location_id = rl.location_id
+        left join PatentsView_20220630.location l on l.location_id = timl.new_location_id
+
+
+
+create sql security invoker view elastic_production.patent_pct_data as
+select
+    p.patent_id
+  , p.doc_type
+  , p.kind
+  , p.doc_number
+  , p.date
+  , p.`102_date`
+  , p.`371_date`
+from
+    PatentsView_20220630.pctdata p;
+
+
+create sql security invoker view elastic_production.patent_uspc_at_issue as
+select
+    u.patent_id
+  , sequence
+  , mainclass_id
+  , subclass_id
+from
+    patent.uspc u;
+
+
+create sql security invoker view elastic_production.patent_wipo as
+select
+    w.patent_id
+  , w.field_id
+  , w.sequence
+from
+    PatentsView_20220630.wipo w;
+
+
+create sql security invoker view elastic_production.patent_botanic as
+select
+    b.patent_id
+  , b.latin_name
+  , b.variety
+from
+    patent.botanic b;
+
+
+
+create sql security invoker view elastic_production.patent_figures as
+select
+    f.patent_id
+  , f.num_figures
+  , f.num_sheets
+from
+    patent.figures f
+;
+
+
+
+insert into elastic_production.patent_attorneys( patent_id, lawyer_id, sequence, name_first, name_last, organization
+                                               , persistent_lawyer_id)
+select
+    pl.patent_id
+  , pl.lawyer_id
+  , pl.sequence
+  , l.name_first
+  , l.name_last
+  , l.organization
+  , timl.old_lawyer_id
+from
+    PatentsView_20220630.patent_lawyer pl
+        join PatentsView_20220630.lawyer l on pl.lawyer_id = l.lawyer_id
+        join PatentsView_20220630.temp_id_mapping_lawyer timl on timl.new_lawyer_id = l.lawyer_id
+        join elastic_production.patents p on pl.patent_id = p.patent_id;
+
+
+
+insert into elastic_production.patent_examiner( patent_id, examiner_id, name_first, name_last, role, `group`
+                                              , persistent_examiner_id)
+select
+    pe.patent_id
+  , pe.examiner_id
+  , e.name_first
+  , e.name_last
+  , e.role
+  , e.`group`
+  , `time`.old_examiner_id
+from
+    PatentsView_20220630.patent_examiner pe
+        join PatentsView_20220630.examiner e on pe.examiner_id = e.examiner_id
+        join PatentsView_20220630.temp_id_mapping_examiner `time` on `time`.new_examiner_id = e.examiner_id
+        join elastic_production.patents p on p.patent_id = pe.patent_id;
+
+
+
+create sql security invoker view elastic_production.patent_us_term_of_grant as
+select
+    u.patent_id
+  , u.disclaimer_date
+  , u.term_disclaimer
+  , u.term_grant
+  , u.term_extension
+from
+    patent.us_term_of_grant u;
+
+
+insert into elastic_production.patent_gov_interest_organizations(patent_id, name, level_one, level_two, level_three)
+select
+    pgi.patent_id
+  , name
+  , level_one
+  , level_two
+  , level_three
+from
+    PatentsView_20220630.government_organization go
+        join PatentsView_20220630.patent_govintorg pgi on pgi.organization_id = go.organization_id
+        join elastic_production.patents p on p.patent_id = pgi.patent_id;
+
+insert into elastic_production.patent_gov_contract(patent_id, award_number)
+select
+    c.patent_id
+  , contract_award_number
+from
+    PatentsView_20220630.patent_contractawardnumber c
+        join elastic_production.patents p on p.patent_id = c.patent_id;
+
+CREATE TABLE `ipcr`
+(
+    `ipcr_id`   int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `section`   varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `ipc_class` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `subclass`  varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (`ipcr_id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 8192
+  DEFAULT CHARSET = latin1;
+
+
+create or replace sql security invoker view elastic_production.ipcr as
+select
+    ipcr_id
+  , section
+  , ipc_class
+  , subclass
+from
+    elastic_staging.ipcr
+order by
+    section
+  , ipc_class
+  , subclass;
+
+
+update elastic_production.patent_ipcr i join elastic_production.ipcr i2 on i2.section = i.section and
+                                                                           i2.ipc_class = i.ipc_class and
+                                                                           i2.subclass = i.subclass
+set i.ipcr_id=i2.ipcr_id;
+
+
+select
+    a.application_id
+  , a.type
+  , a.date
+  , a.series_code
+  , case when a.rule_47_flag = 0 then 'false' else 'true' end
+  , a.type
+  , a.patent_id
+from
+    elastic_production.patent_application a
+        join (select patent_id from elastic_production.patents order by patent_id limit 10 offset 0) p
+             on p.patent_id = a.patent_id;
+
+create sql security invoker view elastic_production.patent_us_related_documents as
+select
+    u.patent_id
+  , doctype
+  , relkind
+  , reldocno
+  , u.country
+  , u.date
+  , status
+  , sequence
+  , u.kind
+from
+    patent.usreldoc u;
+;
+
+
+
+show engine innodb status;
+
+
+
+CREATE TABLE `ipcr`
+(
+    `ipcr_id`   int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `section`   varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `ipc_class` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `subclass`  varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (`ipcr_id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 8192
+  DEFAULT CHARSET = latin1;
+
+
+-- Create syntax for TABLE 'cpc_at_issue'
+CREATE TABLE `patent_cpc_at_issue`
+(
+    `patent_id`    varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `sequence`     int(10) unsigned                       NOT NULL,
+    `cpc_section`  varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `cpc_class`    varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `cpc_subclass` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `cpc_group`    varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `cpc_type`     varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (`patent_id`, `sequence`),
+    KEY `ix_cpc_current_subsection_id` (`cpc_class`),
+    KEY `ix_cpc_current_group_id` (`cpc_subclass`),
+    KEY `ix_cpc_current_subgroup_id` (`cpc_group`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+insert into elastic_production.patent_cpc_at_issue( patent_id, sequence, cpc_section, cpc_class, cpc_subclass, cpc_group
+                                                  , cpc_type)
 select
     x.patent_id
   , row_number() over (partition by x.patent_id order by x.source desc,x.sequence) - 1
@@ -565,288 +870,5 @@ from
          patent.further_cpc c
              join elastic_staging.patents p
                   on p.patent_id = c.patent_id) x;
-
-
-
-insert into elastic_staging.patent_foreign_priority(patent_id, sequence, foreign_doc_number, date, country, kind)
-
-select
-    f.patent_id
-  , f.sequence
-  , f.foreign_doc_number
-  , f.date
-  , f.country
-  , f.kind
-from
-    PatentsView_20211230.foreignpriority f
-        join elastic_staging.patents p on f.patent_id = p.patent_id
-
-
-
-insert into elastic_staging.patent_ipcr ( patent_id, sequence, section, ipc_class, subclass, main_group, subgroup
-                                        , symbol_position, classification_value, classification_data_source
-                                        , action_date)
-select
-    i.patent_id
-  , i.sequence
-  , i.section
-  , i.ipc_class
-  , i.subclass
-  , i.main_group
-  , i.subgroup
-  , i.symbol_position
-  , i.classification_value
-  , i.classification_data_source
-  , i.action_date
-from
-    PatentsView_20211230.ipcr i
-        join elastic_staging.patents p on i.patent_id = p.patent_id;
-
-
-
-insert into elastic_staging.patent_applicant( patent_id, lname, fname, organization, sequence, designation
-                                            , applicant_type
-                                            , location_id, persistent_location_id)
-
-select
-    nia.patent_id
-  , nia.lname
-  , nia.fname
-  , nia.organization
-  , nia.sequence
-  , nia.designation
-  , nia.applicant_type
-  , l.location_id
-  , timl.old_location_id
-from
-    patent.non_inventor_applicant nia
-        join elastic_staging.patents p on nia.patent_id = p.patent_id
-        left join patent.rawlocation rl on rl.id = nia.rawlocation_id
-        left join PatentsView_20211230.temp_id_mapping_location timl on timl.old_location_id = rl.location_id
-        left join PatentsView_20211230.location l on l.location_id = timl.new_location_id
-
-
-
-insert into elastic_staging.patent_pct_data(patent_id, doc_type, kind, doc_number, date, `102_date`, `371_date`)
-select
-    p.patent_id
-  , p.doc_type
-  , p.kind
-  , p.doc_number
-  , p.date
-  , p.`102_date`
-  , p.`371_date`
-from
-    PatentsView_20211230.pctdata p
-        join elastic_staging.patents p2 on p.patent_id = p2.patent_id;
-
-
-
-insert into elastic_staging.patent_uspc_at_issue(patent_id, sequence, mainclass_id, subclass_id)
-select
-    u.patent_id
-  , sequence
-  , mainclass_id
-  , subclass_id
-from
-    patent.uspc u
-        join elastic_staging.patents p on p.patent_id = u.patent_id;
-
-
-
-insert into elastic_staging.patent_wipo(patent_id, field_id, sequence)
-select
-    w.patent_id
-  , w.field_id
-  , w.sequence
-from
-    PatentsView_20211230.wipo w
-        join elastic_staging.patents p on p.patent_id = w.patent_id;
-
-
-
-insert into elastic_staging.patent_botanic(patent_id, latin_name, variety)
-select
-    b.patent_id
-  , b.latin_name
-  , b.variety
-from
-    patent.botanic b
-        join elastic_staging.patents p on p.patent_id = b.patent_id;
-
-
-
-insert into elastic_staging.patent_figures(patent_id, num_figures, num_sheets)
-select
-    f.patent_id
-  , f.num_figures
-  , f.num_sheets
-from
-    patent.figures f
-        join elastic_staging.patents p on f.patent_id = p.patent_id
-;
-
-
-
-insert into elastic_staging.patent_attorneys( patent_id, lawyer_id, sequence, name_first, name_last, organization
-                                            , persistent_lawyer_id)
-select
-    pl.patent_id
-  , pl.lawyer_id
-  , pl.sequence
-  , l.name_first
-  , l.name_last
-  , l.organization
-  , timl.old_lawyer_id
-from
-    PatentsView_20211230.patent_lawyer pl
-        join PatentsView_20211230.lawyer l on pl.lawyer_id = l.lawyer_id
-        join PatentsView_20211230.temp_id_mapping_lawyer timl on timl.new_lawyer_id = l.lawyer_id
-        join elastic_staging.patents p on pl.patent_id = p.patent_id;
-
-
-
-insert into elastic_staging.patent_examiner( patent_id, examiner_id, name_first, name_last, role, `group`
-                                           , persistent_examiner_id)
-select
-    pe.patent_id
-  , pe.examiner_id
-  , e.name_first
-  , e.name_last
-  , e.role
-  , e.`group`
-  , `time`.old_examiner_id
-from
-    PatentsView_20211230.patent_examiner pe
-        join PatentsView_20211230.examiner e on pe.examiner_id = e.examiner_id
-        join PatentsView_20211230.temp_id_mapping_examiner `time` on `time`.new_examiner_id = e.examiner_id
-        join elastic_staging.patents p on p.patent_id = pe.patent_id;
-
-
-
-insert into elastic_staging.patent_us_term_of_grant( patent_id, disclaimer_date, term_disclaimer, term_grant
-                                                   , term_extension)
-select
-    u.patent_id
-  , u.disclaimer_date
-  , u.term_disclaimer
-  , u.term_grant
-  , u.term_extension
-from
-    patent.us_term_of_grant u
-        join elastic_staging.patents p
-             on p.patent_id = u.patent_id;
-
-
-insert into elastic_staging.patent_gov_interest_organizations(patent_id, name, level_one, level_two, level_three)
-select
-    pgi.patent_id
-  , name
-  , level_one
-  , level_two
-  , level_three
-from
-    PatentsView_20211230.government_organization go
-        join PatentsView_20211230.patent_govintorg pgi on pgi.organization_id = go.organization_id
-        join elastic_staging.patents p on p.patent_id = pgi.patent_id;
-
-insert into elastic_staging.patent_gov_contract(patent_id, award_number)
-select
-    c.patent_id
-  , contract_award_number
-from
-    PatentsView_20211230.patent_contractawardnumber c
-        join elastic_staging.patents p on p.patent_id = c.patent_id;
-
-CREATE TABLE `ipcr`
-(
-    `ipcr_id`   int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `section`   varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `ipc_class` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `subclass`  varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    PRIMARY KEY (`ipcr_id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 8192
-  DEFAULT CHARSET = latin1;
-
-
-insert into elastic_staging.ipcr(section, ipc_class, subclass)
-select
-    section
-  , ipc_class
-  , subclass
-from
-    elastic_staging.ipcr
-order by
-    section
-  , ipc_class
-  , subclass;
-
-
-update elastic_staging.patent_ipcr i join elastic_staging.ipcr i2 on i2.section = i.section and
-                                                                     i2.ipc_class = i.ipc_class and
-                                                                     i2.subclass = i.subclass
-set i.ipcr_id=i2.ipcr_id;
-
-
-select
-    a.application_id
-  , a.type
-  , a.date
-  , a.series_code
-  , case when a.rule_47_flag = 0 then 'false' else 'true' end
-  , a.type
-  , a.patent_id
-from
-    elastic_staging.patent_application a
-        join (select patent_id from elastic_staging.patents order by patent_id limit 10 offset 0) p
-             on p.patent_id = a.patent_id;
-
-insert into elastic_staging.patent_us_related_documents( patent_id, doctype, relkind, reldocno, country, date, status
-                                                       , sequence, kind)
-select
-    p.patent_id
-  , doctype
-  , relkind
-  , reldocno
-  , u.country
-  , u.date
-  , status
-  , sequence
-  , u.kind
-from
-    patent.usreldoc u
-        join elastic_staging.patents p on p.patent_id = u.patent_id;
-
-select
-    c.sequence
-  , c.cpc_section
-  , c.cpc_class
-  , c.cpc_class
-  , c.cpc_subclass
-  , c.cpc_subclass
-  , c.cpc_group
-  , c.cpc_group
-  , c.cpc_type
-  , c.patent_id
-from
-    elastic_staging.patent_cpc_current as c
-        join (select patent_id from elastic_staging.patents order by patent_id limit 10 offset 0) p
-             on p.patent_id = c.patent_id;
-
-
-update
-    elastic_staging.patents p
-        left join patent.patent_to_eight_char pe on pe.id = p.patent_id
-set p.patent_zero_prefix =pe.patent_id_eight_char;
-
-update elastic_staging.patent_applicant pa
-    join patent.non_inventor_applicant nia on nia.patent_id = pa.patent_id
-    join elastic_staging.selected_rawlocations rl on rl.id = nia.rawlocation_id
-    join PatentsView_20211230.temp_id_mapping_location timl on timl.old_location_id = rl.location_id
-set pa.location_id=timl.new_location_id
-  , pa.persistent_location_id=timl.old_location_id;
-
-
 
 

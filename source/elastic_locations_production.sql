@@ -30,63 +30,34 @@ CREATE TABLE `locations`
   COLLATE = utf8mb4_unicode_ci;
 
 
-truncate table elastic_staging.locations;
-insert into elastic_staging.locations( location_id, city, state, country, county, state_fips, county_fips, latitude
-                                     , longitude, num_assignees, num_inventors, num_patents, persistent_location_id)
-select distinct
-    location_id
-  , city
-  , state
-  , country
-  , county
-  , state_fips
-  , county_fips
-  , latitude
-  , longitude
 
+
+insert into elastic_production.locations( location_id, city, state, country, county, state_fips, county_fips, latitude
+                                        , longitude, num_assignees, num_inventors, num_patents, persistent_location_id
+                                        , locations.place_type)
+select
+    l.location_id
+  , l.city
+  , l.state
+  , l.country
+  , l.county
+  , l.state_fips
+  , l.county_fips
+  , l.latitude
+  , l.longitude
   , num_assignees
   , num_inventors
   , num_patents
   , timl.old_location_id
+  , cl.place
 from
-    PatentsView_20211230.location l
-        join PatentsView_20211230.temp_id_mapping_location timl on timl.new_location_id = l.location_id
--- join PatentsView_20211230.temp_id_mapping_location timl
---  on timl.old_location_id_transformed = l.persistent_location_id
-    #         left join elastic_staging.patent_inventor pi
-on pi.persistent_location_id = timl.old_location_id
-    # left join elastic_staging.patent_assignee pa on pi.persistent_location_id = timl.old_location_id
-    # left join elastic_staging.assignees a on a.lastknown_persistent_location_id = timl.old_location_id
-    # left join elastic_staging.inventors i on i.lastknown_persistent_location_id = timl.old_location_id
-    #
-where
-  # pi.persistent_location_id is not null
-  #
-  or pa.persistent_location_id is not null
-  #
-  or i.lastknown_persistent_location_id is not null
-  #
-  or a.lastknown_persistent_location_id is not null;
+    PatentsView_20220630.location l
+        join PatentsView_20220630.temp_id_mapping_location timl on timl.new_location_id = l.location_id
+        left join patent.location l2 on l2.id = timl.old_location_id
+        left join geo_data.curated_locations cl on cl.id = l2.curated_location_id;
 
-select
-    location_id
-  , city
-  , state
-  , country
-  , county
-  , state_fips
-  , county_fips
-  , latitude
-  , longitude
-  , num_assignees
-  , num_inventors
-  , num_patents
-  , persistent_location_id
+select *
 from
-    elastic_staging.locations l;
-
-alter table elastic_staging.locations
-    add column `place_type` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL;
-
-update elastic_staging.locations
-set locations.place_type='city';
+    PatentsView_20220630.location l
+        join PatentsView_20220630.temp_id_mapping_location timl on timl.new_location_id = l.location_id
+        join patent.location l2 on l2.id = timl.old_location_id

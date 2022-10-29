@@ -1,0 +1,26 @@
+{
+  "source_setting": {
+    "source": "select uuid, patent_id, document_number, date, name, kind, category, sequence, patent_zero_prefix from elastic_production.us_application_citations order by uuid limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "patent_id": 1,
+      "patent": 1,
+      "citation_document_number": 2,
+      "citation_date": 3,
+      "citation_wipo_kind": 5,
+      "citation_category": 6,
+      "citation_sequence": 7,
+      "citation_name": 4,
+      "patent_zero_prefix":8
+    },
+        "key_field": "uuid",
+
+    "count_source": "SELECT count(1) from  elastic_production.us_application_citations",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "us_application_citations",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}

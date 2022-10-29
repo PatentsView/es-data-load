@@ -11,7 +11,7 @@ CREATE TABLE `foreign_citations` (
   KEY `patent_id` (`patent_id`,`sequence`),
   KEY `country` (`country`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-insert into elastic_staging.foreign_citations ( uuid, patent_id, date, number, country, category, sequence
+insert into elastic_production.foreign_citations ( uuid, patent_id, date, number, country, category, sequence
                                               , patent_zero_prefix)
 select
     fc.uuid
@@ -25,7 +25,7 @@ select
 
 from
     patent.foreigncitation fc
-        join elastic_staging.patents p on p.patent_id = fc.patent_id
+        join elastic_production.patents p on p.patent_id = fc.patent_id
         join patent.patent_to_eight_char pe on pe.id = p.patent_id;
 
 
@@ -52,16 +52,16 @@ CREATE TABLE `attorneys` (
   KEY `ix_lawyer_last_seen_date` (`last_seen_date`),
   KEY `ix_lawyer_persistent_lawyer_id` (`persistent_lawyer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-insert into elastic_staging.attorneys ( lawyer_id, name_first, name_last, organization, num_patents, num_assignees
+insert into elastic_production.attorneys ( lawyer_id, name_first, name_last, organization, num_patents, num_assignees
                                       , num_inventors, first_seen_date, last_seen_date, years_active
                                       , persistent_lawyer_id)
 select distinct
     l.*
 
 from
-    PatentsView_20211230.lawyer l
-        join PatentsView_20211230.patent_lawyer pl on pl.lawyer_id = l.lawyer_id
-        join elastic_staging.patents p on p.patent_id = pl.patent_id;
+    PatentsView_20220630.lawyer l
+        join PatentsView_20220630.patent_lawyer pl on pl.lawyer_id = l.lawyer_id
+        join elastic_production.patents p on p.patent_id = pl.patent_id;
 
 
 
@@ -74,7 +74,7 @@ CREATE TABLE `other_reference` (
   PRIMARY KEY (`uuid`),
   KEY `patent_id` (`patent_id`,`sequence`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-insert into elastic_staging.other_reference(uuid, patent_id, text, sequence, patent_zero_prefix)
+insert into elastic_production.other_reference(uuid, patent_id, text, sequence, patent_zero_prefix)
 select
     o.uuid
   , o.patent_id
@@ -83,7 +83,7 @@ select
   , pe.patent_id_eight_char
 from
     patent.otherreference o
-        join elastic_staging.patents p on o.patent_id = p.patent_id
+        join elastic_production.patents p on o.patent_id = p.patent_id
         join patent.patent_to_eight_char pe on pe.id = p.patent_id;
 
 
@@ -97,7 +97,7 @@ CREATE TABLE `rel_app_text` (
   KEY `patent_id` (`patent_id`,`sequence`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-insert into elastic_staging.rel_app_text(uuid, patent_id, text, sequence, patent_zero_prefix)
+insert into elastic_production.rel_app_text(uuid, patent_id, text, sequence, patent_zero_prefix)
 select
     r.uuid
   , r.patent_id
@@ -106,7 +106,7 @@ select
   , pe.patent_id_eight_char
 from
     patent.rel_app_text r
-        join elastic_staging.patents p on r.patent_id = p.patent_id
+        join elastic_production.patents p on r.patent_id = p.patent_id
         join patent.patent_to_eight_char pe on pe.id = p.patent_id;
 
 CREATE TABLE `us_patent_citations` (
@@ -126,7 +126,7 @@ CREATE TABLE `us_patent_citations` (
   KEY `date` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-insert into elastic_staging.us_patent_citations( uuid, patent_id, citation_id, date, name, kind, category
+insert into elastic_production.us_patent_citations( uuid, patent_id, citation_id, date, name, kind, category
                                                , sequence, patent_zero_prefix)
 
 select
@@ -142,7 +142,7 @@ select
 
 from
     patent.uspatentcitation u2
-        join elastic_staging.patents p on p.patent_id = u2.patent_id
+        join elastic_production.patents p on p.patent_id = u2.patent_id
         join patent.patent p2 on p2.id = u2.citation_id;
 
 
@@ -160,7 +160,7 @@ CREATE TABLE `us_application_citations` (
   KEY `patent_id` (`patent_id`,`sequence`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-insert into elastic_staging.us_application_citations ( uuid, patent_id, document_number, date, name, kind, category
+insert into elastic_production.us_application_citations ( uuid, patent_id, document_number, date, name, kind, category
                                                      , sequence, patent_zero_prefix)
 select
     uuid
@@ -174,7 +174,7 @@ select
   , patent_zero_prefix
 from
     patent.usapplicationcitation u
-        join elastic_staging.patents p on p.patent_id = u.patent_id
+        join elastic_production.patents p on p.patent_id = u.patent_id
 
 
 
@@ -189,7 +189,7 @@ CREATE TABLE `wipo_field` (
 insert into wipo_field
 select *
 from
-    PatentsView_20211230.wipo_field;
+    PatentsView_20220630.wipo_field;
 
 
 
@@ -207,10 +207,10 @@ CREATE TABLE `cpc_class` (
   KEY `ix_cpc_subsection_num_assignees` (`num_assignees`),
   KEY `ix_cpc_subsection_num_patents` (`num_patents`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-insert into elastic_staging.cpc_class
+insert into elastic_production.cpc_class
 select *
 from
-    PatentsView_20211230.cpc_subsection;
+    PatentsView_20220630.cpc_subsection;
 
 CREATE TABLE `cpc_subclass` (
   `id` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -227,10 +227,10 @@ CREATE TABLE `cpc_subclass` (
   KEY `ix_cpc_group_num_patents` (`num_patents`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-insert into elastic_staging.cpc_subclass
+insert into elastic_production.cpc_subclass
 select *
 from
-    PatentsView_20211230.cpc_group;
+    PatentsView_20220630.cpc_group;
  CREATE TABLE `cpc_group` (
   `id` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(2048) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -241,7 +241,7 @@ from
 insert into cpc_group
 select *
 from
-    PatentsView_20211230.cpc_subgroup
+    PatentsView_20220630.cpc_subgroup
 ;
 
 
@@ -265,7 +265,7 @@ CREATE TABLE `uspc_mainclass` (
 insert into uspc_mainclass
 select *
 from
-    PatentsView_20211230.uspc_mainclass;
+    PatentsView_20220630.uspc_mainclass;
 
 
 
@@ -277,7 +277,7 @@ CREATE TABLE `uspc_subclass` (
 insert into uspc_subclass
 select *
 from
-    PatentsView_20211230.uspc_subclass;
+    PatentsView_20220630.uspc_subclass;
 
 
 
@@ -291,7 +291,7 @@ select
   , sequence
   , patent_zero_prefix
 from
-    elastic_staging.foreign_citations;
+    elastic_production.foreign_citations;
 
 select
     uuid
@@ -300,36 +300,36 @@ select
   , sequence
   , patent_zero_prefix
 from
-    elastic_staging.other_reference;
+    elastic_production.other_reference;
 
 select
     id, title, num_patents, num_inventors, num_assignees, first_seen_date, last_seen_date, years_active
-from elastic_staging.cpc_class;
+from elastic_production.cpc_class;
 
 select
     id, title, num_patents, num_inventors, num_assignees, first_seen_date, last_seen_date, years_active
-from elastic_staging.cpc_subclass cs join elastic_staging.cpc_class cc on cc.id=cs.id;
+from elastic_production.cpc_subclass cs join elastic_production.cpc_class cc on cc.id=cs.id;
 
 
 select
     id, title
-from elastic_staging.cpc_group;
+from elastic_production.cpc_group;
 
 select
     ipcr_id, section, ipc_class, subclass
 from
-    elastic_staging.ipcr;
+    elastic_production.ipcr;
 
-select uuid, patent_id, text, sequence, patent_zero_prefix from elastic_staging.rel_app_text;;
+select uuid, patent_id, text, sequence, patent_zero_prefix from elastic_production.rel_app_text;;
 
-select uuid, patent_id, citation_id, date, name, kind, category, sequence, patent_zero_prefix from elastic_staging.us_patent_citations;
+select uuid, patent_id, citation_id, date, name, kind, category, sequence, patent_zero_prefix from elastic_production.us_patent_citations;
 
-select uuid, patent_id, document_number, date, name, kind, category, sequence, patent_zero_prefix from elastic_staging.us_application_citations;
+select uuid, patent_id, document_number, date, name, kind, category, sequence, patent_zero_prefix from elastic_production.us_application_citations;
 
 
-select id, title, num_patents, num_inventors, num_assignees, first_seen_date, last_seen_date, years_active from PatentsView_20211230.uspc_mainclass;
+select id, title, num_patents, num_inventors, num_assignees, first_seen_date, last_seen_date, years_active from PatentsView_20220630.uspc_mainclass;
 
-select persistent_lawyer_id, name_first, name_last, organization, num_patents, num_assignees, num_inventors, first_seen_date, last_seen_date, years_active from elastic_staging.attorneys;
+select persistent_lawyer_id, name_first, name_last, organization, num_patents, num_assignees, num_inventors, first_seen_date, last_seen_date, years_active from elastic_production.attorneys;
 
 select * from ipcr;
 

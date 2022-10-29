@@ -26,8 +26,8 @@ def generate_load_statistics(responses):
             record_count = record_count + len(response['items'])
             total_duration += response['took']
             if not error_status:
-            if response['errors']:
-                error_status = True
+                if response['errors']:
+                    error_status = True
 
     return {
         'batches': batch_count,
