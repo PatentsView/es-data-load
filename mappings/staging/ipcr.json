@@ -5,7 +5,7 @@
       "uuid": 0,
       "ipc_id": 0,
       "ipc_section": 1,
-      "ipc_class_": 2 ,
+      "ipc_class": 2 ,
       "ipc_subclass": 3
     },
     "count_source": "SELECT count(1) from  elastic_staging.ipcr",
