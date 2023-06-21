@@ -6,10 +6,10 @@ from source.MySQLSource import MySQLDataSource
 from source.TabularDataSource import TabularDataSource
 
 
-def get_source(config, source_type='mysql'):
+def get_source(config, source_type='mysql', test=0):
     source = TabularDataSource()
     if source_type == 'mysql':
-        source = MySQLDataSource(config)
+        source = MySQLDataSource(config, test=test)
     if source_type == 'delimited':
         source = DelimitedDataSource(config)
     return source
@@ -22,11 +22,12 @@ def generate_load_statistics(responses):
     error_status = False
     for response in responses:
         batch_count += 1
-        record_count = record_count + len(response['items'])
-        total_duration += response['took']
-        if not error_status:
-            if response['errors']:
-                error_status = True
+        if 'items' in response:
+            record_count = record_count + len(response['items'])
+            total_duration += response['took']
+            if not error_status:
+                if response['errors']:
+                    error_status = True
 
     return {
         'batches': batch_count,
@@ -38,16 +39,17 @@ def generate_load_statistics(responses):
 
 
 class LoadJob:
-    def __init__(self, load_job_config, connection_config):
+    def __init__(self, load_job_config, connection_config, test):
         self.load_operations = {}
         self.searchtarget = PatentsViewElasticSearch(connection_config)
         source_type = connection_config['SOURCE']['TYPE']
-        self.data_source = get_source(connection_config, source_type)
+        self.test = test
+        self.data_source = get_source(connection_config, source_type, test=test)
         for load_job in load_job_config:
             self.add_load_operation(load_job, load_job_config[load_job])
 
     @classmethod
-    def generate_load_job_from_folder(cls, directory, connection_config):
+    def generate_load_job_from_folder(cls, directory, connection_config, test=0):
         import os
         if not os.path.exists(directory) or not os.path.isdir(directory):
             raise Exception(f"{directory} is not a folder")
@@ -57,7 +59,7 @@ class LoadJob:
                 lname = ".".join(fname.split('.')[:-1])
                 json_file = os.path.join(directory, fname)
                 load_job_config[lname] = json.load(open(json_file, "r"))
-        return cls(load_job_config, connection_config)
+        return cls(load_job_config, connection_config, test=test)
 
     def add_load_operation(self, name, setting: dict):
         setting.update({
@@ -71,10 +73,10 @@ class LoadJob:
 
     def process_load_operation(self, name):
         operation = self.load_operations[name]
-        document_source = self.data_source.document_generator(**operation['source_setting'])
+        document_source = self.data_source.document_generator(**operation['source_setting'], load_name=name)
         responses = self.searchtarget.bulk_load_es_documents(
             document_source=document_source,
-            load_config=operation['target_setting'])
+            load_config=operation['target_setting'], test=self.test)
         load_stats = generate_load_statistics(responses)
         self.load_operations[name].update(load_stats)
 

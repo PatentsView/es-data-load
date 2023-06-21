@@ -1,0 +1,25 @@
+{
+  "source_setting": {
+    "source": "select persistent_lawyer_id, name_first, name_last, organization, num_patents, num_assignees, num_inventors, first_seen_date, last_seen_date, years_active from elastic_staging.attorneys order by persistent_lawyer_id limit {limit} offset {offset};",
+    "field_mapping": {
+      "attorney_id": 0,
+      "attorney_name_first": 1,
+      "attorney_name_last": 2,
+      "attorney_organization": 3,
+      "attorney_first_seen_date": 7,
+      "attorney_last_seen_date": 8,
+      "attorney_num_assignees": 5,
+      "attorney_num_patents": 4,
+      "attorney_num_inventors": 6,
+      "attorney_years_active": 9
+    },
+    "key_field": "attorney_id",
+    "count_source": "SELECT count(1) FROM elastic_staging.attorneys",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "attorneys",
+    "indexing_batch_size": 7500,
+    "id_field": "attorney_id"
+  }
+}

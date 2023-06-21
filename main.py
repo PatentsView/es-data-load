@@ -30,6 +30,11 @@ if __name__ == '__main__':
             'help': 'Elastic config file',
             'type': str,
             'argument_count': 1
+        },
+        '-t': {
+            'help': 'Test Source Query/Data',
+            'type': int,
+            'argument_count': 1
         }
     }
     cmdparser = argparse.ArgumentParser()
@@ -40,12 +45,14 @@ if __name__ == '__main__':
             help=argument_settings['help'])
     args = cmdparser.parse_args()
     cfile = args.c[0]
+    test = args.t[0]
     config = get_config(cfile)
-    loadjob = LoadJob.generate_load_job_from_folder(directory=args.d[0], connection_config=config)
+    loadjob = LoadJob.generate_load_job_from_folder(directory=args.d[0], connection_config=config, test=test)
     loadjob.process_all_load_operations()
     operations = loadjob.get_load_operation_names()
     for operation in operations:
         print("------------")
         print(operation)
         status = loadjob.get_load_job_status(operation)
+        del status['source_setting']
         pprint.pprint(status)

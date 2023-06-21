@@ -5,6 +5,14 @@ from source.TabularDataSource import TabularDataSource
 
 class MySQLDataSource(TabularDataSource):
     def execute_query(self, query):
+        if self.test == 1:
+            end_position = query.rfind(';')
+            if end_position == len(query) - 1:
+                query = f"{query[0:end_position]} where 1 = 0;"
+            elif end_position < 0:
+                query = f"{query} where 1 = 0;"
+            else:
+                raise Exception("Multiple ; found in query")
         attempt = 0
         while True:
             try:
@@ -22,7 +30,8 @@ class MySQLDataSource(TabularDataSource):
                 print(query)
                 raise e
 
-    def __init__(self, config):
+    def __init__(self, config, test):
+        self.test = test
         if config['SOURCE']['TYPE'] != 'mysql':
             raise Exception("Source type should be mysql")
         self.connection = pymysql.connect(host=config['SOURCE']['HOSTNAME'],

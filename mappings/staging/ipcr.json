@@ -1,0 +1,20 @@
+ {
+  "source_setting": {
+    "source": "select     ipcr_id, section, ipc_class, subclass from elastic_staging.ipcr  order by ipcr_id limit {limit} offset {offset};",
+    "field_mapping": {
+      "uuid": 0,
+      "ipc_id": 0,
+      "ipc_section": 1,
+      "ipc_class": 2 ,
+      "ipc_subclass": 3
+    },
+    "count_source": "SELECT count(1) from  elastic_staging.ipcr",
+    "chunksize": 10000,
+        "key_field": "uuid"
+  },
+  "target_setting": {
+    "index": "ipcr",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}

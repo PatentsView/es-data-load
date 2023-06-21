@@ -1,0 +1,41 @@
+{
+  "source_setting": {
+    "source": "select persistent_inventor_id, attribution_status, name_first, name_last, male_flag, num_patents, num_assignees, lastknown_location_id, lastknown_city, lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude, first_seen_date, last_seen_date, years_active from elastic_staging.inventors order by persistent_inventor_id limit {limit} offset {offset};",
+    "field_mapping": {
+      "inventor_id": 0,
+      "inventor_name_first": 2,
+      "inventor_name_last": 3,
+      "inventor_male_flag": 4,
+      "inventor_gender_attr_status": 1,
+      "inventor_lastknown_location": 7,
+      "inventor_lastknown_city": 8,
+      "inventor_lastknown_state": 9,
+      "inventor_lastknown_country": 10,
+      "inventor_lastknown_latitude": 11,
+      "inventor_lastknown_longitude": 12,
+      "inventor_first_seen_date": 13,
+      "inventor_last_seen_date": 14,
+      "inventor_num_assignees": 6,
+      "inventor_num_patents": 5,
+      "inventor_years_active": 15
+    },
+    "key_field": "inventor_id",
+    "nested_fields": {
+      "inventor_years": {
+        "source": "select patent_year, num_patents , a.persistent_inventor_id as inventor_id from elastic_staging.inventor_years ay join (select inventor_id, persistent_inventor_id from elastic_staging.inventors order by persistent_inventor_id limit {limit} offset {offset}) a on a.inventor_id = ay.inventor_id",
+        "field_mapping": {
+          "year": 0,
+          "num_patents": 1,
+          "inventor_id": 2
+        }
+      }
+    },
+    "count_source": "SELECT count(1) FROM elastic_staging.inventors",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "inventors",
+    "indexing_batch_size": 7500,
+    "id_field": "inventor_id"
+  }
+}
