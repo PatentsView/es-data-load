@@ -1,18 +1,11 @@
 import argparse
-import configparser
-import os
 import pprint
 
-from LoadJob import LoadJob
-
-
-def get_config(config_file_to_use):
-    # project_root = os.environ['PROJECT_ROOT']
-    # config_file_to_use = "./resources/config.ini"
-    config = configparser.ConfigParser()
-    config.read(config_file_to_use)
-    return config
-
+from es_data_load.specification import LoadConfiguration
+from specification import LoadJob
+from es_data_load.es import PatentsViewElasticSearch
+from es_data_load.lib.utilities import get_source, get_config
+from schema.SchemaManager import PVSchemaManager
 
 if __name__ == '__main__':
     parser_args = {
@@ -47,12 +40,17 @@ if __name__ == '__main__':
     cfile = args.c[0]
     test = args.t[0]
     config = get_config(cfile)
-    loadjob = LoadJob.generate_load_job_from_folder(directory=args.d[0], connection_config=config, test=test)
-    loadjob.process_all_load_operations()
-    operations = loadjob.get_load_operation_names()
+    # loadconfigs = LoadConfiguration.generate_load_configuration_from_folder(directories=[args.d[0]])
+    loadconfigs = LoadConfiguration.load_default_pv_configuration(suffix="_test")
+    es = PatentsViewElasticSearch.from_config(config)
+    schema_manager = PVSchemaManager(es=es, suffix='_test')
+    schema_manager.create_es_indices()
+    mysql_source = get_source(config, source_type='mysql')
+    load_job = LoadJob(loadconfigs, mysql_source, es, test=test)
+    load_job.process_all_load_operations()
+    operations = loadconfigs.get_load_operation_names()
     for operation in operations:
         print("------------")
         print(operation)
-        status = loadjob.get_load_job_status(operation)
-        del status['source_setting']
+        status = load_job.get_load_results(operation)
         pprint.pprint(status)

@@ -1,4 +1,4 @@
-from LoadJob import LoadJob
+from specification import LoadConfiguration
 from tests.test_es import assert_es_counts
 
 
@@ -7,14 +7,14 @@ def test_generate_load_job_from_folder(project_root, config):
     full_test_mapping_path = "{root}/{relative_folder_path}".format(
             relative_folder_path=test_mapping_folder,
             root=project_root)
-    lj = LoadJob.generate_load_job_from_folder(full_test_mapping_path, config)
+    lj = LoadConfiguration.generate_load_configuration_from_folder(full_test_mapping_path)
     assert len(lj.get_load_operation_names()) == 1
     test_mapping_folder = "tests/all_citations_loads"
     full_test_mapping_path = "{root}/{relative_folder_path}".format(
             relative_folder_path=test_mapping_folder,
             root=project_root)
 
-    lj = LoadJob.generate_load_job_from_folder(full_test_mapping_path, config)
+    lj = LoadConfiguration.generate_load_configuration_from_folder(full_test_mapping_path)
     assert len(lj.get_load_operation_names()) == 2
 
 
@@ -28,7 +28,7 @@ def test_get_load_operation_names(load_job_2):
             [x in ljns for x in ['patent_citation', 'application_citation']])
 
 
-def test_process_load_operation(load_job_1: LoadJob):
+def test_process_load_operation(load_job_1: LoadConfiguration):
     load_job_1.searchtarget.es.indices.delete(
             index=load_job_1.get_load_job_status('patent_citation')['target_setting']['index'])
     load_job_1.process_load_operation('patent_citation')

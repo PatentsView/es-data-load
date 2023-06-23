@@ -1,0 +1,26 @@
+{
+  "uspc_mainclass_first_seen_date": {
+    "type": "date"
+  },
+  "uspc_mainclass_id": {
+    "type": "keyword"
+  },
+  "uspc_mainclass_last_seen_date": {
+    "type": "date"
+  },
+  "uspc_mainclass_num_assignees": {
+    "type": "long"
+  },
+  "uspc_mainclass_num_inventors": {
+    "type": "long"
+  },
+  "uspc_mainclass_num_patents": {
+    "type": "long"
+  },
+  "uspc_mainclass_title": {
+    "type": "text"
+  },
+  "uspc_mainclass_years_active": {
+    "type": "long"
+  }
+}

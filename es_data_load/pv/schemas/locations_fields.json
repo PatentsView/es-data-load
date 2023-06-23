@@ -1,0 +1,65 @@
+{
+  "location_id": {
+    "type": "keyword"
+  },
+  "location_name": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "location_county": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "location_county_fips": {
+    "type": "keyword"
+  },
+  "location_state": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "location_state_fips": {
+    "type": "keyword"
+  },
+  "location_country": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "location_place_type": {
+    "type": "keyword"
+  },
+  "location_latitude": {
+    "type": "double"
+  },
+  "location_longitude": {
+    "type": "double"
+  },
+  "location_num_assignees": {
+    "type": "long"
+  },
+  "location_num_patents": {
+    "type": "long"
+  },
+  "location_num_inventors": {
+    "type": "long"
+  }
+}

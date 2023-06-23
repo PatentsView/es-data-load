@@ -1,4 +1,5 @@
-from LoadJob import generate_load_statistics, get_source
+from specification import get_source
+from lib.utilities import generate_load_statistics
 from source.DelimitedDataSource import DelimitedDataSource
 from source.MySQLSource import MySQLDataSource
 from source.TabularDataSource import TabularDataSource

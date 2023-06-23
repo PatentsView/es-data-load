@@ -1,0 +1,11 @@
+{
+  "wipo_id": {
+    "type": "keyword"
+  },
+  "sector_title": {
+    "type": "keyword"
+  },
+  "field_title": {
+    "type": "keyword"
+  }
+}

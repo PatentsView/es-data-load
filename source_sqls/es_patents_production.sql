@@ -1,8 +1,11 @@
-drop database elastic_production;
+drop
+    database elastic_production;
 
-create database elastic_production;
+create
+    database elastic_production;
 
-use elastic_production;
+use
+    elastic_production;
 
 -- Create syntax for TABLE 'patent_gov_contract'
 CREATE TABLE `patent_gov_contract`
@@ -410,7 +413,8 @@ select
   , pe.patent_id_eight_char
 from
     PatentsView_20220630.patent p
-        left join PatentsView_20220630.government_interest gi on gi.patent_id = p.patent_id
+        left join PatentsView_20220630.government_interest gi
+                  on gi.patent_id = p.patent_id
         join patent.patent_to_eight_char pe on pe.id = p.patent_id;
 
 explain extended
@@ -458,8 +462,8 @@ select
   , pa.sequence
   , l.location_id
   , pa.patent_id
-  , tima.old_assignee_id
   , timl.old_location_id
+  , tima.old_assignee_id
 from
     PatentsView_20220630.patent_assignee pa
         join elastic_production.patents p on p.patent_id = pa.patent_id
@@ -534,9 +538,20 @@ from
          c.patent_id
        , c.sequence
        , section                                                          as section_id
-       , concat(section, class)                                           as subsection_id
-       , concat(section, class, subclass)                                 as group_id
-       , concat(section, class, subclass, main_group, '/', subgroup)      as subgroup_id
+       , concat(
+                 section
+             , class)                                                     as subsection_id
+       , concat(
+                 section
+             , class
+             , subclass)                                                  as group_id
+       , concat(
+                 section
+             , class
+             , subclass
+             , main_group
+             , '/'
+             , subgroup)                                                  as subgroup_id
        , case when c.value = 'I' then 'inventional' else 'additional' end as category
        , 'main'                                                           as source
      from
@@ -548,9 +563,20 @@ from
          c.patent_id
        , c.sequence
        , section                                                          as section_id
-       , concat(section, class)                                           as subsection_id
-       , concat(section, class, subclass)                                 as group_id
-       , concat(section, class, subclass, main_group, '/', subgroup)      as subgroup_id
+       , concat(
+                 section
+             , class)                                                     as subsection_id
+       , concat(
+                 section
+             , class
+             , subclass)                                                  as group_id
+       , concat(
+                 section
+             , class
+             , subclass
+             , main_group
+             , '/'
+             , subgroup)                                                  as subgroup_id
        , case when c.value = 'I' then 'inventional' else 'additional' end as category
        , 'further'                                                        as source
      from
@@ -725,7 +751,8 @@ select
   , level_three
 from
     PatentsView_20220630.government_organization go
-        join PatentsView_20220630.patent_govintorg pgi on pgi.organization_id = go.organization_id
+        join PatentsView_20220630.patent_govintorg pgi
+             on pgi.organization_id = go.organization_id
         join elastic_production.patents p on p.patent_id = pgi.patent_id;
 
 insert into elastic_production.patent_gov_contract(patent_id, award_number)
@@ -762,9 +789,10 @@ order by
   , subclass;
 
 
-update elastic_production.patent_ipcr i join elastic_production.ipcr i2 on i2.section = i.section and
-                                                                           i2.ipc_class = i.ipc_class and
-                                                                           i2.subclass = i.subclass
+update elastic_production.patent_ipcr i join elastic_production.ipcr i2
+    on i2.section = i.section and
+       i2.ipc_class = i.ipc_class and
+       i2.subclass = i.subclass
 set i.ipcr_id=i2.ipcr_id;
 
 
@@ -798,7 +826,8 @@ from
 
 
 
-show engine innodb status;
+show
+    engine innodb status;
 
 
 
@@ -847,9 +876,20 @@ from
          c.patent_id
        , c.sequence
        , section                                                          as section_id
-       , concat(section, class)                                           as subsection_id
-       , concat(section, class, subclass)                                 as group_id
-       , concat(section, class, subclass, main_group, '/', subgroup)      as subgroup_id
+       , concat(
+                 section
+             , class)                                                     as subsection_id
+       , concat(
+                 section
+             , class
+             , subclass)                                                  as group_id
+       , concat(
+                 section
+             , class
+             , subclass
+             , main_group
+             , '/'
+             , subgroup)                                                  as subgroup_id
        , case when c.value = 'I' then 'inventional' else 'additional' end as category
        , 'main'                                                           as source
      from
@@ -861,9 +901,20 @@ from
          c.patent_id
        , c.sequence
        , section                                                          as section_id
-       , concat(section, class)                                           as subsection_id
-       , concat(section, class, subclass)                                 as group_id
-       , concat(section, class, subclass, main_group, '/', subgroup)      as subgroup_id
+       , concat(
+                 section
+             , class)                                                     as subsection_id
+       , concat(
+                 section
+             , class
+             , subclass)                                                  as group_id
+       , concat(
+                 section
+             , class
+             , subclass
+             , main_group
+             , '/'
+             , subgroup)                                                  as subgroup_id
        , case when c.value = 'I' then 'inventional' else 'additional' end as category
        , 'further'                                                        as source
      from
@@ -872,3 +923,30 @@ from
                   on p.patent_id = c.patent_id) x;
 
 
+SELECT
+    table_schema                                            "DB Name"
+  , ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB"
+FROM
+    information_schema.tables
+GROUP BY
+    table_schema;
+
+CREATE TABLE `elastic_production_20220929`.`patent_inventor`
+(
+    `inventor_id`            int(10) unsigned                       NOT NULL,
+    `persistent_inventor_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `patent_id`              varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `sequence`               int(11)                                NOT NULL,
+    `name_first`             varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `name_last`              varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `city`                   varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `state`                  varchar(20) COLLATE utf8mb4_unicode_ci  DEFAULT NULL,
+    `country`                varchar(10) COLLATE utf8mb4_unicode_ci  DEFAULT NULL,
+    `location_id`            int(11)                                 DEFAULT NULL,
+    `persistent_location_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (`patent_id`, `inventor_id`, `sequence`),
+    KEY `ix_inventor_name_first` (`name_first`),
+    KEY `ix_inventor_name_last` (`name_last`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;

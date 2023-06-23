@@ -1,0 +1,8 @@
+{
+  "cpc_class_id": {"type": "keyword"},
+  "cpc_class": {"type": "keyword"},
+  "cpc_subclass_id": {"type": "keyword"},
+  "cpc_subclass": {"type": "keyword"},
+  "cpc_group_id": {"type": "keyword"},
+  "cpc_group_title": {"type": "text"}
+}

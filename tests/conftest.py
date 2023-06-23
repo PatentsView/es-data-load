@@ -4,9 +4,9 @@ import os
 
 import pytest
 
-from LoadJob import LoadJob
+from specification import LoadConfiguration
 from es import PatentsViewElasticSearch
-from source.MySQLSource import MySQLDataSource
+from es_data_load.DataSources import MySQLDataSource
 
 
 @pytest.fixture()
@@ -33,32 +33,32 @@ def load_job_config(project_root):
 
 @pytest.fixture()
 def mysql_source(config):
-    source = MySQLDataSource(config)
+    source = MySQLDataSource.from_config(config)
     yield source
 
 
 @pytest.fixture()
 def search(config):
-    yield PatentsViewElasticSearch(config)
+    yield PatentsViewElasticSearch.from_config(config)
 
 
 @pytest.fixture()
-def load_job_2(project_root, config):
+def load_job_2(project_root):
     test_mapping_folder = "tests/all_citations_loads"
     full_test_mapping_path = "{root}/{relative_folder_path}".format(
             relative_folder_path=test_mapping_folder,
             root=project_root)
-    lj = LoadJob.generate_load_job_from_folder(full_test_mapping_path, config)
+    lj = LoadConfiguration.generate_load_configuration_from_folder(full_test_mapping_path)
     yield lj
 
 
 @pytest.fixture()
-def load_job_1(project_root, config):
+def load_job_1(project_root):
     test_mapping_folder = "tests/patent_citations_loads"
     full_test_mapping_path = "{root}/{relative_folder_path}".format(
             relative_folder_path=test_mapping_folder,
             root=project_root)
-    lj = LoadJob.generate_load_job_from_folder(full_test_mapping_path, config)
+    lj = LoadConfiguration.generate_load_configuration_from_folder(full_test_mapping_path)
     yield lj
 
 

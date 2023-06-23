@@ -1,0 +1,5 @@
+sphinx
+elasticsearch==8.4.1
+tqdm
+pymysql
+pytest
