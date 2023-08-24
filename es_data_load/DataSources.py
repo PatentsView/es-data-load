@@ -25,13 +25,14 @@ class TabularDataSource(ABC):
         source = kwargs.get('source')
         field_mapping = kwargs.get('field_mapping')
         offset = 0
+        last_id = 0
         nested_field_source_settings = kwargs.get('nested_fields', {})
         total_count = self.get_document_count(count_source=kwargs.get('count_source'))
         pbar = tqdm(total=total_count, desc=kwargs.get('load_name', 'Load:'))
         key_field = kwargs.get('key_field')
         while True:
             exists = False
-            main_document = self.generate_source_chunk(source, field_mapping, offset=offset, **kwargs)
+            main_document = self.generate_source_chunk(source, field_mapping, offset=last_id, **kwargs)
             sub_documents = {}
 
             for nested_field, nested_field_setting in nested_field_source_settings.items():
@@ -56,6 +57,7 @@ class TabularDataSource(ABC):
                 yield data_row
             if not exists or chunksize is None:
                 break
+            last_id = data_row[key_field]
             offset = offset + chunksize
 
 
@@ -181,7 +183,8 @@ class MySQLDataSource(TabularDataSource):
         :param int offset: Number of records to skip
         """
         limit = int(kwargs.get('chunksize', 10000))
-        offset = int(kwargs.get('offset'))
+        # offset = int(kwargs.get('offset'))
+        offset = kwargs.get('offset')
         test = int(kwargs.get('test', '0'))
         query_template = args[0]
         mapping = args[1]

@@ -32,7 +32,7 @@ CREATE TABLE `locations`
 
 
 
-insert into elastic_production.locations( location_id, city, state, country, county, state_fips, county_fips, latitude
+insert into elastic_production_20230629.locations( location_id, city, state, country, county, state_fips, county_fips, latitude
                                         , longitude, num_assignees, num_inventors, num_patents, persistent_location_id
                                         , locations.place_type)
 select

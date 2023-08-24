@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select id, id, title, num_assignees, num_inventors, num_patents, first_seen_date, last_seen_date, years_active from elastic_production.cpc_class  order by id limit {limit} offset {offset};",
+    "source": "select id, id, title, num_assignees, num_inventors, num_patents, first_seen_date, last_seen_date, years_active from elastic_production_20230629.cpc_class where id > '{offset}' order by id limit {limit};",
     "field_mapping": {
       "uuid": 0,
       "cpc_class_id": 1,
@@ -14,8 +14,8 @@
       "cpc_class_years_active": 8
     },
     "key_field": "uuid",
-    "count_source": "SELECT count(1) from  elastic_production.cpc_class",
-    "chunksize": 10000
+    "count_source": "SELECT count(1) from  elastic_production_20230629.cpc_class",
+    "chunksize": 1000000
   },
   "target_setting": {
     "index": "cpc_classes",

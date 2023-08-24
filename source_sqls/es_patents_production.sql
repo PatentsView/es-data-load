@@ -380,7 +380,7 @@ CREATE TABLE `patent_wipo`
 
 
 -- 47mins
-insert into elastic_production.patents ( patent_id, type, number, country, date, year, abstract, title, kind, num_claims
+insert into elastic_production_20230629.patents ( patent_id, type, number, country, date, year, abstract, title, kind, num_claims
                                        , num_foreign_documents_cited, num_us_applications_cited, num_us_patents_cited
                                        , num_total_documents_cited, num_times_cited_by_us_patents
                                        , earliest_application_date, patent_processing_days
@@ -418,7 +418,7 @@ from
         join patent.patent_to_eight_char pe on pe.id = p.patent_id;
 
 explain extended
-INSERT INTO elastic_production.patent_application( application_id, patent_id, type, number, country, date, series_code
+INSERT INTO elastic_production_20230629.patent_application( application_id, patent_id, type, number, country, date, series_code
                                                  , rule_47_flag)
 select
     a.application_id
@@ -443,10 +443,10 @@ from
               group by
                   patent_id) x on x.patent_id = a.patent_id;
 
-TRUNCATE table elastic_production.patent_assignee;
+TRUNCATE table elastic_production_20230629.patent_assignee;
 
 
-INSERT INTO elastic_production.patent_assignee( assignee_id, type, name_first, name_last, organization, city, state
+INSERT INTO elastic_production_20230629.patent_assignee( assignee_id, type, name_first, name_last, organization, city, state
                                               , country, sequence, location_id, patent_id, persistent_location_id
                                               , persistent_assignee_id)
 
@@ -466,15 +466,15 @@ select
   , tima.old_assignee_id
 from
     PatentsView_20220630.patent_assignee pa
-        join elastic_production.patents p on p.patent_id = pa.patent_id
+        join elastic_production_20230629.patents p on p.patent_id = pa.patent_id
         join PatentsView_20220630.assignee a on a.assignee_id = pa.assignee_id
         join PatentsView_20220630.temp_id_mapping_assignee tima on tima.new_assignee_id = a.assignee_id
         left join PatentsView_20220630.location l on l.location_id = pa.location_id
         left join PatentsView_20220630.temp_id_mapping_location timl on timl.new_location_id = l.location_id;
 
-TRUNCATE table elastic_production.patent_inventor;
+TRUNCATE table elastic_production_20230629.patent_inventor;
 
-insert into elastic_production.patent_inventor ( inventor_id, patent_id, sequence, name_first, name_last, city, state
+insert into elastic_production_20230629.patent_inventor ( inventor_id, patent_id, sequence, name_first, name_last, city, state
                                                , country, location_id, persistent_inventor_id, persistent_location_id)
 
 select
@@ -495,11 +495,11 @@ from
         join PatentsView_20220630.temp_id_mapping_inventor timi on timi.new_inventor_id = i.inventor_id
         left join PatentsView_20220630.location l on l.location_id = pi.location_id
         left join PatentsView_20220630.temp_id_mapping_location timl on timl.new_location_id = l.location_id
-        join elastic_production.patents p on p.patent_id = pi.patent_id;
+        join elastic_production_20230629.patents p on p.patent_id = pi.patent_id;
 
 
 
-create or replace sql security invoker view elastic_production.patent_cpc_current as
+create or replace sql security invoker view elastic_production_20230629.patent_cpc_current as
 select
 
     c.patent_id
@@ -512,7 +512,7 @@ select
 from
     PatentsView_20220630.cpc_current c;
 
-create sql security invoker view elastic_production.granted_pregrant_crosswalk as
+create sql security invoker view elastic_production_20230629.granted_pregrant_crosswalk as
 
 select
     gpc.patent_number as patent_id
@@ -523,7 +523,7 @@ from
 
 
 
-insert into elastic_production.patent_cpc_at_issue( patent_id, sequence, cpc_section, cpc_class, cpc_subclass, cpc_group
+insert into elastic_production_20230629.patent_cpc_at_issue( patent_id, sequence, cpc_section, cpc_class, cpc_subclass, cpc_group
                                                   , cpc_type)
 select
     x.patent_id
@@ -556,7 +556,7 @@ from
        , 'main'                                                           as source
      from
          patent.main_cpc c
-             join elastic_production.patents p
+             join elastic_production_20230629.patents p
                   on p.patent_id = c.patent_id
      union
      SELECT
@@ -581,12 +581,12 @@ from
        , 'further'                                                        as source
      from
          patent.further_cpc c
-             join elastic_production.patents p
+             join elastic_production_20230629.patents p
                   on p.patent_id = c.patent_id) x;
 
 
 
-create sql security invoker view elastic_production.patent_foreign_priority as
+create sql security invoker view elastic_production_20230629.patent_foreign_priority as
 
 select
     f.patent_id
@@ -599,7 +599,7 @@ from
     PatentsView_20220630.foreignpriority f;
 
 
-create or replace sql security invoker view elastic_production.patent_ipcr as
+create or replace sql security invoker view elastic_production_20230629.patent_ipcr as
 select
     i.patent_id
   , i2.ipcr_id as ipcr_id
@@ -615,11 +615,11 @@ select
   , i.action_date
 from
     PatentsView_20220630.ipcr i
-        join elastic_production.ipcr i2
+        join elastic_production_20230629.ipcr i2
              on i2.ipc_class = i.ipc_class and i2.section = i.section and i2.subclass = i.subclass;
 
 
-insert into elastic_production.patent_applicant( patent_id, lname, fname, organization, sequence, designation
+insert into elastic_production_20230629.patent_applicant( patent_id, lname, fname, organization, sequence, designation
                                                , applicant_type
                                                , location_id, persistent_location_id)
 
@@ -635,14 +635,14 @@ select
   , timl.old_location_id
 from
     patent.non_inventor_applicant nia
-        join elastic_production.patents p on nia.patent_id = p.patent_id
+        join elastic_production_20230629.patents p on nia.patent_id = p.patent_id
         left join patent.rawlocation rl on rl.id = nia.rawlocation_id
         left join PatentsView_20220630.temp_id_mapping_location timl on timl.old_location_id = rl.location_id
         left join PatentsView_20220630.location l on l.location_id = timl.new_location_id
 
 
 
-create sql security invoker view elastic_production.patent_pct_data as
+create sql security invoker view elastic_production_20230629.patent_pct_data as
 select
     p.patent_id
   , p.doc_type
@@ -655,7 +655,7 @@ from
     PatentsView_20220630.pctdata p;
 
 
-create sql security invoker view elastic_production.patent_uspc_at_issue as
+create sql security invoker view elastic_production_20230629.patent_uspc_at_issue as
 select
     u.patent_id
   , sequence
@@ -665,7 +665,7 @@ from
     patent.uspc u;
 
 
-create sql security invoker view elastic_production.patent_wipo as
+create sql security invoker view elastic_production_20230629.patent_wipo as
 select
     w.patent_id
   , w.field_id
@@ -674,7 +674,7 @@ from
     PatentsView_20220630.wipo w;
 
 
-create sql security invoker view elastic_production.patent_botanic as
+create sql security invoker view elastic_production_20230629.patent_botanic as
 select
     b.patent_id
   , b.latin_name
@@ -684,7 +684,7 @@ from
 
 
 
-create sql security invoker view elastic_production.patent_figures as
+create sql security invoker view elastic_production_20230629.patent_figures as
 select
     f.patent_id
   , f.num_figures
@@ -695,7 +695,7 @@ from
 
 
 
-insert into elastic_production.patent_attorneys( patent_id, lawyer_id, sequence, name_first, name_last, organization
+insert into elastic_production_20230629.patent_attorneys( patent_id, lawyer_id, sequence, name_first, name_last, organization
                                                , persistent_lawyer_id)
 select
     pl.patent_id
@@ -709,11 +709,11 @@ from
     PatentsView_20220630.patent_lawyer pl
         join PatentsView_20220630.lawyer l on pl.lawyer_id = l.lawyer_id
         join PatentsView_20220630.temp_id_mapping_lawyer timl on timl.new_lawyer_id = l.lawyer_id
-        join elastic_production.patents p on pl.patent_id = p.patent_id;
+        join elastic_production_20230629.patents p on pl.patent_id = p.patent_id;
 
 
 
-insert into elastic_production.patent_examiner( patent_id, examiner_id, name_first, name_last, role, `group`
+insert into elastic_production_20230629.patent_examiner( patent_id, examiner_id, name_first, name_last, role, `group`
                                               , persistent_examiner_id)
 select
     pe.patent_id
@@ -727,11 +727,11 @@ from
     PatentsView_20220630.patent_examiner pe
         join PatentsView_20220630.examiner e on pe.examiner_id = e.examiner_id
         join PatentsView_20220630.temp_id_mapping_examiner `time` on `time`.new_examiner_id = e.examiner_id
-        join elastic_production.patents p on p.patent_id = pe.patent_id;
+        join elastic_production_20230629.patents p on p.patent_id = pe.patent_id;
 
 
 
-create sql security invoker view elastic_production.patent_us_term_of_grant as
+create sql security invoker view elastic_production_20230629.patent_us_term_of_grant as
 select
     u.patent_id
   , u.disclaimer_date
@@ -742,7 +742,7 @@ from
     patent.us_term_of_grant u;
 
 
-insert into elastic_production.patent_gov_interest_organizations(patent_id, name, level_one, level_two, level_three)
+insert into elastic_production_20230629.patent_gov_interest_organizations(patent_id, name, level_one, level_two, level_three)
 select
     pgi.patent_id
   , name
@@ -753,15 +753,15 @@ from
     PatentsView_20220630.government_organization go
         join PatentsView_20220630.patent_govintorg pgi
              on pgi.organization_id = go.organization_id
-        join elastic_production.patents p on p.patent_id = pgi.patent_id;
+        join elastic_production_20230629.patents p on p.patent_id = pgi.patent_id;
 
-insert into elastic_production.patent_gov_contract(patent_id, award_number)
+insert into elastic_production_20230629.patent_gov_contract(patent_id, award_number)
 select
     c.patent_id
   , contract_award_number
 from
     PatentsView_20220630.patent_contractawardnumber c
-        join elastic_production.patents p on p.patent_id = c.patent_id;
+        join elastic_production_20230629.patents p on p.patent_id = c.patent_id;
 
 CREATE TABLE `ipcr`
 (
@@ -775,7 +775,7 @@ CREATE TABLE `ipcr`
   DEFAULT CHARSET = latin1;
 
 
-create or replace sql security invoker view elastic_production.ipcr as
+create or replace sql security invoker view elastic_production_20230629.ipcr as
 select
     ipcr_id
   , section
@@ -789,7 +789,7 @@ order by
   , subclass;
 
 
-update elastic_production.patent_ipcr i join elastic_production.ipcr i2
+update elastic_production_20230629.patent_ipcr i join elastic_production_20230629.ipcr i2
     on i2.section = i.section and
        i2.ipc_class = i.ipc_class and
        i2.subclass = i.subclass
@@ -805,11 +805,11 @@ select
   , a.type
   , a.patent_id
 from
-    elastic_production.patent_application a
-        join (select patent_id from elastic_production.patents order by patent_id limit 10 offset 0) p
+    elastic_production_20230629.patent_application a
+        join (select patent_id from elastic_production_20230629.patents order by patent_id limit 10 offset 0) p
              on p.patent_id = a.patent_id;
 
-create sql security invoker view elastic_production.patent_us_related_documents as
+create sql security invoker view elastic_production_20230629.patent_us_related_documents as
 select
     u.patent_id
   , doctype
@@ -861,7 +861,7 @@ CREATE TABLE `patent_cpc_at_issue`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-insert into elastic_production.patent_cpc_at_issue( patent_id, sequence, cpc_section, cpc_class, cpc_subclass, cpc_group
+insert into elastic_production_20230629.patent_cpc_at_issue( patent_id, sequence, cpc_section, cpc_class, cpc_subclass, cpc_group
                                                   , cpc_type)
 select
     x.patent_id

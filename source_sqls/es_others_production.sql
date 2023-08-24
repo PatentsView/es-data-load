@@ -15,7 +15,7 @@ CREATE TABLE `foreign_citations`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-create or replace sql security invoker view elastic_production.foreign_citations as
+create or replace sql security invoker view elastic_production_20230629.foreign_citations as
 select
     fc.uuid
   , fc.patent_id
@@ -28,7 +28,7 @@ select
 
 from
     patent.foreigncitation fc
-        join elastic_production.patents p on p.patent_id = fc.patent_id;
+        join elastic_production_20230629.patents p on p.patent_id = fc.patent_id;
 
 CREATE TABLE `attorneys`
 (
@@ -57,7 +57,7 @@ CREATE TABLE `attorneys`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-insert into elastic_production.attorneys ( lawyer_id, name_first, name_last, organization, num_patents, num_assignees
+insert into elastic_production_20230629.attorneys ( lawyer_id, name_first, name_last, organization, num_patents, num_assignees
                                          , num_inventors, first_seen_date, last_seen_date, years_active
                                          , persistent_lawyer_id)
 select distinct
@@ -81,11 +81,11 @@ CREATE TABLE `other_reference`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-drop view elastic_production.other_reference;
+drop view elastic_production_20230629.other_reference;
 
 
 explain extended
-insert into elastic_production.other_reference(uuid, patent_id, text, sequence, patent_zero_prefix)
+insert into elastic_production_20230629.other_reference(uuid, patent_id, text, sequence, patent_zero_prefix)
 select
     o.uuid
   , o.patent_id
@@ -94,7 +94,7 @@ select
   , p.patent_zero_prefix
 from
     patent.otherreference o
-        join elastic_production.patents p on o.patent_id = p.patent_id;
+        join elastic_production_20230629.patents p on o.patent_id = p.patent_id;
 
 CREATE TABLE `rel_app_text`
 (
@@ -109,7 +109,7 @@ CREATE TABLE `rel_app_text`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-create or replace sql security invoker view elastic_production.rel_app_text as
+create or replace sql security invoker view elastic_production_20230629.rel_app_text as
 select
     r.uuid
   , r.patent_id
@@ -118,7 +118,7 @@ select
   , p.patent_zero_prefix
 from
     patent.rel_app_text r
-        join elastic_production.patents p on r.patent_id = p.patent_id
+        join elastic_production_20230629.patents p on r.patent_id = p.patent_id
 
 CREATE TABLE `us_patent_citations`
 (
@@ -140,7 +140,7 @@ CREATE TABLE `us_patent_citations`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 ;
-explain extended insert into elastic_production.us_patent_citations( uuid, patent_id, citation_id, date, name, kind, category
+explain extended insert into elastic_production_20230629.us_patent_citations( uuid, patent_id, citation_id, date, name, kind, category
                                                , sequence, patent_zero_prefix)
 
 select
@@ -156,7 +156,7 @@ select
 
 from
     patent.uspatentcitation u2
-        join elastic_production.patents p on p.patent_id = u2.patent_id
+        join elastic_production_20230629.patents p on p.patent_id = u2.patent_id
         join patent.patent p2 on p2.id = u2.citation_id;
 
 
@@ -177,7 +177,7 @@ CREATE TABLE `us_application_citations`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-insert into elastic_production.us_application_citations ( uuid, patent_id, document_number, date, name, kind, category
+insert into elastic_production_20230629.us_application_citations ( uuid, patent_id, document_number, date, name, kind, category
                                                      , sequence, patent_zero_prefix)
  select
     uuid
@@ -191,7 +191,7 @@ insert into elastic_production.us_application_citations ( uuid, patent_id, docum
   , patent_zero_prefix
 from
     patent.usapplicationcitation u
-        join elastic_production.patents p on p.patent_id = u.patent_id
+        join elastic_production_20230629.patents p on p.patent_id = u.patent_id
 
 
 CREATE TABLE `wipo_field`
@@ -229,7 +229,7 @@ CREATE TABLE `cpc_class`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-insert into elastic_production.cpc_class
+insert into elastic_production_20230629.cpc_class
 select *
 from
     PatentsView_20220630.cpc_subsection;
@@ -252,7 +252,7 @@ CREATE TABLE `cpc_subclass`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-insert into elastic_production.cpc_subclass
+insert into elastic_production_20230629.cpc_subclass
 select *
 from
     PatentsView_20220630.cpc_group;
@@ -325,7 +325,7 @@ select
   , sequence
   , patent_zero_prefix
 from
-    elastic_production.foreign_citations;
+    elastic_production_20230629.foreign_citations;
 
 select
     uuid
@@ -334,7 +334,7 @@ select
   , sequence
   , patent_zero_prefix
 from
-    elastic_production.other_reference;
+    elastic_production_20230629.other_reference;
 
 select
     id
@@ -346,7 +346,7 @@ select
   , last_seen_date
   , years_active
 from
-    elastic_production.cpc_class;
+    elastic_production_20230629.cpc_class;
 
 select
     id
@@ -358,15 +358,15 @@ select
   , last_seen_date
   , years_active
 from
-    elastic_production.cpc_subclass cs
-        join elastic_production.cpc_class cc on cc.id = cs.id;
+    elastic_production_20230629.cpc_subclass cs
+        join elastic_production_20230629.cpc_class cc on cc.id = cs.id;
 
 
 select
     id
   , title
 from
-    elastic_production.cpc_group;
+    elastic_production_20230629.cpc_group;
 
 select
     ipcr_id
@@ -374,7 +374,7 @@ select
   , ipc_class
   , subclass
 from
-    elastic_production.ipcr;
+    elastic_production_20230629.ipcr;
 
 select
     uuid
@@ -383,7 +383,7 @@ select
   , sequence
   , patent_zero_prefix
 from
-    elastic_production.rel_app_text;;
+    elastic_production_20230629.rel_app_text;;
 
 select
     uuid
@@ -396,7 +396,7 @@ select
   , sequence
   , patent_zero_prefix
 from
-    elastic_production.us_patent_citations;
+    elastic_production_20230629.us_patent_citations;
 
 select
     uuid
@@ -409,7 +409,7 @@ select
   , sequence
   , patent_zero_prefix
 from
-    elastic_production.us_application_citations;
+    elastic_production_20230629.us_application_citations;
 
 
 select
@@ -436,7 +436,7 @@ select
   , last_seen_date
   , years_active
 from
-    elastic_production.attorneys;
+    elastic_production_20230629.attorneys;
 
 select *
 from

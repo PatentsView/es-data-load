@@ -48,8 +48,8 @@ class PVSchemaManager(SchemaManager):
         import importlib.resources as pkg_resources
         for file_name, index_pattern in PVSchemaManager.schema_index_mapping.items():
             # DATA_PATH = pkg_resources.path('es_data_load', 'pv/schema')
-            schema_file = pkg_resources.path('es_data_load.pv.schemas', file_name)
-            field_mapping = json.load(open(schema_file, 'r'))
+            with pkg_resources.path('es_data_load.pv.schemas', file_name) as schema_file:
+                field_mapping = json.load(open(schema_file, 'r'))
             index_name = index_pattern.format(suffix=suffix)
             schemas[index_name] = field_mapping
         return cls(es, schemas, suffix)
