@@ -1,13 +1,13 @@
 {
   "source_setting": {
-    "source": "select id, sector_title,field_title from elastic_production_20230629.wipo_field where id > '{offset}' order by id limit {limit};",
+    "source": "select id, sector_title,field_title from elastic_production.wipo_field where id > '{offset}' order by id limit {limit};",
     "field_mapping": {
       "uuid": 0,
       "wipo_id": 0,
       "sector_title": 1,
       "field_title": 2
     },
-    "count_source": "SELECT count(1) from   elastic_production_20230629.wipo_field",
+    "count_source": "SELECT count(1) from   elastic_production.wipo_field",
     "chunksize": 10000,
     "key_field": "uuid"
   },

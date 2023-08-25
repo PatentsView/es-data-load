@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select persistent_location_id, city, state, country, county, state_fips, county_fips, latitude, longitude, num_assignees, num_inventors, num_patents, persistent_location_id from elastic_production_20230629.locations where location_id > '{offset}' order by location_id limit {limit};",
+    "source": "select persistent_location_id, city, state, country, county, state_fips, county_fips, latitude, longitude, num_assignees, num_inventors, num_patents, persistent_location_id from elastic_production.locations where location_id > '{offset}' order by location_id limit {limit};",
     "field_mapping": {
       "location_id": 0,
       "location_name": 1,
@@ -17,7 +17,7 @@
       "location_place_type": 12
     },
     "key_field": "location_id",
-    "count_source": "SELECT count(1) FROM elastic_production_20230629.locations",
+    "count_source": "SELECT count(1) FROM elastic_production.locations",
     "chunksize": 1000000
   },
   "target_setting": {

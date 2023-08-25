@@ -1,6 +1,6 @@
  {
   "source_setting": {
-    "source": "select ipcr_id, section, ipc_class, subclass from elastic_production_20230629.ipcr where ipcr_id > '{offset}' order by ipcr_id limit {limit};",
+    "source": "select ipcr_id, section, ipc_class, subclass from elastic_production.ipcr where ipcr_id > '{offset}' order by ipcr_id limit {limit};",
     "field_mapping": {
       "uuid": 0,
       "ipc_id": 0,
@@ -8,7 +8,7 @@
       "ipc_class": 2 ,
       "ipc_subclass": 3
     },
-    "count_source": "SELECT count(1) from  elastic_production_20230629.ipcr",
+    "count_source": "SELECT count(1) from  elastic_production.ipcr",
     "chunksize": 1000000,
         "key_field": "uuid"
   },

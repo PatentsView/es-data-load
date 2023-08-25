@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select inner_q.uuid, patent_id, date, number, country, category, sequence, CONCAT(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+'), LPAD(REGEXP_SUBSTR(patent_id, '[0-9]+$'), 8-LENGTH(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+')), '0')) as patent_zero_prefix from (select uuid from elastic_production_20230629.foreign_citations where uuid > '{offset}' order by uuid limit {limit}) inner_q join elastic_production_20230629.foreign_citations fc on fc.uuid = inner_q.uuid",
+    "source": "select inner_q.uuid, patent_id, date, number, country, category, sequence, CONCAT(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+'), LPAD(REGEXP_SUBSTR(patent_id, '[0-9]+$'), 8-LENGTH(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+')), '0')) as patent_zero_prefix from (select uuid from elastic_production.foreign_citations where uuid > '{offset}' order by uuid limit {limit}) inner_q join elastic_production.foreign_citations fc on fc.uuid = inner_q.uuid",
     "field_mapping": {
       "uuid": 0,
       "patent_id": 1,
@@ -13,7 +13,7 @@
       "patent_zero_prefix": 7
     },
     "key_field": "uuid",
-    "count_source": "SELECT count(1) FROM elastic_production_20230629.foreign_citations",
+    "count_source": "SELECT count(1) FROM elastic_production.foreign_citations",
     "chunksize": 1000000
   },
   "target_setting": {

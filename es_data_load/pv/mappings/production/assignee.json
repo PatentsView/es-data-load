@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select persistent_assignee_id, type, name_first, name_last, organization, num_patents, num_inventors, lastknown_location_id, lastknown_city, lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude, first_seen_date, last_seen_date, years_active from elastic_production_20230629.assignees where persistent_assignee_id > '{offset}' order by persistent_assignee_id limit {limit};",
+    "source": "select persistent_assignee_id, type, name_first, name_last, organization, num_patents, num_inventors, lastknown_location_id, lastknown_city, lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude, first_seen_date, last_seen_date, years_active from elastic_production.assignees where persistent_assignee_id > '{offset}' order by persistent_assignee_id limit {limit};",
     "field_mapping": {
       "assignee_id": 0,
       "assignee_individual_name_first": 2,
@@ -22,7 +22,7 @@
     "key_field": "assignee_id",
     "nested_fields": {
       "assignee_years": {
-        "source": "select patent_year, num_patents , a.persistent_assignee_id as assignee_id from elastic_production_20230629.assignee_years ay join (select assignee_id, persistent_assignee_id from elastic_production_20230629.assignees where persistent_assignee_id > '{offset}' order by persistent_assignee_id limit {limit}) a on a.assignee_id = ay.assignee_id",
+        "source": "select patent_year, num_patents , a.persistent_assignee_id as assignee_id from elastic_production.assignee_years ay join (select assignee_id, persistent_assignee_id from elastic_production.assignees where persistent_assignee_id > '{offset}' order by persistent_assignee_id limit {limit}) a on a.assignee_id = ay.assignee_id",
         "field_mapping": {
           "year": 0,
           "num_patents": 1,
@@ -30,7 +30,7 @@
         }
       }
     },
-    "count_source": "SELECT count(1) FROM elastic_production_20230629.assignees",
+    "count_source": "SELECT count(1) FROM elastic_production.assignees",
     "chunksize": 1000000
   },
   "target_setting": {

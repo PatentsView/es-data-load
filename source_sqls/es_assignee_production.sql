@@ -39,7 +39,7 @@ CREATE TABLE `assignee_years` (
   KEY `ix_assignee_year_assignee_id` (`assignee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-insert into elastic_production_20230629.assignees( assignee_id, type, name_first, name_last, organization, num_patents
+insert into elastic_production.assignees( assignee_id, type, name_first, name_last, organization, num_patents
                                      , num_inventors, lastknown_location_id, lastknown_persistent_location_id
                                      , lastknown_city, lastknown_state, lastknown_country, lastknown_latitude
                                      , lastknown_longitude, first_seen_date, last_seen_date, years_active
@@ -70,14 +70,14 @@ from
 
 
 
-insert into elastic_production_20230629.assignee_years(assignee_id, patent_year, num_patents)
+insert into elastic_production.assignee_years(assignee_id, patent_year, num_patents)
 select
     ay.assignee_id
   , patent_year
   , ay.num_patents
 from
     PatentsView_20220630.assignee_year ay
-        join elastic_production_20230629.assignees a
+        join elastic_production.assignees a
 where
     a.assignee_id = ay.assignee_id;
 

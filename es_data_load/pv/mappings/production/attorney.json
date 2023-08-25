@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select persistent_lawyer_id, name_first, name_last, organization, num_patents, num_assignees, num_inventors, first_seen_date, last_seen_date, years_active from elastic_production_20230629.attorneys where persistent_lawyer_id > '{offset}' order by persistent_lawyer_id limit {limit};",
+    "source": "select persistent_lawyer_id, name_first, name_last, organization, num_patents, num_assignees, num_inventors, first_seen_date, last_seen_date, years_active from elastic_production.attorneys where persistent_lawyer_id > '{offset}' order by persistent_lawyer_id limit {limit};",
     "field_mapping": {
       "attorney_id": 0,
       "attorney_name_first": 1,
@@ -14,7 +14,7 @@
       "attorney_years_active": 9
     },
     "key_field": "attorney_id",
-    "count_source": "SELECT count(1) FROM elastic_production_20230629.attorneys",
+    "count_source": "SELECT count(1) FROM elastic_production.attorneys",
     "chunksize": 1000000
   },
   "target_setting": {

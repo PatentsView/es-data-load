@@ -44,7 +44,7 @@ CREATE TABLE `inventors`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-insert into elastic_production_20230629.inventors( inventor_id, name_first, name_last, num_patents, num_assignees
+insert into elastic_production.inventors( inventor_id, name_first, name_last, num_patents, num_assignees
                                         , lastknown_location_id, lastknown_persistent_location_id, lastknown_city
                                         , lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude
                                         , first_seen_date, last_seen_date, years_active, persistent_inventor_id
@@ -76,13 +76,13 @@ from
 
 
 
-insert into elastic_production_20230629.inventor_years(inventor_id, patent_year, num_patents)
+insert into elastic_production.inventor_years(inventor_id, patent_year, num_patents)
 select
     ay.inventor_id
   , patent_year
   , ay.num_patents
 from
     PatentsView_20220630.inventor_year ay
-        join elastic_production_20230629.inventors a
+        join elastic_production.inventors a
 where
     a.inventor_id = ay.inventor_id;

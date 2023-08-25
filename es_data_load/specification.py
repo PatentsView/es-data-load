@@ -22,23 +22,27 @@ class LoadConfiguration:
         return cls(load_job_config)
 
     @classmethod
-    def load_default_pv_configuration(cls, suffix=""):
+    def load_default_pv_configuration(cls, suffix="", files=[
+            'assignee.json', 
+            'attorney.json', 
+            'cpc_class.json', 
+            'cpc_group.json',
+            'cpc_subclass.json',
+            'fcitation.json', 
+            'inventor.json',
+            'ipcr.json',
+            'locations.json', 
+            'oreference.json', 
+            'patents.json', 
+            'rel_app_text.json',
+            'us_application_citations.json', 
+            'us_patent_citations.json',
+            'uspc_mainclass.json',
+            'uspc_subclass.json', 
+            'wipo.json'
+        ]):
         import importlib.resources as pkg_resources
         # schema_file =
-        files = [
-            # 'assignee.json', 
-            # 'attorney.json', 
-            # 'cpc_class.json', 'cpc_group.json',
-            #      'cpc_subclass.json',
-                #  'fcitation.json', 
-                #  'inventor.json',
-            # 'ipcr.json',
-            # 'locations.json', 
-            # 'oreference.json', 
-            'patents.json', 'rel_app_text.json',
-            'us_application_citations.json', 'us_patent_citations.json','uspc_mainclass.json',
-            'uspc_subclass.json', 'wipo.json'
-        ]
         package_files = [pkg_resources.path('es_data_load.pv.mappings.production', fl) for fl in files]
 
         configs = {}
