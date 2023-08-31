@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select persistent_inventor_id, attribution_status, name_first, name_last, male_flag, num_patents, num_assignees, lastknown_location_id, lastknown_city, lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude, first_seen_date, last_seen_date, years_active from elastic_production.inventors where persistent_inventor_id > '{offset}' order by persistent_inventor_id limit {limit};",
+    "source": "select persistent_inventor_id, attribution_status, name_first, name_last, male_flag, num_patents, num_assignees, lastknown_location_id, lastknown_city, lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude, first_seen_date, last_seen_date, years_active from {elastic_production_source}.inventors where persistent_inventor_id > '{{offset}}' order by persistent_inventor_id limit {{limit}};",
     "field_mapping": {
       "inventor_id": 0,
       "inventor_name_first": 2,
@@ -22,7 +22,7 @@
     "key_field": "inventor_id",
     "nested_fields": {
       "inventor_years": {
-        "source": "select patent_year, num_patents , a.persistent_inventor_id as inventor_id from elastic_production.inventor_years ay join (select inventor_id, persistent_inventor_id from elastic_production.inventors where persistent_inventor_id > '{offset}' order by persistent_inventor_id limit {limit}) a on a.inventor_id = ay.inventor_id",
+        "source": "select patent_year, num_patents , a.persistent_inventor_id as inventor_id from {elastic_production_source}.inventor_years ay join (select inventor_id, persistent_inventor_id from {elastic_production_source}.inventors where persistent_inventor_id > '{{offset}}' order by persistent_inventor_id limit {{limit}}) a on a.inventor_id = ay.inventor_id",
         "field_mapping": {
           "year": 0,
           "num_patents": 1,
@@ -30,7 +30,7 @@
         }
       }
     },
-    "count_source": "SELECT count(1) FROM elastic_production.inventors",
+    "count_source": "SELECT count(1) FROM {elastic_production_source}.inventors",
     "chunksize": 1000000
   },
   "target_setting": {

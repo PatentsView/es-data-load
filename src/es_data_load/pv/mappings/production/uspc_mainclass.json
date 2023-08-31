@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select id, id, title, num_patents, num_inventors, num_assignees, first_seen_date, last_seen_date, years_active from PatentsView_20211230.uspc_mainclass where id > '{offset}' order by id limit {limit};",
+    "source": "select id, id, title, num_patents, num_inventors, num_assignees, first_seen_date, last_seen_date, years_active from {reporting_data_source}.uspc_mainclass where id > '{{offset}}' order by id limit {{limit}};",
     "field_mapping": {
       "uuid": 0,
       "uspc_mainclass_id": 1,
@@ -14,7 +14,7 @@
     },
         "key_field": "uuid",
 
-    "count_source": "SELECT count(1) from  PatentsView_20211230.uspc_mainclass",
+    "count_source": "SELECT count(1) from  {reporting_data_source}.uspc_mainclass",
     "chunksize": 1000000
   },
   "target_setting": {

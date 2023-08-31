@@ -21,44 +21,6 @@ class LoadConfiguration:
         load_job_config = load_config_dict_from_json_files(directories)
         return cls(load_job_config)
 
-    @classmethod
-    def load_default_pv_configuration(cls, suffix="", files=[
-            'assignee.json', 
-            'attorney.json', 
-            'cpc_class.json', 
-            'cpc_group.json',
-            'cpc_subclass.json',
-            'fcitation.json', 
-            'inventor.json',
-            'ipcr.json',
-            'locations.json', 
-            'oreference.json', 
-            'patents.json', 
-            'rel_app_text.json',
-            'us_application_citations.json', 
-            'us_patent_citations.json',
-            'uspc_mainclass.json',
-            'uspc_subclass.json', 
-            'wipo.json'
-        ]):
-        import importlib.resources as pkg_resources
-        # schema_file =
-        package_files = [pkg_resources.path('es_data_load.pv.mappings.production', fl) for fl in files]
-
-        configs = {}
-        for idx, fname in enumerate(package_files):
-            with fname as fname:
-                config_name = "{dname}-{fname}".format(dname='es_data_load/pv/mappings/production',
-                                                    fname=".".join(files[idx].split('.')[:-1]))
-                current_operation = json.load(open(fname, "r"))
-                index_w_o_suffix = current_operation['target_setting']['index']
-                index = "{idx}{suffix}".format(idx=index_w_o_suffix, suffix=suffix)
-                current_operation['target_setting']['index'] = index
-                configs[config_name] = current_operation
-
-        load_configuration = LoadConfiguration(load_configs=configs)
-        return load_configuration
-
     def get_load_operation_names(self):
         return self.load_operations.keys()
 
