@@ -1,5 +1,5 @@
 sphinx
-elasticsearch==8.4.1
+elasticsearch
 tqdm
 pymysql
 pytest
