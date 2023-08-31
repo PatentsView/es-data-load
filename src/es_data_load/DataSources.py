@@ -24,7 +24,7 @@ class TabularDataSource(ABC):
         chunksize = kwargs.get('chunksize', None)
         source = kwargs.get('source')
         field_mapping = kwargs.get('field_mapping')
-        offset = 0
+        # offset = 0
         last_id = 0
         nested_field_source_settings = kwargs.get('nested_fields', {})
         total_count = self.get_document_count(count_source=kwargs.get('count_source'))
@@ -39,7 +39,7 @@ class TabularDataSource(ABC):
                 sub_source = nested_field_setting['source']
                 sub_field_mapping = nested_field_setting['field_mapping']
                 sub_documents[nested_field] = {}
-                for nested_record in self.generate_source_chunk(sub_source, sub_field_mapping, offset=offset,
+                for nested_record in self.generate_source_chunk(sub_source, sub_field_mapping, offset=last_id,
                                                                 **kwargs):
                     key_data = nested_record[key_field]
                     if key_data not in sub_documents[nested_field]:
@@ -54,11 +54,12 @@ class TabularDataSource(ABC):
                     if key_data in nested_records:
                         data_row[nested_field] = nested_records[key_data]
                 pbar.update(1)
+                last_id = data_row[key_field]
                 yield data_row
             if not exists or chunksize is None:
                 break
-            last_id = data_row[key_field]
-            offset = offset + chunksize
+            # last_id = data_row[key_field]
+            # offset = offset + chunksize
 
 
 class DelimitedDataSource(TabularDataSource):
