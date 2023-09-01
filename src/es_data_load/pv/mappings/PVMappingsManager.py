@@ -26,10 +26,12 @@ AVAILABLE_MAPPING_FILES = [
 def partially_inject_databases(configuration, elastic_source, reporting_source):
     source_sql = configuration['source'].format(
         elastic_production_source=elastic_source, reporting_data_source=reporting_source)
-    count_source = configuration['count_source'].format(
-        elastic_production_source=elastic_source, reporting_data_source=reporting_source)
     configuration['source'] = source_sql
-    configuration['count_source'] = count_source
+    if 'count_source' in configuration:
+        count_source = configuration['count_source'].format(
+            elastic_production_source=elastic_source, reporting_data_source=reporting_source)
+        configuration['count_source'] = count_source
+
     return configuration
 
 
