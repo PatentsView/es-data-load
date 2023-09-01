@@ -23,6 +23,16 @@ AVAILABLE_MAPPING_FILES = [
 ]
 
 
+def partially_inject_databases(configuration, elastic_source, reporting_source):
+    source_sql = configuration['source_setting']['source'].format(
+        elastic_production_source=elastic_source, reporting_data_source=reporting_source)
+    count_source = configuration['source_setting']['count_source'].format(
+        elastic_production_source=elastic_source, reporting_data_source=reporting_source)
+    configuration['source_setting']['source'] = source_sql
+    configuration['source_setting']['count_source'] = count_source
+    return configuration
+
+
 class PVLoadConfiguration(LoadConfiguration):
     def __init__(self, load_configs):
         super().__init__(load_configs)
@@ -44,12 +54,13 @@ class PVLoadConfiguration(LoadConfiguration):
                 current_operation = json.load(open(fname, "r"))
                 index_w_o_suffix = current_operation['target_setting']['index']
                 index = "{idx}{suffix}".format(idx=index_w_o_suffix, suffix=suffix)
-                source_sql = current_operation['source_setting']['source'].format(
-                    elastic_production_source=elastic_source, reporting_data_source=reporting_source)
-                count_source = current_operation['source_setting']['count_source'].format(
-                    elastic_production_source=elastic_source, reporting_data_source=reporting_source)
-                current_operation['source_setting']['source'] = source_sql
-                current_operation['source_setting']['count_source'] = count_source
+                current_operation = partially_inject_databases(current_operation, elastic_source=elastic_source,
+                                                               reporting_source=reporting_source)
+                if 'nested_fields' in current_operation:
+                    for nested_operation_key in current_operation['nested_fields']:
+                        current_operation[nested_operation_key] = partially_inject_databases(
+                            current_operation[nested_operation_key], elastic_source=elastic_source,
+                            reporting_source=reporting_source)
                 current_operation['target_setting']['index'] = index
                 configs[config_name] = current_operation
 
