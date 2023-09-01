@@ -54,14 +54,18 @@ class PVLoadConfiguration(LoadConfiguration):
                 current_operation = json.load(open(fname, "r"))
                 index_w_o_suffix = current_operation['target_setting']['index']
                 index = "{idx}{suffix}".format(idx=index_w_o_suffix, suffix=suffix)
-                current_operation["source_setting"] = partially_inject_databases(current_operation["source_setting"],
-                                                                                 elastic_source=elastic_source,
-                                                                                 reporting_source=reporting_source)
-                if 'nested_fields' in current_operation["source_setting"]:
-                    for nested_operation_key in current_operation["source_setting"]['nested_fields']:
-                        current_operation["source_setting"][nested_operation_key] = partially_inject_databases(
-                            current_operation["source_setting"][nested_operation_key], elastic_source=elastic_source,
+                source_settings = current_operation["source_setting"]
+                source_settings = partially_inject_databases(source_settings,
+                                                             elastic_source=elastic_source,
+                                                             reporting_source=reporting_source)
+                if 'nested_fields' in source_settings:
+                    for nested_operation_key in source_settings['nested_fields']:
+                        source_settings['nested_fields'][
+                            nested_operation_key] = partially_inject_databases(
+                            source_settings['nested_fields'][nested_operation_key],
+                            elastic_source=elastic_source,
                             reporting_source=reporting_source)
+                current_operation["source_setting"] = source_settings
                 current_operation['target_setting']['index'] = index
                 configs[config_name] = current_operation
 
