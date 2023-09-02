@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select uuid, patent_id, text, patent_zero_prefix from {elastic_production_source}.rel_app_text where patent_zero_prefix > '{{offset}}' order by patent_zero_prefix limit {{limit}};",
+    "source": "select uuid, patent_id, text, patent_zero_prefix from {elastic_production_source}.rel_app_text where patent_zero_prefix > '{{offset}}' order by uuid limit {{limit}};",
     "field_mapping": {
       "uuid": 0,
       "patent_id": 1,
