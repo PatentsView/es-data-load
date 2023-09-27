@@ -1,4 +1,4 @@
-from source.MySQLSource import MySQLDataSource
+from es_data_load.DataSources import MySQLDataSource
 
 
 def test_connect(mysql_source: MySQLDataSource):

@@ -1,8 +1,8 @@
-from es import PatentsViewElasticSearch
+from es_data_load.es import PatentsViewElasticSearch
 
 
 def test_es_connection(config):
-    es = PatentsViewElasticSearch(config)
+    es = PatentsViewElasticSearch.from_config(config)
     print(es.es.info())
 
 

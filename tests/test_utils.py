@@ -1,8 +1,5 @@
-from specification import get_source
-from lib.utilities import generate_load_statistics
-from source.DelimitedDataSource import DelimitedDataSource
-from source.MySQLSource import MySQLDataSource
-from source.TabularDataSource import TabularDataSource
+from es_data_load.DataSources import DelimitedDataSource, MySQLDataSource, TabularDataSource
+from es_data_load.lib.utilities import generate_load_statistics, get_source
 
 
 def test_get_mysql_source(project_root, config):

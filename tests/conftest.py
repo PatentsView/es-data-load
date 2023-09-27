@@ -4,9 +4,9 @@ import os
 
 import pytest
 
-from specification import LoadConfiguration
-from es import PatentsViewElasticSearch
 from es_data_load.DataSources import MySQLDataSource
+from es_data_load.es import PatentsViewElasticSearch
+from es_data_load.specification import LoadConfiguration
 
 
 @pytest.fixture()
@@ -17,7 +17,7 @@ def project_root():
 @pytest.fixture()
 def config(project_root):
     c = configparser.ConfigParser()
-    c.read("{root}/resources/config.ini".format(root=project_root))
+    c.read("{root}/resources/config_dev_elastic.ini".format(root=project_root))
     yield c
 
 
@@ -63,7 +63,7 @@ def load_job_1(project_root):
 
 
 @pytest.fixture()
-def documents(mysql_source, load_job_config):
+def documents(mysql_source: MySQLDataSource, load_job_config):
     yield mysql_source.document_generator(**load_job_config['source_setting'])
 
 

@@ -1,5 +1,4 @@
 import json
-
 from es_data_load.specification import LoadConfiguration
 
 AVAILABLE_MAPPING_FILES = [

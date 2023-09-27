@@ -1,4 +1,4 @@
-from specification import LoadConfiguration
+from es_data_load.specification import LoadConfiguration
 from tests.test_es import assert_es_counts
 
 
