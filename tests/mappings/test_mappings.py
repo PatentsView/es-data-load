@@ -1,16 +1,20 @@
 import importlib.resources as pkg_resources
 import json
+import random
 import re
 
 from es_data_load.specification import validate_mapping_structure
+from es_data_load.pv.mappings.PVMappingsManager import (
+    PVLoadConfiguration,
+    AVAILABLE_MAPPING_FILES,
+)
+
+
+def validate_jinja_sql(sql_template, variable):
+    assert variable not in sql_template
 
 
 def test_pv_mappings():
-    from es_data_load.pv.mappings.PVMappingsManager import (
-        PVLoadConfiguration,
-        AVAILABLE_MAPPING_FILES,
-    )
-
     assert len(AVAILABLE_MAPPING_FILES) == 17
     for idx, fname in enumerate(
             [
@@ -27,3 +31,21 @@ def test_pv_mappings():
                                     flags=re.IGNORECASE).group(1)
         columns = col_list_string.split(",")
         assert max(current_operation["source_setting"]["field_mapping"].values()) < len(columns)
+
+
+def test_pv_load_configuration():
+    pv_configuration = PVLoadConfiguration.load_default_pv_configuration(suffix="_test",
+                                                                         files=random.sample(AVAILABLE_MAPPING_FILES,
+                                                                                              k=5))
+    assert len(pv_configuration.get_load_operation_names()) == 5
+    for setting_name in pv_configuration.get_load_operation_names():
+        setting = pv_configuration.get_load_operation(setting_name)
+        validate_mapping_structure(setting)
+        validate_jinja_sql(sql_template=setting["source_setting"]["source"],
+                           variable="{elastic_production_source}")
+        validate_jinja_sql(sql_template=setting["source_setting"]["source"],
+                           variable="{reporting_data_source}")
+        validate_jinja_sql(sql_template=setting["source_setting"]["count_source"],
+                           variable="{elastic_production_source}")
+        validate_jinja_sql(sql_template=setting["source_setting"]["count_source"],
+                           variable="{reporting_data_source}")

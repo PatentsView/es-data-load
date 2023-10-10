@@ -39,7 +39,7 @@ class PVLoadConfiguration(LoadConfiguration):
         super().__init__(load_configs)
 
     @classmethod
-    def load_default_pv_configuration(cls, suffix="", files=None, elastic_source='elastic_production',
+    def  load_default_pv_configuration(cls, suffix="", files=None, elastic_source='elastic_production',
             reporting_source='PatentsView_'):
         if files is None:
             files = AVAILABLE_MAPPING_FILES
