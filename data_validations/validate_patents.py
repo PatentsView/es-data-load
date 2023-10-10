@@ -1,3 +1,2 @@
-
-if __name__ == '__main__':
-    print('validating')
+if __name__ == "__main__":
+    print("validating")

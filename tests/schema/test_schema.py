@@ -4,7 +4,10 @@ import pytest
 from elasticsearch import NotFoundError
 
 from es_data_load.pv.mappings.PVMappingsManager import AVAILABLE_MAPPING_FILES
-from es_data_load.pv.schemas.PVSchemaManager import AVAILABLE_SCHEMA_FILES, PVSchemaManager
+from es_data_load.pv.schemas.PVSchemaManager import (
+    AVAILABLE_SCHEMA_FILES,
+    PVSchemaManager,
+)
 
 
 def validate_es_schema(schema):
@@ -16,14 +19,13 @@ def test_schema_mapping_crosswalk():
 
 
 def test_pv_schema_load(search):
-    sm = PVSchemaManager.load_default_pv_schema(suffix="_test",
-                                                es=search.es)
+    sm = PVSchemaManager.load_default_pv_schema(suffix="_test", es=search.es)
     assert len(sm.schemas) == len(AVAILABLE_SCHEMA_FILES)
     random_choices = random.sample(list(AVAILABLE_SCHEMA_FILES.keys()), k=3)
     print("Random choices are {c}".format(c=", ".join(random_choices)))
-    sm = PVSchemaManager.load_default_pv_schema(suffix="_test",
-                                                es=search.es,
-                                                schema_files=random_choices)
+    sm = PVSchemaManager.load_default_pv_schema(
+        suffix="_test", es=search.es, schema_files=random_choices
+    )
     assert len(sm.schemas) == 3
     for file_name in sm.schemas.keys():
         index_name = sm.schemas[file_name]["index_name"]
@@ -50,9 +52,9 @@ def test_go_live(search):
     print("Random choices are {c}".format(c=", ".join(random_choices)))
     live_flag_name = "_test_live"
     suffix_name = "_test"
-    sm = PVSchemaManager.load_default_pv_schema(suffix=suffix_name,
-                                                es=search.es,
-                                                schema_files=random_choices)
+    sm = PVSchemaManager.load_default_pv_schema(
+        suffix=suffix_name, es=search.es, schema_files=random_choices
+    )
 
     for file_name in random_choices:
         pattern = AVAILABLE_SCHEMA_FILES[file_name]
@@ -71,5 +73,8 @@ def test_go_live(search):
         print(f"Verifying :{alias_name}")
         search.es.indices.get_alias(index=index_name, name=alias_name)
         mapping_from_es = search.es.indices.get_mapping(index=alias_name)
-        assert sm.schemas[file_name]["field_mapping"] == mapping_from_es[index_name]["mappings"]["properties"]
+        assert (
+            sm.schemas[file_name]["field_mapping"]
+            == mapping_from_es[index_name]["mappings"]["properties"]
+        )
         search.es.indices.delete_alias(index=index_name, name=alias_name)
