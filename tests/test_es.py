@@ -32,7 +32,8 @@ def assert_es_counts(search, target_setting):
     assert not hits['timed_out']
     assert hits['hits']['total']['value'] == 1
 
-
+# Todo: Test with number of documents greater than "indexing chunk" size
+# Todo: Test with localhost
 def test_bulk_load_es_documents(search, documents, load_job_config):
     target_setting = load_job_config['target_setting']
     try:

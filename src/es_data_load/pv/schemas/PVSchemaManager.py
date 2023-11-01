@@ -1,6 +1,6 @@
 import json
 
-from es_data_load.lib.utilities import create_recreate_index
+from es_data_load.schema.SchemaManager import SchemaManager
 
 AVAILABLE_SCHEMA_FILES = {'assignees_fields.json': 'assignees{suffix}',
                           'attorneys_fields.json': 'attorneys{suffix}',
@@ -21,19 +21,12 @@ AVAILABLE_SCHEMA_FILES = {'assignees_fields.json': 'assignees{suffix}',
                           'wipo_fields.json': 'wipo{suffix}'}
 
 
-class PVSchemaManager:
+class PVSchemaManager(SchemaManager):
     def __init__(self, es, suffix, schemas: dict):
+        super().__init__(es, schemas)
         self.suffix = suffix
         self.es = es
         self.schemas = schemas.copy()
-
-    def create_es_indices(self, drop_and_recreate=False, exists_ok=True):
-
-        for file_name in self.schemas:
-            index_name = self.schemas[file_name]["index_name"]
-            field_mapping = self.schemas[file_name]["field_mapping"]
-            create_recreate_index(self.es, index_name=index_name, aliases=[], fields=field_mapping,
-                                  delete_index=drop_and_recreate, exists_ok=exists_ok)
 
     @classmethod
     def load_default_pv_schema(cls, es, suffix, schema_files=None):

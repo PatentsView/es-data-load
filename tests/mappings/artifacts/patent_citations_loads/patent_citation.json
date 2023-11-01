@@ -16,7 +16,7 @@
     "chunksize": 10000
   },
   "target_setting": {
-    "index": "test_patent_citations",
+    "index": "patent_citations_test",
     "indexing_batch_size": 10000,
     "id_field": "uuid"
   }

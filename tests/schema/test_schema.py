@@ -5,6 +5,7 @@ from elasticsearch import NotFoundError
 
 from es_data_load.pv.mappings.PVMappingsManager import AVAILABLE_MAPPING_FILES
 from es_data_load.pv.schemas.PVSchemaManager import AVAILABLE_SCHEMA_FILES, PVSchemaManager
+from es_data_load.schema.SchemaManager import SchemaManager
 
 
 def validate_es_schema(schema):
@@ -73,3 +74,27 @@ def test_go_live(search):
         mapping_from_es = search.es.indices.get_mapping(index=alias_name)
         assert sm.schemas[file_name]["field_mapping"] == mapping_from_es[index_name]["mappings"]["properties"]
         search.es.indices.delete_alias(index=index_name, name=alias_name)
+
+
+def test_generic_schema_load(search):
+    sm = SchemaManager(es=search.es, schemas={'some_file_name': {'index_name': 'generic_index', 'field_mapping': {
+        "attorney_name_first": {"type": "keyword"}}}})
+    assert len(sm.schemas) == 1
+    for file_name in sm.schemas.keys():
+        index_name = sm.schemas[file_name]["index_name"]
+        print(f"Deleting :{index_name}")
+        try:
+            search.es.indices.delete(index=index_name)
+        except NotFoundError:
+            pass
+    sm.create_es_indices()
+    for file_name in sm.schemas:
+        index_name = sm.schemas[file_name]["index_name"]
+        field_mapping = sm.schemas[file_name]["field_mapping"]
+        print(f"Verifying :{index_name}")
+        mapping_from_es = search.es.indices.get_mapping(index=index_name)
+        assert field_mapping == mapping_from_es[index_name]["mappings"]["properties"]
+    for file_name in sm.schemas.keys():
+        index_name = sm.schemas[file_name]["index_name"]
+        print(f"Deleting :{index_name}")
+        search.es.indices.delete(index=index_name)

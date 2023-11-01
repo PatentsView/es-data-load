@@ -1,6 +1,9 @@
 from es_data_load.DataSources import MySQLDataSource
 
 
+# Todo: Test for Nested document scenario
+# Todo: Test for "test" execution scenario
+# Todo: Test for mysql network times out scenario
 def test_connect(mysql_source: MySQLDataSource):
     mysql_source.connect()
     with mysql_source.connection.cursor() as cur:
