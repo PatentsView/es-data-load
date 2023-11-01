@@ -1,0 +1,33 @@
+{
+  "uuid": {"type": "keyword"},
+  "patent_id": {
+    "type": "keyword"
+  },
+  "patent": {
+    "type": "keyword"
+  },
+  "citation_sequence": {
+    "type": "long"
+  },
+  "citation_patent_id": {
+    "type": "keyword"
+  },
+  "citation_patent": {
+    "type": "keyword"
+  },
+  "citation_wipo_kind": {
+    "type": "keyword"
+  },
+  "citation_category": {
+    "type": "keyword"
+  },
+  "citation_date": {
+    "type": "date"
+  },
+  "citation_name": {
+    "type": "keyword"
+  },
+  "patent_zero_prefix": {
+    "type": "keyword"
+  }
+}

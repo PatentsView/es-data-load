@@ -1,0 +1,19 @@
+{
+  "source_setting": {
+    "source": "select id, sector_title,field_title from {elastic_production_source}.wipo_field where id > '{{offset}}' order by id limit {{limit}};",
+    "field_mapping": {
+      "uuid": 0,
+      "wipo_id": 0,
+      "sector_title": 1,
+      "field_title": 2
+    },
+    "count_source": "SELECT count(1) from   {elastic_production_source}.wipo_field",
+    "chunksize": 10000,
+    "key_field": "uuid"
+  },
+  "target_setting": {
+    "index": "wipo",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}

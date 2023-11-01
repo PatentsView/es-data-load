@@ -1,0 +1,25 @@
+{
+  "cpc_class_id": {"type": "keyword"},
+  "cpc_class": {"type": "keyword"},
+  "cpc_subclass_id": {"type": "keyword"},
+  "cpc_subclass": {"type": "keyword"},
+  "cpc_subclass_title": {"type": "text"},
+  "cpc_subclass_first_seen_date": {
+    "type": "date"
+  },
+  "cpc_subclass_last_seen_date": {
+    "type": "date"
+  },
+  "cpc_subclass_years_active": {
+    "type": "long"
+  },
+  "cpc_subclass_num_assignees": {
+    "type": "long"
+  },
+  "cpc_subclass_num_patents": {
+    "type": "long"
+  },
+  "cpc_subclass_num_inventors": {
+    "type": "long"
+  }
+}

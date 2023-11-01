@@ -1,4 +1,4 @@
-from source.MySQLSource import MySQLDataSource
+from es_data_load.DataSources import MySQLDataSource
 
 
 def test_connect(mysql_source: MySQLDataSource):
@@ -15,9 +15,9 @@ def test_get_document_count(mysql_source, load_job_config):
 def test_generate_source_chunk(mysql_source, load_job_config):
     source_setting = load_job_config['source_setting']
     document_generator = mysql_source.generate_source_chunk(
-            source_setting['source'],
-            offset=0,
-            limit=source_setting['chunksize'])
+        source_setting['source'], source_setting["field_mapping"],
+        offset=0,
+        limit=source_setting['chunksize'])
     import types
     assert type(document_generator) == types.GeneratorType
     doc_count = 0

@@ -1,0 +1,23 @@
+{
+  "cpc_class_id": {"type": "keyword"},
+  "cpc_class": {"type": "keyword"},
+  "cpc_class_title": {"type": "text"},
+  "cpc_class_first_seen_date": {
+    "type": "date"
+  },
+  "cpc_class_last_seen_date": {
+    "type": "date"
+  },
+  "cpc_class_years_active": {
+    "type": "long"
+  },
+  "cpc_class_num_assignees": {
+    "type": "long"
+  },
+  "cpc_class_num_patents": {
+    "type": "long"
+  },
+  "cpc_class_num_inventors": {
+    "type": "long"
+  }
+}

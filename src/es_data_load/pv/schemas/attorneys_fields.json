@@ -1,0 +1,35 @@
+  {
+  "attorney_id": {
+    "type": "keyword"
+  },
+  "attorney_name_first": {
+    "type": "keyword"
+  },
+  "attorney_name_last": {
+    "type": "keyword"
+  },
+  "attorney_organization": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "attorney_first_seen_date": {
+    "type": "date"
+  },
+  "attorney_last_seen_date": {
+    "type": "date"
+  },
+  "attorney_num_inventors": {
+    "type": "long"
+  },
+  "attorney_num_patents": {
+    "type": "long"
+  },
+  "attorney_years_active": {
+    "type": "long"
+  }
+}

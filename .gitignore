@@ -14,7 +14,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -134,3 +133,4 @@ resources/config.ini
 
 **/__pycache__/
 **/.DS_Store
+**/.pytest_cache

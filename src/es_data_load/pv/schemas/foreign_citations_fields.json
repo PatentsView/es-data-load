@@ -1,0 +1,25 @@
+{
+  "uuid": {"type": "keyword"},
+  "patent_id": {
+    "type": "keyword"
+  },
+  "patent": {
+    "type": "keyword"
+  },
+  "citation_number": {
+    "type": "keyword"
+  },
+  "citation_sequence": {
+    "type": "long"
+  },
+  "citation_date": {
+    "type": "date"
+  },
+  "citation_category": {
+    "type": "keyword"
+  },
+  "citation_country": {
+    "type": "keyword"
+  },
+  "patent_zero_prefix": {"type": "keyword"}
+}

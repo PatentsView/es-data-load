@@ -1,0 +1,91 @@
+{
+  "inventor_id": {
+    "type": "keyword"
+  },
+  "inventor_name_first": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "inventor_name_last": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "inventor_male_flag": {
+    "type": "long"
+  },
+  "inventor_gender_attr_status": {
+    "type": "long"
+  },
+  "inventor_lastknown_city": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "inventor_lastknown_state": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "inventor_lastknown_country": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "inventor_lastknown_latitude": {
+    "type": "double"
+  },
+  "inventor_lastknown_longitude": {
+    "type": "double"
+  },
+  "inventor_lastknown_location": {
+    "type": "keyword"
+  },
+  "inventor_first_seen_date": {
+    "type": "date"
+  },
+  "inventor_last_seen_date": {
+    "type": "date"
+  },
+  "inventor_num_assignees": {
+    "type": "long"
+  },
+  "inventor_num_patents": {
+    "type": "long"
+  },
+  "inventor_years_active": {
+    "type": "long"
+  },
+  "inventor_years": {
+    "type": "nested",
+    "properties": {
+      "year": {
+        "type": "long"
+      },
+      "num_patents": {
+        "type": "long"
+      }
+    }
+  }
+}

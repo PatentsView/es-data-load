@@ -1,0 +1,6 @@
+{
+  "ipc_id": {"type": "keyword"},
+  "ipc_section": {"type": "keyword"},
+  "ipc_class": {"type": "keyword"},
+  "ipc_subclass": {"type": "keyword"}
+}

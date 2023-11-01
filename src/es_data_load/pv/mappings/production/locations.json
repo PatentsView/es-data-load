@@ -1,0 +1,28 @@
+{
+  "source_setting": {
+    "source": "select persistent_location_id, city, state, country, county, state_fips, county_fips, latitude, longitude, num_assignees, num_inventors, num_patents, persistent_location_id from {elastic_production_source}.locations where persistent_location_id > '{{offset}}' order by persistent_location_id limit {{limit}};",
+    "field_mapping": {
+      "location_id": 0,
+      "location_name": 1,
+      "location_county": 4,
+      "location_county_fips": 6,
+      "location_state": 2,
+      "location_state_fips": 5,
+      "location_country": 3,
+      "location_latitude": 7,
+      "location_longitude": 8,
+      "location_num_inventors": 10,
+      "location_num_assignees": 9,
+      "location_num_patents": 11,
+      "location_place_type": 12
+    },
+    "key_field": "location_id",
+    "count_source": "SELECT count(1) FROM {elastic_production_source}.locations",
+    "chunksize": 10000
+  },
+  "target_setting": {
+    "index": "locations",
+    "indexing_batch_size": 7500,
+    "id_field": "location_id"
+  }
+}

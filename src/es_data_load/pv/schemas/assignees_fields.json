@@ -1,0 +1,97 @@
+{
+  "assignee_id": {
+    "type": "keyword"
+  },
+  "assignee_individual_name_first": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "assignee_individual_name_last": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "assignee_organization": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "assignee_type": {
+    "type": "keyword"
+  },
+  "assignee_lastknown_city": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "assignee_lastknown_state": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "assignee_lastknown_country": {
+    "fields": {
+      "keyword": {
+        "ignore_above": 256,
+        "type": "keyword"
+      }
+    },
+    "type": "text"
+  },
+  "assignee_lastknown_latitude": {
+    "type": "double"
+  },
+  "assignee_lastknown_longitude": {
+    "type": "double"
+  },
+  "assignee_lastknown_location": {
+    "type": "keyword"
+  },
+  "assignee_first_seen_date": {
+    "type": "date"
+  },
+  "assignee_last_seen_date": {
+    "type": "date"
+  },
+  "assignee_num_inventors": {
+    "type": "long"
+  },
+  "assignee_num_patents": {
+    "type": "long"
+  },
+  "assignee_years_active": {
+    "type": "long"
+  },
+  "assignee_years": {
+    "type": "nested",
+    "properties": {
+      "year": {
+        "type": "long"
+      },
+      "num_patents": {
+        "type": "long"
+      }
+    }
+  }
+}

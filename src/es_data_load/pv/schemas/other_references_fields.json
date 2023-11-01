@@ -1,0 +1,8 @@
+
+{
+  "uuid": {"type": "keyword" },
+  "patent_id": {"type": "keyword"},
+  "reference_sequence": {"type": "keyword"},
+  "reference_text": {"type": "text"},
+  "patent_zero_prefix": {"type": "keyword"}
+}

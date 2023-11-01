@@ -1,0 +1,12 @@
+{
+  "uspc_mainclass_id": {
+    "type": "keyword"
+  },
+  "uspc_mainclass": {"type": "keyword"},
+  "uspc_subclass_id": {
+    "type": "keyword"
+  },
+  "uspc_subclass_title": {
+    "type": "text"
+  }
+}

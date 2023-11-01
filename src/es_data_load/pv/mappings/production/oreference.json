@@ -1,0 +1,21 @@
+{
+  "source_setting": {
+    "source": "select uuid, patent_id, text, sequence, patent_zero_prefix from {elastic_production_source}.other_reference where uuid > '{{offset}}' order by uuid limit {{limit}};",
+    "field_mapping": {
+      "uuid": 0,
+      "patent_id": 1,
+      "patent": 1,
+      "reference_text": 2,
+      "reference_sequence": 3,
+      "patent_zero_prefix": 4
+    },
+    "key_field": "uuid",
+    "count_source": "SELECT count(1) FROM {elastic_production_source}.other_reference",
+    "chunksize": 500000
+  },
+  "target_setting": {
+    "index": "other_references",
+    "indexing_batch_size": 7500,
+    "id_field": "uuid"
+  }
+}
