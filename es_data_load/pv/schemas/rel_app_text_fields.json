@@ -1,7 +1,0 @@
-{
-  "uuid": {"type": "keyword"},
-  "patent_id": {"type": "keyword"},
-  "related_text": {"type": "keyword"},
-  "patent_zero_prefix": {"type": "keyword"}
-
-}

@@ -15,10 +15,10 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "elasticsearch==8.4.1",
+    "elasticsearch",
     "tqdm",
     "pymysql>=1.0",
 ]
-[tool.setuptools.packages.find]
-include = ["es_data_load"]  # alternatively: `exclude = ["additional*"]`
-namespaces = false
+[tool.setuptools.package-data]
+"es_data_load.pv.schemas" = ["*.json"]
+"es_data_load.pv.mappings.production" = ["*.json"]

@@ -1,0 +1,22 @@
+{
+  "source_setting": {
+    "source": "select id, id, SUBSTR(id,1,3) class, SUBSTR(id,1,4) subclass, title from {elastic_production_source}.cpc_group where id > '{{offset}}' order by id limit {{limit}};",
+    "field_mapping": {
+      "uuid": 0,
+      "cpc_class": 2,
+      "cpc_class_id": 2,
+      "cpc_subclass_id": 3,
+      "cpc_subclass": 3,
+      "cpc_group_id":1,
+      "cpc_group_title": 4
+    },
+    "count_source": "SELECT count(1) from  {elastic_production_source}.cpc_group",
+    "chunksize": 1000000,
+        "key_field": "uuid"
+  },
+  "target_setting": {
+    "index": "cpc_groups",
+    "indexing_batch_size": 10000,
+    "id_field": "uuid"
+  }
+}
