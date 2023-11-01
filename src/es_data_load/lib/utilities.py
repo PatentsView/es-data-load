@@ -3,11 +3,12 @@ import csv
 import json
 import os
 import sys
+from typing import Iterable, List
 
 from elasticsearch import NotFoundError, BadRequestError
 
 
-def load_config_dict_from_json_files(directories):
+def load_config_dict_from_json_files(directories: List):
     configs = {}
     for directory in directories:
         if not os.path.exists(directory) or not os.path.isdir(directory):

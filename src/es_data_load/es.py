@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch
 
 
 class PatentsViewElasticSearch:
-    def __init__(self, hoststring, timeout, username, password):
+    def __init__(self, hoststring, timeout=None, username=None, password=None):
         self.logger = logging.getLogger(self.__class__.__name__)
         if username is not None:
             self.es = Elasticsearch(hosts=hoststring, http_auth=(username, password), timeout=timeout)
@@ -21,6 +21,10 @@ class PatentsViewElasticSearch:
                    timeout=int(config["ELASTICSEARCH"]["TIMEOUT"]),
                    username=config["ELASTICSEARCH"].get("USERNAME", None),
                    password=config["ELASTICSEARCH"].get("PASSWORD", None))
+
+    @classmethod
+    def for_localhost(cls):
+        return cls(hoststring="localhost:9200")
 
     def bulk_load_es_documents(self, document_source, load_config, test):
         target_index = load_config['index']
