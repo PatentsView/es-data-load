@@ -1,7 +1,7 @@
 import json
 from es_data_load.specification import LoadConfiguration
 
-AVAILABLE_MAPPING_FILES = [
+AVAILABLE_MAPPING_FILES = {'granted': [
     'assignee.json',
     'attorney.json',
     'cpc_class.json',
@@ -19,7 +19,7 @@ AVAILABLE_MAPPING_FILES = [
     'uspc_mainclass.json',
     'uspc_subclass.json',
     'wipo.json'
-]
+], 'pregrant': []}
 
 
 def partially_inject_databases(configuration, elastic_source, reporting_source):
@@ -39,7 +39,7 @@ class PVLoadConfiguration(LoadConfiguration):
         super().__init__(load_configs)
 
     @classmethod
-    def  load_default_pv_configuration(cls, suffix="", files=None, elastic_source='elastic_production',
+    def load_default_pv_configuration(cls, suffix="", files=None, elastic_source='elastic_production',
             reporting_source='PatentsView_'):
         if files is None:
             files = AVAILABLE_MAPPING_FILES

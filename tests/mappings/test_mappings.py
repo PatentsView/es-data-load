@@ -15,11 +15,12 @@ def validate_jinja_sql(sql_template, variable):
 
 
 def test_pv_mappings():
-    assert len(AVAILABLE_MAPPING_FILES) == 17
+    assert len(AVAILABLE_MAPPING_FILES['granted']) == 17
+    assert len(AVAILABLE_MAPPING_FILES['pregrant']) == 0
     for idx, fname in enumerate(
             [
                 pkg_resources.path("es_data_load.pv.mappings.production", fl)
-                for fl in AVAILABLE_MAPPING_FILES
+                for fl in AVAILABLE_MAPPING_FILES["granted"]
             ]
     ):
         current_operation = json.load(open(fname, "r"))
@@ -35,8 +36,9 @@ def test_pv_mappings():
 
 def test_pv_load_configuration():
     pv_configuration = PVLoadConfiguration.load_default_pv_configuration(suffix="_test",
-                                                                         files=random.sample(AVAILABLE_MAPPING_FILES,
-                                                                                              k=5))
+                                                                         files=random.sample(
+                                                                             AVAILABLE_MAPPING_FILES['granted'],
+                                                                             k=5))
     assert len(pv_configuration.get_load_operation_names()) == 5
     for setting_name in pv_configuration.get_load_operation_names():
         setting = pv_configuration.get_load_operation(setting_name)

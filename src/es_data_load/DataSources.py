@@ -12,6 +12,7 @@ from typing import Generator, Tuple
 
 
 class TabularDataSource(ABC):
+
     def get_document_count(self, count_source):
         raise NotImplementedError
 
@@ -68,6 +69,8 @@ class DelimitedDataSource(TabularDataSource):
         self.delimiter = kwargs.get('delimiter')
         if self.delimiter == 'tab':
             self.delimiter = "\t"
+        self.quote_style = kwargs.get('quoting', csv.QUOTE_NONNUMERIC)
+        self.header = kwargs.get('header', 0)
 
     @classmethod
     def from_config(cls, config):
@@ -84,7 +87,7 @@ class DelimitedDataSource(TabularDataSource):
         field_mapping = args[1]
         csv.field_size_limit(sys.maxsize)
         with open(filename) as fp:
-            reader = csv.reader(fp, delimiter=self.delimiter)
+            reader = csv.reader(fp, delimiter=self.delimiter, quoting=self.quote_style)
             for line in reader:
                 yield {field_name: line[idx] for field_name, idx in field_mapping.items()}
 

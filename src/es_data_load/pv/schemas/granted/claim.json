@@ -1,0 +1,23 @@
+{
+  "patent_id": {
+    "type": "keyword"
+  },
+  "claim_number": {
+    "type": "keyword"
+  },
+  "claim_text": {
+    "type": "text"
+  },
+  "claim_sequence": {
+    "type": "integer"
+  },
+  "claim_dependent": {
+    "type": "keyword"
+  },
+  "claim_exemplary": {
+    "type": "integer"
+  },
+  "patent_zero_prefix": {
+    "type": "keyword"
+  }
+}

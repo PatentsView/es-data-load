@@ -7,7 +7,7 @@ from elasticsearch import NotFoundError
 
 from es_data_load.DataSources import DelimitedDataSource, MySQLDataSource
 from es_data_load.es import PatentsViewElasticSearch
-from es_data_load.pv.schemas.PVSchemaManager import PVSchemaManager, AVAILABLE_SCHEMA_FILES
+from es_data_load.pv.schemas.granted.PVSchemaManager import PVSchemaManager
 from es_data_load.specification import LoadConfiguration, LoadJob
 
 
@@ -55,7 +55,7 @@ def tabular_source(delimited_config):
 @pytest.fixture()
 def pv_citations_only_schema_manager(search):
     sm = PVSchemaManager.load_default_pv_schema(es=search.es, suffix="test",
-                                                schema_files=["us_patent_citations_fields.json"])
+                                                granted_schema_files=["us_patent_citations_fields.json"])
     yield sm
 
 
