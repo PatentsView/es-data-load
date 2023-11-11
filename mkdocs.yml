@@ -1,0 +1,14 @@
+site_name: Elastic Data Loader (es-data-load)
+theme:
+  name: null
+  custom_dir: 'cinder'
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - toc:
+      permalink: "#"

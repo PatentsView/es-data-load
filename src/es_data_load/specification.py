@@ -1,5 +1,4 @@
-import json
-from typing import Iterable, List
+from typing import List
 
 from es_data_load.lib.utilities import (
     load_config_dict_from_json_files,
@@ -48,7 +47,7 @@ class LoadConfiguration:
 
 class LoadJob:
     def __init__(
-            self, load_configuration: LoadConfiguration, data_source, data_target, test
+        self, load_configuration: LoadConfiguration, data_source, data_target, test
     ):
         self.test = test
         self.search_target = data_target

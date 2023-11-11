@@ -10,5 +10,11 @@ class SchemaManager:
         for file_name in self.schemas:
             index_name = self.schemas[file_name]["index_name"]
             field_mapping = self.schemas[file_name]["field_mapping"]
-            create_recreate_index(self.es, index_name=index_name, aliases=[], fields=field_mapping,
-                                  delete_index=drop_and_recreate, exists_ok=exists_ok)
+            create_recreate_index(
+                self.es,
+                index_name=index_name,
+                aliases=[],
+                fields=field_mapping,
+                delete_index=drop_and_recreate,
+                exists_ok=exists_ok,
+            )

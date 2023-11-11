@@ -12,7 +12,6 @@ from typing import Generator, Tuple
 
 
 class TabularDataSource(ABC):
-
     def get_document_count(self, count_source):
         raise NotImplementedError
 
@@ -20,28 +19,34 @@ class TabularDataSource(ABC):
         raise NotImplementedError
 
     def document_generator(self, **kwargs):
-        if not all([x in kwargs for x in ['source', 'field_mapping']]):
+        if not all([x in kwargs for x in ["source", "field_mapping"]]):
             raise Exception("Both 'source' and 'field_mapping' are required parameters")
-        chunksize = kwargs.get('chunksize', None)
-        source = kwargs.get('source')
-        field_mapping = kwargs.get('field_mapping')
+        chunksize = kwargs.get("chunksize", None)
+        source = kwargs.get("source")
+        field_mapping = kwargs.get("field_mapping")
         # offset = 0
         last_id = 0
-        nested_field_source_settings = kwargs.get('nested_fields', {})
-        total_count = self.get_document_count(count_source=kwargs.get('count_source'))
-        pbar = tqdm(total=total_count, desc=kwargs.get('load_name', 'Load:'))
-        key_field = kwargs.get('key_field')
+        nested_field_source_settings = kwargs.get("nested_fields", {})
+        total_count = self.get_document_count(count_source=kwargs.get("count_source"))
+        pbar = tqdm(total=total_count, desc=kwargs.get("load_name", "Load:"))
+        key_field = kwargs.get("key_field")
         while True:
             exists = False
-            main_document = self.generate_source_chunk(source, field_mapping, offset=last_id, **kwargs)
+            main_document = self.generate_source_chunk(
+                source, field_mapping, offset=last_id, **kwargs
+            )
             sub_documents = {}
 
-            for nested_field, nested_field_setting in nested_field_source_settings.items():
-                sub_source = nested_field_setting['source']
-                sub_field_mapping = nested_field_setting['field_mapping']
+            for (
+                nested_field,
+                nested_field_setting,
+            ) in nested_field_source_settings.items():
+                sub_source = nested_field_setting["source"]
+                sub_field_mapping = nested_field_setting["field_mapping"]
                 sub_documents[nested_field] = {}
-                for nested_record in self.generate_source_chunk(sub_source, sub_field_mapping, offset=last_id,
-                                                                **kwargs):
+                for nested_record in self.generate_source_chunk(
+                    sub_source, sub_field_mapping, offset=last_id, **kwargs
+                ):
                     key_data = nested_record[key_field]
                     if key_data not in sub_documents[nested_field]:
                         sub_documents[nested_field][key_data] = []
@@ -66,17 +71,15 @@ class TabularDataSource(ABC):
 class DelimitedDataSource(TabularDataSource):
     def __init__(self, **kwargs):
         super().__init__()
-        self.delimiter = kwargs.get('delimiter')
-        if self.delimiter == 'tab':
+        self.delimiter = kwargs.get("delimiter")
+        if self.delimiter == "tab":
             self.delimiter = "\t"
-        self.quote_style = kwargs.get('quoting', csv.QUOTE_NONNUMERIC)
-        self.header = kwargs.get('header', 0)
+        self.quote_style = kwargs.get("quoting", csv.QUOTE_NONNUMERIC)
+        self.header = kwargs.get("header", 0)
 
     @classmethod
     def from_config(cls, config):
-        if config['SOURCE']['TYPE'] != 'delimited':
-            raise Exception("Source type should be delimited")
-        return cls(delimiter=config["SOURCE"]['DELIMITER'])
+        return cls(delimiter=config["DELIMITED_SETUP"]["DELIMITER"])
 
     def get_document_count(self, count_source):
         filename = count_source
@@ -89,7 +92,9 @@ class DelimitedDataSource(TabularDataSource):
         with open(filename) as fp:
             reader = csv.reader(fp, delimiter=self.delimiter, quoting=self.quote_style)
             for line in reader:
-                yield {field_name: line[idx] for field_name, idx in field_mapping.items()}
+                yield {
+                    field_name: line[idx] for field_name, idx in field_mapping.items()
+                }
 
 
 class MySQLDataSource(TabularDataSource):
@@ -102,7 +107,7 @@ class MySQLDataSource(TabularDataSource):
         :param query: Query to execute
         """
         if test == 1:
-            end_position = query.rfind(';')
+            end_position = query.rfind(";")
             if end_position == len(query) - 1:
                 query = f"{query[0:end_position]} where 1 = 0;"
             elif end_position < 0:
@@ -135,8 +140,8 @@ class MySQLDataSource(TabularDataSource):
         :param int retries: Number of times to retry a query before giving up
         :param int test: Test flag. Adds where 1=0 to queries. Can be used to test if source tables exist.
         """
-        self.connection = kwargs.get('connection')
-        self.retries = kwargs.get('retries', 3)
+        self.connection = kwargs.get("connection")
+        self.retries = kwargs.get("retries", 3)
         self.connect()
 
     @classmethod
@@ -148,14 +153,17 @@ class MySQLDataSource(TabularDataSource):
         :param int test: test flag
         :return: instance of MySQLDataSource
         """
-        if config['SOURCE']['TYPE'] != 'mysql':
-            raise Exception("Source type should be mysql")
-        return cls(connection=pymysql_connect(host=config['SOURCE']['HOSTNAME'],
-                                              user=config['SOURCE']['USERNAME'],
-                                              password=config['SOURCE']['PASSWORD'],
-                                              charset='utf8mb4', defer_connect=True,
-                                              port=int(config['SOURCE']['PORT'])),
-                   retries=int(config['SOURCE']['RETRIES']))
+        return cls(
+            connection=pymysql_connect(
+                host=config["DATABASE_SETUP"]["HOST"],
+                user=config["DATABASE_SETUP"]["USERNAME"],
+                password=config["DATABASE_SETUP"]["PASSWORD"],
+                charset="utf8mb4",
+                defer_connect=True,
+                port=int(config["DATABASE_SETUP"]["PORT"]),
+            ),
+            retries=int(config["DATABASE_SETUP"].get("RETRIES", "3")),
+        )
 
     def connect(self):
         """
@@ -186,10 +194,10 @@ class MySQLDataSource(TabularDataSource):
         :param int chunksize: Number of records to fetch
         :param int offset: Number of records to skip
         """
-        limit = int(kwargs.get('chunksize', 10000))
+        limit = int(kwargs.get("chunksize", 10000))
         # offset = int(kwargs.get('offset'))
-        offset = kwargs.get('offset')
-        test = int(kwargs.get('test', '0'))
+        offset = kwargs.get("offset")
+        test = int(kwargs.get("test", "0"))
         query_template = args[0]
         mapping = args[1]
         query = query_template.format(limit=limit, offset=offset)
