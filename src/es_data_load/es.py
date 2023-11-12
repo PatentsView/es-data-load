@@ -1,5 +1,6 @@
 import configparser
 import logging
+import sys
 import typing
 
 import elastic_transport
@@ -88,7 +89,8 @@ class ElasticsearchWrapper:
         # https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
         action_data_pairs = []
         for data_row in document_source:
-            if current_batch_size >= indexing_batch_size:
+            # A given request can at most have 100MB
+            if current_batch_size >= indexing_batch_size or sys.getsizeof(action_data_pairs) > 80 * 1024 * 1024:
                 current_batch_size = 0
                 if test == 1:
                     yield []
