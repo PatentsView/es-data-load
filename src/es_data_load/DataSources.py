@@ -27,16 +27,18 @@ class TabularDataSource(ABC):
         # offset = 0
         last_id = 0
         nested_field_source_settings = kwargs.get("nested_fields", {})
+        # Get count to show progress bar
         total_count = self.get_document_count(count_source=kwargs.get("count_source"))
         pbar = tqdm(total=total_count, desc=kwargs.get("load_name", "Load:"))
         key_field = kwargs.get("key_field")
+        # Repeat until data source is exhausted
         while True:
             exists = False
             main_document = self.generate_source_chunk(
                 source, field_mapping, offset=last_id, **kwargs
             )
             sub_documents = {}
-
+            # Build document for nested fields first
             for (
                 nested_field,
                 nested_field_setting,
@@ -52,10 +54,11 @@ class TabularDataSource(ABC):
                         sub_documents[nested_field][key_data] = []
                     nested_record.pop(key_field)
                     sub_documents[nested_field][key_data].append(nested_record)
-
+            # Build document for unnested fields
             for data_row in main_document:
                 exists = True
                 key_data = data_row[key_field]
+                # Included nested data
                 for nested_field, nested_records in sub_documents.items():
                     if key_data in nested_records:
                         data_row[nested_field] = nested_records[key_data]

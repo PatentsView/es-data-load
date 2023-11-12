@@ -57,9 +57,11 @@ class LoadJob:
 
     def process_load_operation(self, load_name):
         operation = self.load_configuration.get_load_operation(name=load_name)
+        # Obtain  data source
         document_source = self.data_source.document_generator(
             **operation["source_setting"], load_name=load_name, test=self.test
         )
+        # Load into elastic index from data source
         responses = self.search_target.bulk_load_es_documents(
             document_source=document_source,
             load_config=operation["target_setting"],
