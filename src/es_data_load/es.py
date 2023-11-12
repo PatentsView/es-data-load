@@ -19,11 +19,11 @@ class ElasticsearchWrapper:
     """
 
     def __init__(
-        self,
-        hoststring: str,
-        timeout: int = None,
-        username: str = None,
-        password: str = None,
+            self,
+            hoststring: str,
+            timeout: int = None,
+            username: str = None,
+            password: str = None,
     ):
         self.logger = logging.getLogger(self.__class__.__name__)
         if username is not None:
@@ -49,7 +49,7 @@ class ElasticsearchWrapper:
         """
         return cls(
             hoststring=config["ELASTICSEARCH"]["HOST"],
-            timeout=int(config["ELASTICSEARCH"].get("TIMEOUT", 120)),
+            timeout=int(config["ELASTICSEARCH"].get("TIMEOUT", "120")),
             username=config["ELASTICSEARCH"].get("USER", None),
             password=config["ELASTICSEARCH"].get("PASSWORD", None),
         )
@@ -65,11 +65,11 @@ class ElasticsearchWrapper:
         return cls(hoststring="localhost:9200")
 
     def bulk_load_es_documents(
-        self,
-        document_source: typing.Generator[typing.Dict],
-        target_settings: dict,
-        test: bool,
-    ) -> typing.Generator[elastic_transport.ObjectApiResponse]:
+            self,
+            document_source: typing.Iterable[dict],
+            target_settings: dict,
+            test: bool,
+    ) -> typing.Generator:
         """
         Bulk load documents from tabular data source according to provided load configuratin
 

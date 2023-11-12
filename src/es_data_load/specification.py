@@ -64,7 +64,7 @@ class LoadJob:
         # Load into elastic index from data source
         responses = self.search_target.bulk_load_es_documents(
             document_source=document_source,
-            load_config=operation["target_setting"],
+            target_settings=operation["target_setting"],
             test=self.test,
         )
         return generate_load_statistics(responses)
