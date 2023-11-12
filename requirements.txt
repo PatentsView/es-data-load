@@ -10,3 +10,7 @@ black
 sqlglot==18.8.0
 mkdocs~=1.5.0
 mkdocs-material
+mkdocstrings
+mkdocs-gen-files
+mkdocs-literate-nav
+mkdocs-section-index

@@ -1,7 +1,4 @@
 site_name: Elastic Data Loader (es-data-load)
-theme:
-  name: null
-  custom_dir: 'cinder'
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -12,3 +9,17 @@ markdown_extensions:
   - pymdownx.superfences
   - toc:
       permalink: "#"
+plugins:
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: false
+            members_order: source
+            show_root_heading: true

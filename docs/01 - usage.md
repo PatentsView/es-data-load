@@ -5,10 +5,10 @@
 ### Connect using credentials
 
 ```python
-from es_data_load.es import PatentsViewElasticSearch
+from es_data_load.es import ElasticsearchWrapper
 
-search_target = PatentsViewElasticSearch(hoststring="hostname", username='es_username', password='es_password',
-                                         timeout=60)
+search_target = ElasticsearchWrapper(hoststring="hostname", username='es_username', password='es_password',
+                                     timeout=60)
 ```
 
 ### Connect using configuration
@@ -16,13 +16,13 @@ search_target = PatentsViewElasticSearch(hoststring="hostname", username='es_use
 See [config structure](index.md#config-structure-for-elasticsearch-connection)
 
 ```python
-from es_data_load.es import PatentsViewElasticSearch
+from es_data_load.es import ElasticsearchWrapper
 import configparser
 
 config_file_to_use = "somefile.ini"
 config = configparser.ConfigParser()
 config.read(config_file_to_use)
-search_target = PatentsViewElasticSearch.from_config(config)
+search_target = ElasticsearchWrapper.from_config(config)
 ```
 
 ## 2. Create Elasticsearch index
@@ -173,7 +173,7 @@ load_job.process_all_load_operations()
 from pymysql import connect as pymysql_connect
 
 from es_data_load.DataSources import MySQLDataSource
-from es_data_load.es import PatentsViewElasticSearch
+from es_data_load.es import ElasticsearchWrapper
 from es_data_load.specification import LoadConfiguration, LoadJob
 from es_data_load.schema.SchemaManager import SchemaManager
 import configparser, json
@@ -184,7 +184,7 @@ config = configparser.ConfigParser()
 config.read(config_file_to_use)
 
 # Connect to elasticsearch
-search_target = PatentsViewElasticSearch.from_config(config)
+search_target = ElasticsearchWrapper.from_config(config)
 
 # Create Schema
 sm = SchemaManager(es=search_target.es, schemas={'patent_citations_schema': {'index_name': 'patent_citations_test',

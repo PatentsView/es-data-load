@@ -1,10 +1,27 @@
+import configparser
 import logging
+import typing
+from typing import Type
 
+import elastic_transport
 from elasticsearch import Elasticsearch
 
+from es_data_load.DataSources import TabularDataSource
 
-class PatentsViewElasticSearch:
-    def __init__(self, hoststring, timeout=None, username=None, password=None):
+
+class ElasticsearchWrapper:
+    """
+    Wrapper for Python Elasticsearch client. Allows bulk indexing of data
+
+    Args:
+        hoststring: Elasticsearch host (including port)
+        timeout: connection timeout
+        username: Elasticsearch username
+        password: Elasticsearch password
+
+    """
+
+    def __init__(self, hoststring: str, timeout: int = None, username: str = None, password: str = None):
         self.logger = logging.getLogger(self.__class__.__name__)
         if username is not None:
             self.es = Elasticsearch(
@@ -17,7 +34,16 @@ class PatentsViewElasticSearch:
         self.logger.info(self.es.info())
 
     @classmethod
-    def from_config(cls, config):
+    def from_config(cls, config: configparser.ConfigParser) -> 'ElasticsearchWrapper':
+        """
+        Build ElasticsearchWrapper object from config(ini)file
+
+        Args:
+            config: config object loaded from configparser
+
+        Returns:
+            ElasticsearchWrapper object
+        """
         return cls(
             hoststring=config["ELASTICSEARCH"]["HOST"],
             timeout=int(config["ELASTICSEARCH"].get("TIMEOUT", 120)),
@@ -26,13 +52,32 @@ class PatentsViewElasticSearch:
         )
 
     @classmethod
-    def for_localhost(cls):
+    def for_localhost(cls) -> 'ElasticsearchWrapper':
+        """
+        Build ElasticsearchWrapper object for localhost instance. No username/password
+
+        Returns:
+            ElasticsearchWrapper object
+        """
         return cls(hoststring="localhost:9200")
 
-    def bulk_load_es_documents(self, document_source, load_config, test):
-        target_index = load_config["index"]
-        indexing_batch_size = load_config["indexing_batch_size"]
-        id_field = load_config["id_field"]
+    def bulk_load_es_documents(self, document_source: typing.Generator[typing.Dict], target_settings: dict,
+            test: bool) -> \
+            typing.Generator[elastic_transport.ObjectApiResponse]:
+        """
+        Bulk load documents from tabular data source according to provided load configuratin
+
+        Args:
+            document_source: Data Source
+            target_settings: dict containing load configuration (target index, indexing batch size and id field)
+            test: Boolean indicating if current run should be a test run. (No data is indexed)
+
+        Returns:
+            Bulk indexing results
+        """
+        target_index = target_settings["index"]
+        indexing_batch_size = target_settings["indexing_batch_size"]
+        id_field = target_settings["id_field"]
         current_batch_size = 0
         action_data_pairs = []
         for data_row in document_source:

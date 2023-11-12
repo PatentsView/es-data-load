@@ -6,7 +6,7 @@ import pytest
 from elasticsearch import NotFoundError
 
 from es_data_load.DataSources import DelimitedDataSource, MySQLDataSource
-from es_data_load.es import PatentsViewElasticSearch
+from es_data_load.es import ElasticsearchWrapper
 from es_data_load.pv.schemas.PVSchemaManager import PVSchemaManager
 from es_data_load.specification import LoadConfiguration, LoadJob
 
@@ -66,7 +66,7 @@ def pv_citations_only_schema_manager(search):
 
 @pytest.fixture()
 def search(config):
-    yield PatentsViewElasticSearch.from_config(config)
+    yield ElasticsearchWrapper.from_config(config)
 
 
 @pytest.fixture()

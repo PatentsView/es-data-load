@@ -1,10 +1,10 @@
 from elasticsearch import NotFoundError
 
-from es_data_load.es import PatentsViewElasticSearch
+from es_data_load.es import ElasticsearchWrapper
 
 
 def test_es_connection(config):
-    es = PatentsViewElasticSearch.from_config(config)
+    es = ElasticsearchWrapper.from_config(config)
     print(es.es.info())
 
 

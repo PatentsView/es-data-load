@@ -4,10 +4,11 @@ For PatentsView data load, the package supports a simplified list of steps to fo
 Compare these steps to the steps in [General Usage Exmple](01 - usage.md#complete-example)
 
 ## Complete Example
+
 ```python
 # Imports
 from es_data_load.DataSources import MySQLDataSource
-from es_data_load.es import PatentsViewElasticSearch
+from es_data_load.es import ElasticsearchWrapper
 from es_data_load.pv.schemas.PVSchemaManager import AVAILABLE_SCHEMA_FILES, PVSchemaManager
 from es_data_load.pv.mappings.PVMappingsManager import AVAILABLE_MAPPING_FILES, PVLoadConfiguration
 from es_data_load.specification import LoadConfiguration, LoadJob
@@ -19,7 +20,7 @@ config = configparser.ConfigParser()
 config.read(config_file_to_use)
 
 # Connect to elasticsearch
-search_target = PatentsViewElasticSearch.from_config(config)
+search_target = ElasticsearchWrapper.from_config(config)
 
 # Load all existing PV schema
 sm = PVSchemaManager.load_default_pv_schema(es=search_target.es, suffix="test")
