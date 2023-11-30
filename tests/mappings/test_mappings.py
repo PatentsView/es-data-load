@@ -3,6 +3,8 @@ import json
 import random
 import re
 
+import pytest
+
 from es_data_load.specification import validate_mapping_structure
 from es_data_load.pv.mappings.PVMappingsManager import (
     PVLoadConfiguration,
@@ -15,13 +17,13 @@ def validate_jinja_sql(sql_template, variable):
 
 
 def test_pv_mappings():
-    assert len(AVAILABLE_MAPPING_FILES["granted"]) == 17
+    assert len(AVAILABLE_MAPPING_FILES["granted"]) == 21
     assert len(AVAILABLE_MAPPING_FILES["pregrant"]) == 0
     for idx, fname in enumerate(
-        [
-            pkg_resources.path("es_data_load.pv.mappings.production.granted", fl)
-            for fl in AVAILABLE_MAPPING_FILES["granted"]
-        ]
+            [
+                pkg_resources.path("es_data_load.pv.mappings.production.granted", fl)
+                for fl in AVAILABLE_MAPPING_FILES["granted"]
+            ]
     ):
         current_operation = json.load(open(fname, "r"))
         validate_mapping_structure(current_operation)
@@ -37,6 +39,11 @@ def test_pv_mappings():
         assert max(current_operation["source_setting"]["field_mapping"].values()) < len(
             columns
         )
+
+
+@pytest.mark.skip()
+def test_pv_mapping_queries():
+    all_configs = PVLoadConfiguration.load_default_pv_configuration()
 
 
 def test_pv_load_configuration():

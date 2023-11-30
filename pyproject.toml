@@ -20,5 +20,7 @@ dependencies = [
     "pymysql>=1.0",
 ]
 [tool.setuptools.package-data]
-"es_data_load.pv.schemas" = ["*.json"]
-"es_data_load.pv.mappings.production" = ["*.json"]
+"es_data_load.pv.schemas.granted" = ["*.json"]
+"es_data_load.pv.mappings.production.granted" = ["*.json"]
+"es_data_load.pv.schemas.pregrant" = ["*.json"]
+"es_data_load.pv.mappings.production.pregrant" = ["*.json"]

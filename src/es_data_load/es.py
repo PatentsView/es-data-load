@@ -20,11 +20,11 @@ class ElasticsearchWrapper:
     """
 
     def __init__(
-            self,
-            hoststring: str,
-            timeout: int = None,
-            username: str = None,
-            password: str = None,
+        self,
+        hoststring: str,
+        timeout: int = None,
+        username: str = None,
+        password: str = None,
     ):
         self.logger = logging.getLogger(self.__class__.__name__)
         if username is not None:
@@ -66,10 +66,10 @@ class ElasticsearchWrapper:
         return cls(hoststring="localhost:9200")
 
     def bulk_load_es_documents(
-            self,
-            document_source: typing.Iterable[dict],
-            target_settings: dict,
-            test: bool,
+        self,
+        document_source: typing.Iterable[dict],
+        target_settings: dict,
+        test: bool,
     ) -> typing.Generator:
         """
         Bulk load documents from tabular data source according to provided load configuratin
@@ -90,7 +90,10 @@ class ElasticsearchWrapper:
         action_data_pairs = []
         for data_row in document_source:
             # A given request can at most have 100MB
-            if current_batch_size >= indexing_batch_size or sys.getsizeof(action_data_pairs) > 80 * 1024 * 1024:
+            if (
+                current_batch_size >= indexing_batch_size
+                or sys.getsizeof(action_data_pairs) > 80 * 1024 * 1024
+            ):
                 current_batch_size = 0
                 if test == 1:
                     yield []

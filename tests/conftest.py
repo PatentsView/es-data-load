@@ -129,4 +129,8 @@ def responses(search, documents, load_job_config):
     except NotFoundError:
         pass
     index_responses = search.bulk_load_es_documents(documents, target_setting, test=0)
+    try:
+        search.es.indices.delete(index=target_setting["index"])
+    except NotFoundError:
+        pass
     yield index_responses

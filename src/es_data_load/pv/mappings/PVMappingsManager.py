@@ -20,6 +20,10 @@ AVAILABLE_MAPPING_FILES = {
         "uspc_mainclass.json",
         "uspc_subclass.json",
         "wipo.json",
+        "claim.json",
+        "brf_sum_text.json",
+        "detail_desc_text.json",
+        "draw_desc_text.json",
     ],
     "pregrant": [],
 }

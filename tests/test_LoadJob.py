@@ -42,10 +42,10 @@ def test_generate_load_job_from_folder(project_root, config):
 
 
 def test_process_load_operation(
-    pv_citations_only_schema_manager,
-    load_job_configuration_1: LoadConfiguration,
-    search,
-    mysql_source,
+        pv_citations_only_schema_manager,
+        load_job_configuration_1: LoadConfiguration,
+        search,
+        mysql_source,
 ):
     load_job = LoadJob(
         load_configuration=load_job_configuration_1,
@@ -66,6 +66,9 @@ def test_process_load_operation(
             name_load_job_to_process
         )["target_setting"],
     )
+    search.es.indices.delete(index=load_job.load_configuration.get_load_operation(
+        name_load_job_to_process
+    )["target_setting"]["index"])
 
 
 def test_get_load_job_status(load_job: LoadJob):
@@ -85,13 +88,22 @@ def test_get_load_job_status(load_job: LoadJob):
         for x in ["batches", "record_count", "complete", "success", "duration"]
     )
     assert status["complete"] and ["success"]
+    for load_operation in load_job.load_configuration.get_load_operation_names():
+        try:
+            load_job.search_target.es.indices.delete(
+                index=load_job.load_configuration.get_load_operation(
+                    load_operation
+                )["target_setting"]["index"]
+            )
+        except NotFoundError:
+            pass
 
 
 def test_process_csv_load_operation(
-    pv_citations_only_schema_manager,
-    load_job_configuration_csv: LoadConfiguration,
-    search,
-    tabular_source,
+        pv_citations_only_schema_manager,
+        load_job_configuration_csv: LoadConfiguration,
+        search,
+        tabular_source,
 ):
     load_job = LoadJob(
         load_configuration=load_job_configuration_csv,
@@ -123,3 +135,11 @@ def test_process_csv_load_operation(
     )
     assert not hits["timed_out"]
     assert hits["hits"]["total"]["value"] == 1
+    try:
+        search.es.indices.delete(
+            index=load_job.load_configuration.get_load_operation(
+                name_load_job_to_process
+            )["target_setting"]["index"]
+        )
+    except NotFoundError:
+        pass

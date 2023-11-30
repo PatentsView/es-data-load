@@ -21,6 +21,10 @@ AVAILABLE_SCHEMA_FILES = {
         "uspc_mainclasses_fields.json": "uspc_mainclasses{suffix}",
         "uspc_subclasses_fields.json": "uspc_subclasses{suffix}",
         "wipo_fields.json": "wipo{suffix}",
+        "brf_sum_text.json": "brf_sum_text{suffix}",
+        "claim.json": "brf_sum_text{suffix}",
+        "detail_desc_text.json": "brf_sum_text{suffix}",
+        "draw_desc_text.json": "brf_sum_text{suffix}",
     },
     "pregrant": {},
 }

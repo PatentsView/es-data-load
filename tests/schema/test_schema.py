@@ -86,6 +86,8 @@ def test_go_live(search):
             == mapping_from_es[index_name]["mappings"]["properties"]
         )
         search.es.indices.delete_alias(index=index_name, name=alias_name)
+        search.es.indices.delete(index=index_name)
+
 
 
 def test_generic_schema_load(search):

@@ -50,13 +50,13 @@ def verify_test_index_mapping(es: Elasticsearch, index_name):
     assert index_name in index_config
     assert "assignee_id" in index_config[index_name]["mappings"]["properties"]
     assert (
-        index_config[index_name]["mappings"]["properties"]["assignee_id"]["type"]
-        == "keyword"
+            index_config[index_name]["mappings"]["properties"]["assignee_id"]["type"]
+            == "keyword"
     )
 
 
 def test_create_recreate_index(
-    search,
+        search,
 ):
     index_name = "test_util_index"
     # Verify index doesn't exist already
@@ -169,6 +169,10 @@ def test_create_recreate_index(
         exists_ok=True,
     )
     verify_test_index_mapping(search.es, index_name)
+    try:
+        search.es.indices.delete(index=index_name)
+    except NotFoundError:
+        pass
 
 
 def test_csv_lines():

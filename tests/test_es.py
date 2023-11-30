@@ -41,3 +41,7 @@ def test_bulk_load_es_documents(search, documents, load_job_config):
     )
     assert not any([index_response["errors"] for index_response in index_responses])
     assert_es_counts(search, target_setting)
+    try:
+        search.es.indices.delete(index=target_setting["index"])
+    except NotFoundError:
+        pass
