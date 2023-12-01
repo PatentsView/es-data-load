@@ -3,7 +3,6 @@ import logging
 import sys
 from abc import ABC
 
-import enlighten
 from tqdm import tqdm
 import configparser
 from pymysql import Connection, Error as PyMySQLError, connect as pymysql_connect
