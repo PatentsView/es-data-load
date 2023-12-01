@@ -1,11 +1,14 @@
 import configparser
 import csv
 import json
+import logging
 import os
 import sys
 from typing import List
 
 from elasticsearch import NotFoundError, BadRequestError
+
+logger = logging.getLogger("es-data-load")
 
 
 def load_config_dict_from_json_files(directories: List):
@@ -99,7 +102,7 @@ def generate_load_statistics(responses):
                     if "error" in error_items["create"]:
                         errors.add(error_items["create"]["error"]["type"])
                 error_status = True
-
+    logger.info(f"Load completed. Errors: {errors}")
     return {
         "batches": batch_count,
         "record_count": record_count,

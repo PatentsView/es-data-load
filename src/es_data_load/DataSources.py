@@ -1,7 +1,9 @@
 import csv
+import logging
 import sys
 from abc import ABC
 
+import enlighten
 from tqdm import tqdm
 import configparser
 from pymysql import Connection, Error as PyMySQLError, connect as pymysql_connect
@@ -9,6 +11,8 @@ from pymysql import Connection, Error as PyMySQLError, connect as pymysql_connec
 from es_data_load.lib.utilities import csv_lines
 
 from typing import Generator, Tuple
+
+logger = logging.getLogger("es-data-load")
 
 
 class TabularDataSource(ABC):

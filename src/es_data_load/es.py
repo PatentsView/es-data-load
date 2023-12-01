@@ -6,6 +6,8 @@ import typing
 import elastic_transport
 from elasticsearch import Elasticsearch
 
+logger = logging.getLogger("es-data-load")
+
 
 class ElasticsearchWrapper:
     """
@@ -26,16 +28,15 @@ class ElasticsearchWrapper:
         username: str = None,
         password: str = None,
     ):
-        self.logger = logging.getLogger(self.__class__.__name__)
         if username is not None:
             self.es = Elasticsearch(
                 hosts=hoststring, basic_auth=(username, password), timeout=timeout
             )
-            self.logger.debug("Connecting with credentials")
+            logger.debug("Connecting with credentials")
         else:
-            self.logger.debug("Connecting without credentials")
+            logger.debug("Connecting without credentials")
             self.es = Elasticsearch(hosts=hoststring, timeout=timeout)
-        self.logger.info(self.es.info())
+        logger.info(self.es.info())
 
     @classmethod
     def from_config(cls, config: configparser.ConfigParser) -> "ElasticsearchWrapper":
@@ -98,6 +99,7 @@ class ElasticsearchWrapper:
                 if test == 1:
                     yield []
                 else:
+                    logger.info("Sending current batch to Elasticsearch")
                     r = self.es.bulk(operations=action_data_pairs, refresh=True)
                     yield r
                 action_data_pairs = []
@@ -109,5 +111,6 @@ class ElasticsearchWrapper:
         if test == 1:
             yield []
         else:
+            logger.info("Sending final batch to Elasticsearch")
             r = self.es.bulk(operations=action_data_pairs, refresh=True)
             yield r

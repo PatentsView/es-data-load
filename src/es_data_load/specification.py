@@ -1,9 +1,12 @@
+import logging
 from typing import List
 
 from es_data_load.lib.utilities import (
     load_config_dict_from_json_files,
     generate_load_statistics,
 )
+
+logger = logging.getLogger("es-data-load")
 
 
 def validate_mapping_structure(mapping):
@@ -56,6 +59,7 @@ class LoadJob:
         self.load_results = {}
 
     def process_load_operation(self, load_name):
+        logger.info(f"Loading data for operation: {load_name}")
         operation = self.load_configuration.get_load_operation(name=load_name)
         # Obtain  data source
         document_source = self.data_source.document_generator(
