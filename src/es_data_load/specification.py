@@ -47,10 +47,10 @@ class LoadConfiguration:
 
 class LoadJob:
     def __init__(
-        self, load_configuration: LoadConfiguration, data_source, data_target, test
+        self, load_configuration: LoadConfiguration, data_source, search_wrapper, test
     ):
         self.test = test
-        self.search_target = data_target
+        self.search_wrapper = search_wrapper
         self.data_source = data_source
         self.load_configuration = load_configuration
         self.load_results = {}
@@ -62,7 +62,7 @@ class LoadJob:
             **operation["source_setting"], load_name=load_name, test=self.test
         )
         # Load into elastic index from data source
-        responses = self.search_target.bulk_load_es_documents(
+        responses = self.search_wrapper.bulk_load_es_documents(
             document_source=document_source,
             target_settings=operation["target_setting"],
             test=self.test,

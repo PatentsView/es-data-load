@@ -50,7 +50,7 @@ def test_process_load_operation(
     load_job = LoadJob(
         load_configuration=load_job_configuration_1,
         data_source=mysql_source,
-        data_target=search,
+        search_wrapper=search,
         test=False,
     )
     name_load_job_to_process = load_job_configuration_1.get_load_operation_names()[0]
@@ -61,7 +61,7 @@ def test_process_load_operation(
 
     load_job.process_load_operation(name_load_job_to_process)
     assert_es_counts(
-        search=load_job.search_target,
+        search=load_job.search_wrapper,
         target_setting=load_job.load_configuration.get_load_operation(
             name_load_job_to_process
         )["target_setting"],
@@ -74,7 +74,7 @@ def test_process_load_operation(
 def test_get_load_job_status(load_job: LoadJob):
     name_load_job_to_process = load_job.load_configuration.get_load_operation_names()[0]
     try:
-        load_job.search_target.es.indices.delete(
+        load_job.search_wrapper.es.indices.delete(
             index=load_job.load_configuration.get_load_operation(
                 name_load_job_to_process
             )["target_setting"]["index"]
@@ -90,7 +90,7 @@ def test_get_load_job_status(load_job: LoadJob):
     assert status["complete"] and ["success"]
     for load_operation in load_job.load_configuration.get_load_operation_names():
         try:
-            load_job.search_target.es.indices.delete(
+            load_job.search_wrapper.es.indices.delete(
                 index=load_job.load_configuration.get_load_operation(
                     load_operation
                 )["target_setting"]["index"]
@@ -108,7 +108,7 @@ def test_process_csv_load_operation(
     load_job = LoadJob(
         load_configuration=load_job_configuration_csv,
         data_source=tabular_source,
-        data_target=search,
+        search_wrapper=search,
         test=False,
     )
     name_load_job_to_process = load_job_configuration_csv.get_load_operation_names()[0]

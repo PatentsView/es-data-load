@@ -20,10 +20,10 @@ config = configparser.ConfigParser()
 config.read(config_file_to_use)
 
 # Connect to elasticsearch
-search_target = ElasticsearchWrapper.from_config(config)
+search_wrapper = ElasticsearchWrapper.from_config(config)
 
 # Load all existing PV schema
-sm = PVSchemaManager.load_default_pv_schema(es=search_target.es, suffix="test")
+sm = PVSchemaManager.load_default_pv_schema(search_wrapper=search_wrapper, suffix="test")
 
 sm.create_es_indices(drop_and_recreate=False, exists_ok=False)
 
@@ -37,7 +37,7 @@ l_config = PVLoadConfiguration.load_default_pv_configuration(suffix="test",
                                                              reporting_source="PatentsView_20230630")
 
 ## Create load job
-load_job = LoadJob(load_configuration=l_config, data_source=mysql_source, data_target=search_target,
+load_job = LoadJob(load_configuration=l_config, data_source=mysql_source, search_wrapper=search_wrapper,
                    test=False)
 
 # Run load job
@@ -64,7 +64,7 @@ print(AVAILABLE_SCHEMA_FILES['granted'])
 from es_data_load.pv.schemas.PVSchemaManager import PVSchemaManager
 
 selected_sm = (
-    PVSchemaManager.load_default_pv_schema(es=search_target.es, suffix="test",
+    PVSchemaManager.load_default_pv_schema(search_wrapper=search_wrapper, suffix="test",
                                            granted_schema_files=['assignees_fields.json'],
                                            pregrant_schema_files=[])
 )

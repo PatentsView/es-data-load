@@ -7,7 +7,7 @@
 ```python
 from es_data_load.es import ElasticsearchWrapper
 
-search_target = ElasticsearchWrapper(hoststring="hostname", username='es_username', password='es_password',
+search_wrapper = ElasticsearchWrapper(hoststring="hostname", username='es_username', password='es_password',
                                      timeout=60)
 ```
 
@@ -22,18 +22,18 @@ import configparser
 config_file_to_use = "somefile.ini"
 config = configparser.ConfigParser()
 config.read(config_file_to_use)
-search_target = ElasticsearchWrapper.from_config(config)
+search_wrapper = ElasticsearchWrapper.from_config(config)
 ```
 
 ## 2. Create Elasticsearch index
 
-This snippet uses `search_target` from [Connecting to Elasticsearch](#connecting-to-elasticsearch) section above. For
+This snippet uses `search_wrapper` from [Connecting to Elasticsearch](#connecting-to-elasticsearch) section above. For
 reference to schema, see [specification](index.md#json-structure-for-elasticsearch-index-creation)
 
 ```python
 from es_data_load.schema.SchemaManager import SchemaManager
 
-sm = SchemaManager(es=search_target.es,
+sm = SchemaManager(search_wrapper=search_wrapper,
                    schemas={'patent_citations_schema': {'index_name': 'patent_citations_test', 'field_mapping': {
                        "uuid": {"type": "keyword"},
                        "patent_id": {
@@ -156,7 +156,7 @@ This snippet uses variables from above sections
 ```python
 from es_data_load.specification import LoadJob
 
-load_job = LoadJob(load_configuration=l_config, data_source=mysql_source, data_target=search_target,
+load_job = LoadJob(load_configuration=l_config, data_source=mysql_source, search_wrapper=search_wrapper,
                    test=False)
 ```
 
@@ -184,12 +184,13 @@ config = configparser.ConfigParser()
 config.read(config_file_to_use)
 
 # Connect to elasticsearch
-search_target = ElasticsearchWrapper.from_config(config)
+search_wrapper = ElasticsearchWrapper.from_config(config)
 
 # Create Schema
-sm = SchemaManager(es=search_target.es, schemas={'patent_citations_schema': {'index_name': 'patent_citations_test',
-                                                                             'field_mapping': json.load(
-                                                                                 open("schema.json", "r"))}})
+sm = SchemaManager(search_wrapper=search_wrapper,
+                   schemas={'patent_citations_schema': {'index_name': 'patent_citations_test',
+                                                        'field_mapping': json.load(
+                                                            open("schema.json", "r"))}})
 sm.create_es_indices(drop_and_recreate=False, exists_ok=False)
 
 # Connect to MySQL Database
@@ -200,7 +201,7 @@ mappings_folder = "mappings/patent_citations_loads"
 l_config = LoadConfiguration.generate_load_configuration_from_folder(directories=[mappings_folder])
 
 ## Create load job
-load_job = LoadJob(load_configuration=l_config, data_source=mysql_source, data_target=search_target,
+load_job = LoadJob(load_configuration=l_config, data_source=mysql_source, search_wrapper=search_wrapper,
                    test=False)
 
 # Run load job

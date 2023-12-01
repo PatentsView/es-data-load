@@ -1,5 +1,6 @@
 import json
 
+from es_data_load.es import ElasticsearchWrapper
 from es_data_load.schema.SchemaManager import SchemaManager
 
 AVAILABLE_SCHEMA_FILES = {
@@ -31,10 +32,10 @@ AVAILABLE_SCHEMA_FILES = {
 
 
 class PVSchemaManager(SchemaManager):
-    def __init__(self, es, suffix, schemas: dict):
-        super().__init__(es, schemas)
+    def __init__(self, search_wrapper, suffix, schemas: dict):
+        super().__init__(search_wrapper, schemas)
         self.suffix = suffix
-        self.es = es
+        self.search_wrapper = search_wrapper
         self.schemas = schemas.copy()
 
     @classmethod
@@ -46,7 +47,7 @@ class PVSchemaManager(SchemaManager):
             import importlib.resources as pkg_resources
 
             with pkg_resources.path(
-                f"es_data_load.pv.schemas.{schema_path_prefix}", file_name
+                    f"es_data_load.pv.schemas.{schema_path_prefix}", file_name
             ) as schema_file:
                 field_mapping = json.load(open(schema_file, "r"))
             index_name = index_pattern.format(suffix=suffix)
@@ -60,7 +61,7 @@ class PVSchemaManager(SchemaManager):
 
     @classmethod
     def load_default_pv_schema(
-        cls, es, suffix, granted_schema_files=None, pregrant_schema_files=None
+            cls, search_wrapper: ElasticsearchWrapper, suffix, granted_schema_files=None, pregrant_schema_files=None
     ):
         if granted_schema_files is None:
             granted_schema_files = AVAILABLE_SCHEMA_FILES["granted"].keys()
@@ -72,12 +73,12 @@ class PVSchemaManager(SchemaManager):
         selected_schemas.update(
             cls.load_default_schema(pregrant_schema_files, suffix, "pregrant")
         )
-        return cls(es=es, schemas=selected_schemas, suffix=suffix)
+        return cls(search_wrapper=search_wrapper, schemas=selected_schemas, suffix=suffix)
 
     def go_live(self, live_pattern=""):
         for filename in self.schemas:
             index_pattern = self.schemas[filename]["index_pattern"]
-            self.es.indices.put_alias(
+            self.search_wrapper.es.indices.put_alias(
                 index=index_pattern.format(suffix=self.suffix),
                 name=index_pattern.format(suffix=live_pattern),
             )

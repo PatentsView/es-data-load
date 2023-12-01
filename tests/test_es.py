@@ -4,8 +4,8 @@ from es_data_load.es import ElasticsearchWrapper
 
 
 def test_es_connection(config):
-    es = ElasticsearchWrapper.from_config(config)
-    print(es.es.info())
+    search_wrapper = ElasticsearchWrapper.from_config(config)
+    print(search_wrapper.es.info())
 
 
 def assert_es_counts(search, target_setting):
@@ -37,7 +37,7 @@ def test_bulk_load_es_documents(search, documents, load_job_config):
         pass
     index_responses = search.bulk_load_es_documents(documents, target_setting, test=0)
     assert (
-        sum([len(index_response["items"]) for index_response in index_responses]) == 49
+            sum([len(index_response["items"]) for index_response in index_responses]) == 49
     )
     assert not any([index_response["errors"] for index_response in index_responses])
     assert_es_counts(search, target_setting)

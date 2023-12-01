@@ -57,7 +57,7 @@ def tabular_source(delimited_config):
 @pytest.fixture()
 def pv_citations_only_schema_manager(search):
     sm = PVSchemaManager.load_default_pv_schema(
-        es=search.es,
+        search_wrapper=search,
         suffix="test",
         granted_schema_files=["us_patent_citations_fields.json"],
     )
@@ -110,7 +110,7 @@ def load_job(project_root, load_job_configuration_1, mysql_source, search):
     lj = LoadJob(
         load_configuration=load_job_configuration_1,
         data_source=mysql_source,
-        data_target=search,
+        search_wrapper=search,
         test=False,
     )
     return lj
@@ -128,7 +128,7 @@ def responses(search, documents, load_job_config):
         search.es.indices.delete(index=target_setting["index"])
     except NotFoundError:
         pass
-    index_responses = search.bulk_load_es_documents(documents, target_setting, test=0)
+    index_responses = search.bulk_load_es_documents(documents, target_setting, test=False)
     try:
         search.es.indices.delete(index=target_setting["index"])
     except NotFoundError:
