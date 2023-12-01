@@ -1,0 +1,14 @@
+{
+  "patent_id": {
+    "type": "keyword"
+  },
+  "summary_text": {
+    "type": "text"
+  },
+  "patent_zero_prefix": {
+    "type": "keyword"
+  },
+  "document_number": {
+    "type": "keyword"
+  }
+}

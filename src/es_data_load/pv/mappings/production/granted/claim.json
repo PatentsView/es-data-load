@@ -1,0 +1,24 @@
+{
+  "source_setting": {
+    "source": "select uuid, patent_id, claim_number, claim_text, claim_sequence, dependent, exemplary, CONCAT(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+'), LPAD(REGEXP_SUBSTR(patent_id, '[0-9]+$'), 8-LENGTH(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+')), '0')) as patent_zero_prefix, document_number from (select uuid from {elastic_production_source}.claims where uuid > '{{offset}}' order by uuid limit {{limit}}) inner_q join {elastic_production_source}.claims c on c.uuid=inner_q.uuid",
+    "field_mapping": {
+      "uuid": 0,
+      "patent_id": 1,
+      "claim_number": 2,
+      "claim_text": 3,
+      "claim_sequence": 4,
+      "claim_dependent": 5,
+      "claim_exemplary": 6,
+      "patent_zero_prefix": 7,
+      "document_number": 8
+    },
+    "key_field": "uuid",
+    "count_source": "select count(1) from {elastic_production_source}.claims",
+    "chunksize": 1000
+  },
+  "target_setting": {
+    "index": "claims",
+    "indexing_batch_size": 1000,
+    "id_field": "uuid"
+  }
+}
