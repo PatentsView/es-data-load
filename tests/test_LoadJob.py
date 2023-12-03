@@ -1,3 +1,4 @@
+import logging
 import os
 
 import pytest
@@ -5,6 +6,7 @@ from elasticsearch import NotFoundError
 
 from es_data_load.specification import LoadConfiguration, LoadJob
 from tests.test_es import assert_es_counts
+
 
 
 def test_generate_load_job_from_folder(project_root, config):
