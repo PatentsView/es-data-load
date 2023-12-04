@@ -1,23 +1,22 @@
 {
   "source_setting": {
-    "source": "select persistent_inventor_id, attribution_status, name_first, name_last, male_flag, num_patents, num_assignees, lastknown_location_id, lastknown_city, lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude, first_seen_date, last_seen_date, years_active from {elastic_production_source}.inventors where persistent_inventor_id > '{{offset}}' order by persistent_inventor_id limit {{limit}};",
+    "source": "select persistent_inventor_id, name_first, name_last, gender_code, num_patents, num_assignees, lastknown_location_id, lastknown_city, lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude, first_seen_date, last_seen_date, years_active from {elastic_production_source}.inventors where persistent_inventor_id > '{{offset}}' order by persistent_inventor_id limit {{limit}};",
     "field_mapping": {
       "inventor_id": 0,
-      "inventor_name_first": 2,
-      "inventor_name_last": 3,
-      "inventor_male_flag": 4,
-      "inventor_gender_attr_status": 1,
-      "inventor_lastknown_location": 7,
-      "inventor_lastknown_city": 8,
-      "inventor_lastknown_state": 9,
-      "inventor_lastknown_country": 10,
-      "inventor_lastknown_latitude": 11,
-      "inventor_lastknown_longitude": 12,
-      "inventor_first_seen_date": 13,
-      "inventor_last_seen_date": 14,
-      "inventor_num_assignees": 6,
-      "inventor_num_patents": 5,
-      "inventor_years_active": 15
+      "inventor_name_first": 1,
+      "inventor_name_last": 2,
+      "inventor_gender_code": 3,
+      "inventor_lastknown_location": 6,
+      "inventor_lastknown_city": 7,
+      "inventor_lastknown_state": 8,
+      "inventor_lastknown_country": 9,
+      "inventor_lastknown_latitude": 10,
+      "inventor_lastknown_longitude": 11,
+      "inventor_first_seen_date": 12,
+      "inventor_last_seen_date": 13,
+      "inventor_num_assignees": 5,
+      "inventor_num_patents": 4,
+      "inventor_years_active": 14
     },
     "key_field": "inventor_id",
     "nested_fields": {
