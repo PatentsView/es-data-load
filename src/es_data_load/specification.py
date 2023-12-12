@@ -1,10 +1,12 @@
-import json
-from typing import Iterable, List
+import logging
+from typing import List
 
 from es_data_load.lib.utilities import (
     load_config_dict_from_json_files,
     generate_load_statistics,
 )
+
+logger = logging.getLogger("es-data-load")
 
 
 def validate_mapping_structure(mapping):
@@ -48,22 +50,25 @@ class LoadConfiguration:
 
 class LoadJob:
     def __init__(
-            self, load_configuration: LoadConfiguration, data_source, data_target, test
+        self, load_configuration: LoadConfiguration, data_source, search_wrapper, test
     ):
         self.test = test
-        self.search_target = data_target
+        self.search_wrapper = search_wrapper
         self.data_source = data_source
         self.load_configuration = load_configuration
         self.load_results = {}
 
     def process_load_operation(self, load_name):
+        logger.info(f"Loading data for operation: {load_name}")
         operation = self.load_configuration.get_load_operation(name=load_name)
+        # Obtain  data source
         document_source = self.data_source.document_generator(
             **operation["source_setting"], load_name=load_name, test=self.test
         )
-        responses = self.search_target.bulk_load_es_documents(
+        # Load into elastic index from data source
+        responses = self.search_wrapper.bulk_load_es_documents(
             document_source=document_source,
-            load_config=operation["target_setting"],
+            target_settings=operation["target_setting"],
             test=self.test,
         )
         return generate_load_statistics(responses)

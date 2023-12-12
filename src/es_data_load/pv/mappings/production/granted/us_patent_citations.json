@@ -17,7 +17,7 @@
         "key_field": "uuid",
 
     "count_source": "SELECT count(1) from  {elastic_production_source}.us_patent_citations",
-    "chunksize": 1000000
+    "chunksize": 10000
   },
   "target_setting": {
     "index": "us_patent_citations",

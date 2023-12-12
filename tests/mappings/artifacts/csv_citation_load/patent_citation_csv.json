@@ -1,0 +1,23 @@
+{
+  "source_setting": {
+    "source": "tests/mappings/artifacts/g_us_patent_citations.sample.tsv",
+    "field_mapping": {
+      "uuid": 0,
+      "patent_number": 1,
+      "cited_patent_number": 3,
+      "citation_date": 4,
+      "citation_kind":6,
+      "citation_country": 5,
+      "citation_category": 7,
+      "citation_sequence": 2
+    },
+    "count_source": "tests/mappings/artifacts/g_us_patent_citations.sample.tsv",
+    "key_field": "uuid",
+    "chunksize": null
+  },
+  "target_setting": {
+    "index": "test_patent_citations",
+    "indexing_batch_size": 100000,
+    "id_field": "uuid"
+  }
+}

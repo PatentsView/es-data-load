@@ -1,0 +1,698 @@
+{
+  "applicants": {
+    "properties": {
+      "applicant_designation": {
+        "type": "keyword"
+      },
+      "applicant_name_first": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "applicant_name_last": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "applicant_organization": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "applicant_sequence": {
+        "type": "long"
+      },
+      "applicant_type": {
+        "type": "keyword"
+      },
+      "location_id": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "application": {
+    "properties": {
+      "application_id": {
+        "type": "keyword"
+      },
+      "application_type": {
+        "type": "keyword"
+      },
+      "filing_date": {
+        "type": "date"
+      },
+      "filing_type": {
+        "type": "keyword"
+      },
+      "rule_47_flag": {
+        "type": "boolean"
+      },
+      "series_code": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "assignees": {
+    "properties": {
+      "assignee_city": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_country": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_id": {
+        "type": "keyword"
+      },
+      "assignee_individual_name_first": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_individual_name_last": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_location_id": {
+        "type": "keyword"
+      },
+      "assignee_organization": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_sequence": {
+        "type": "long"
+      },
+      "assignee_state": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_type": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "assignee_incarnations": {
+    "properties": {
+      "assignee_city": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_country": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_id": {
+        "type": "keyword"
+      },
+      "assignee_individual_name_first": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_individual_name_last": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_location_id": {
+        "type": "keyword"
+      },
+      "assignee_organization": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_sequence": {
+        "type": "long"
+      },
+      "assignee_state": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "assignee_type": {
+        "type": "keyword"
+      },
+      "update_version": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "cpc_at_issue": {
+    "properties": {
+      "cpc_class": {
+        "type": "keyword"
+      },
+      "cpc_class_id": {
+        "type": "keyword"
+      },
+      "cpc_group": {
+        "type": "keyword"
+      },
+      "cpc_group_id": {
+        "type": "keyword"
+      },
+      "cpc_section": {
+        "type": "keyword"
+      },
+      "cpc_sequence": {
+        "type": "long"
+      },
+      "cpc_subclass": {
+        "type": "keyword"
+      },
+      "cpc_subclass_id": {
+        "type": "keyword"
+      },
+      "cpc_type": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "cpc_current": {
+    "properties": {
+      "cpc_class": {
+        "type": "keyword"
+      },
+      "cpc_class_id": {
+        "type": "keyword"
+      },
+      "cpc_group": {
+        "type": "keyword"
+      },
+      "cpc_group_id": {
+        "type": "keyword"
+      },
+      "cpc_section": {
+        "type": "keyword"
+      },
+      "cpc_sequence": {
+        "type": "long"
+      },
+      "cpc_subclass": {
+        "type": "keyword"
+      },
+      "cpc_subclass_id": {
+        "type": "keyword"
+      },
+      "cpc_type": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "foreign_priority": {
+    "properties": {
+      "filing_date": {
+        "type": "date"
+      },
+      "foreign_application_id": {
+        "type": "keyword"
+      },
+      "foreign_country_filed": {
+        "type": "keyword"
+      },
+      "priority_claim_kind": {
+        "type": "keyword"
+      },
+      "priority_claim_sequence": {
+        "type": "long"
+      }
+    },
+    "type": "nested"
+  },
+  "gov_interest_contract_award_numbers": {
+    "properties": {
+      "award_number": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "gov_interest_organizations": {
+    "properties": {
+      "fedagency_name": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "level_one": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "level_three": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "level_two": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      }
+    },
+    "type": "nested"
+  },
+  "gov_interest_statement": {
+    "type": "text"
+  },
+  "granted_pregrant_crosswalk": {
+    "properties": {
+      "application_number": {
+        "type": "keyword"
+      },
+      "document_number": {
+        "type": "long"
+      },
+      "patent_id": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "inventors": {
+    "properties": {
+      "inventor_city": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "inventor_country": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "inventor_id": {
+        "type": "keyword"
+      },
+      "inventor_location_id": {
+        "type": "keyword"
+      },
+      "inventor_name_first": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "inventor_name_last": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "inventor_sequence": {
+        "type": "long"
+      },
+      "inventor_state": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      }
+    },
+    "type": "nested"
+  },
+  "inventor_incarnations": {
+    "properties": {
+      "inventor_city": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "inventor_country": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "inventor_id": {
+        "type": "keyword"
+      },
+      "inventor_location_id": {
+        "type": "keyword"
+      },
+      "inventor_name_first": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "inventor_name_last": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "inventor_sequence": {
+        "type": "long"
+      },
+      "inventor_state": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "update_version": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "ipcr": {
+    "properties": {
+      "ipc_action_date": {
+        "type": "date"
+      },
+      "ipc_class": {
+        "type": "keyword"
+      },
+      "ipc_classification_data_source": {
+        "type": "keyword"
+      },
+      "ipc_classification_value": {
+        "type": "keyword"
+      },
+      "ipc_id": {
+        "type": "keyword"
+      },
+      "ipc_main_group": {
+        "type": "keyword"
+      },
+      "ipc_section": {
+        "type": "keyword"
+      },
+      "ipc_sequence": {
+        "type": "long"
+      },
+      "ipc_subclass": {
+        "type": "keyword"
+      },
+      "ipc_subgroup": {
+        "type": "keyword"
+      },
+      "ipc_symbol_position": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "pgpubs_application_number": {
+    "type": "keyword"
+  },
+  "pgpubs_country": {
+    "type": "keyword"
+  },
+  "pgpubs_date": {
+    "type": "date"
+  },
+  "pgpubs_document_number": {
+    "type": "keyword"
+  },
+  "pgpubs_invention_abstract": {
+    "type": "text"
+  },
+  "pgpubs_invention_title": {
+    "type": "text"
+  },
+  "pgpubs_kind": {
+    "type": "keyword"
+  },
+  "pgpubs_rule_47_flag": {
+    "type": "boolean"
+  },
+  "pgpubs_series_code": {
+    "type": "keyword"
+  },
+  "pgpubs_type": {
+    "type": "keyword"
+  },
+  "pgpubs_year": {
+    "type": "long"
+  },
+  "pct_data": {
+    "properties": {
+      "application_kind": {
+        "type": "keyword"
+      },
+      "pct_102_date": {
+        "type": "date"
+      },
+      "pct_371_date": {
+        "type": "date"
+      },
+      "pct_doc_number": {
+        "type": "keyword"
+      },
+      "pct_doc_type": {
+        "type": "keyword"
+      },
+      "published_filed_date": {
+        "type": "date"
+      }
+    },
+    "type": "nested"
+  },
+  "us_related_documents": {
+    "properties": {
+      "published_country": {
+        "type": "keyword"
+      },
+      "related_doc_kind": {
+        "type": "keyword"
+      },
+      "related_doc_number": {
+        "type": "keyword"
+      },
+      "related_doc_published_date": {
+        "type": "date"
+      },
+      "related_doc_sequence": {
+        "type": "long"
+      },
+      "related_doc_status": {
+        "type": "keyword"
+      },
+      "related_doc_type": {
+        "type": "keyword"
+      },
+      "wipo_kind": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "us_parties": {
+    "properties": {
+      "party_designation": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "party_applicant_type": {
+        "type": "keyword"
+      },
+      "party_name_first": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "party_name_last": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "party_organization": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "party_sequence": {
+        "type": "long"
+      },
+      "party_location_id": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "uspc_at_issue": {
+    "properties": {
+      "uspc_mainclass": {
+        "type": "keyword"
+      },
+      "uspc_mainclass_id": {
+        "type": "keyword"
+      },
+      "uspc_sequence": {
+        "type": "long"
+      },
+      "uspc_subclass": {
+        "type": "keyword"
+      },
+      "uspc_subclass_id": {
+        "type": "keyword"
+      }
+    },
+    "type": "nested"
+  },
+  "wipo": {
+    "properties": {
+      "wipo_field": {
+        "type": "keyword"
+      },
+      "wipo_field_id": {
+        "type": "keyword"
+      },
+      "wipo_sequence": {
+        "type": "long"
+      }
+    },
+    "type": "nested"
+  },
+  "wipo_kind": {
+    "type": "keyword"
+  },
+  "patent_zero_prefix": {
+    "type": "keyword"
+  }
+}

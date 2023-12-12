@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select uuid, patent_id, text, patent_zero_prefix from {elastic_production_source}.rel_app_text where patent_zero_prefix > '{{offset}}' order by uuid limit {{limit}};",
+    "source": "select uuid, patent_id, text, patent_zero_prefix from {elastic_production_source}.rel_app_text where uuid > '{{offset}}' order by uuid limit {{limit}};",
     "field_mapping": {
       "uuid": 0,
       "patent_id": 1,
@@ -9,7 +9,7 @@
     },
     "key_field": "uuid",
     "count_source": "SELECT count(1) FROM {elastic_production_source}.rel_app_text",
-    "chunksize": 1000000
+    "chunksize": 10000
   },
   "target_setting": {
     "index": "rel_app_text",

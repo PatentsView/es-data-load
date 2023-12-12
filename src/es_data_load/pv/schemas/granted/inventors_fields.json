@@ -20,11 +20,8 @@
     },
     "type": "text"
   },
-  "inventor_male_flag": {
-    "type": "long"
-  },
-  "inventor_gender_attr_status": {
-    "type": "long"
+  "inventor_gender_code": {
+    "type": "keyword"
   },
   "inventor_lastknown_city": {
     "fields": {
