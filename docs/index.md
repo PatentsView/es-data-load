@@ -6,7 +6,7 @@ provide an interface through which PatentsView data can be loaded into elastic s
 # Installation
 
 ```shell
-$ pip install ssh+git@github.com:PatentsView/es-data-load.git
+$ pip install git+ssh://git@github.com/PatentsView/es-data-load.git
 ```
 
 # Getting started
