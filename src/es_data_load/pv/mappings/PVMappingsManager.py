@@ -25,7 +25,9 @@ AVAILABLE_MAPPING_FILES = {
         "detail_desc_text.json",
         "draw_desc_text.json",
     ],
-    "pregrant": [],
+    "pregrant": [
+        'publications.json'
+    ],
 }
 
 
@@ -54,7 +56,8 @@ class PVLoadConfiguration(LoadConfiguration):
         suffix="",
         granted_files=None,
         pregrant_files=None,
-        elastic_source="elastic_production",
+        elastic_source_patent="elastic_production",
+        elastic_source_pregrant="elastic_production",
         reporting_source="PatentsView_",
     ):
         if granted_files is None:
@@ -77,12 +80,18 @@ class PVLoadConfiguration(LoadConfiguration):
 
         configs = {}
         for source_type, files in package_files.items():
+            if source_type == 'granted_package_files':
+                elastic_source = elastic_source_patent
+                files_list = granted_files
+            else:
+                elastic_source = elastic_source_pregrant
+                files_list = pregrant_files
             for idx, fname in enumerate(files):
                 with fname as fname:
                     config_name = "{dname}-{stype}-{fname}".format(
                         dname="es_data_load/pv/mappings/production",
                         stype=source_type,
-                        fname=".".join(granted_files[idx].split(".")[:-1]),
+                        fname=".".join(files_list[idx].split(".")[:-1]),
                     )
                     current_operation = json.load(open(fname, "r"))
                     index_w_o_suffix = current_operation["target_setting"]["index"]

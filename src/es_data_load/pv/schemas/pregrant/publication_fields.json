@@ -1,70 +1,6 @@
 {
-  "applicants": {
-    "properties": {
-      "applicant_designation": {
-        "type": "keyword"
-      },
-      "applicant_name_first": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "applicant_name_last": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "applicant_organization": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "applicant_sequence": {
-        "type": "long"
-      },
-      "applicant_type": {
-        "type": "keyword"
-      },
-      "location_id": {
-        "type": "keyword"
-      }
-    },
-    "type": "nested"
-  },
-  "application": {
-    "properties": {
-      "application_id": {
-        "type": "keyword"
-      },
-      "application_type": {
-        "type": "keyword"
-      },
-      "filing_date": {
-        "type": "date"
-      },
-      "filing_type": {
-        "type": "keyword"
-      },
-      "rule_47_flag": {
-        "type": "boolean"
-      },
-      "series_code": {
-        "type": "keyword"
-      }
-    },
-    "type": "nested"
+  "application_number": {
+    "type": "keyword"
   },
   "assignees": {
     "properties": {
@@ -137,79 +73,8 @@
     },
     "type": "nested"
   },
-  "assignee_incarnations": {
-    "properties": {
-      "assignee_city": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "assignee_country": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "assignee_id": {
-        "type": "keyword"
-      },
-      "assignee_individual_name_first": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "assignee_individual_name_last": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "assignee_location_id": {
-        "type": "keyword"
-      },
-      "assignee_organization": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "assignee_sequence": {
-        "type": "long"
-      },
-      "assignee_state": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "assignee_type": {
-        "type": "keyword"
-      },
-      "update_version": {
-        "type": "keyword"
-      }
-    },
-    "type": "nested"
+  "country": {
+    "type": "keyword"
   },
   "cpc_at_issue": {
     "properties": {
@@ -275,6 +140,9 @@
     },
     "type": "nested"
   },
+  "document_number": {
+    "type": "keyword"
+  },
   "foreign_priority": {
     "properties": {
       "filing_date": {
@@ -287,17 +155,6 @@
         "type": "keyword"
       },
       "priority_claim_kind": {
-        "type": "keyword"
-      },
-      "priority_claim_sequence": {
-        "type": "long"
-      }
-    },
-    "type": "nested"
-  },
-  "gov_interest_contract_award_numbers": {
-    "properties": {
-      "award_number": {
         "type": "keyword"
       }
     },
@@ -343,9 +200,6 @@
       }
     },
     "type": "nested"
-  },
-  "gov_interest_statement": {
-    "type": "text"
   },
   "granted_pregrant_crosswalk": {
     "properties": {
@@ -420,68 +274,6 @@
     },
     "type": "nested"
   },
-  "inventor_incarnations": {
-    "properties": {
-      "inventor_city": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "inventor_country": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "inventor_id": {
-        "type": "keyword"
-      },
-      "inventor_location_id": {
-        "type": "keyword"
-      },
-      "inventor_name_first": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "inventor_name_last": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "inventor_sequence": {
-        "type": "long"
-      },
-      "inventor_state": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "update_version": {
-        "type": "keyword"
-      }
-    },
-    "type": "nested"
-  },
   "ipcr": {
     "properties": {
       "ipc_action_date": {
@@ -520,48 +312,15 @@
     },
     "type": "nested"
   },
-  "pgpubs_application_number": {
-    "type": "keyword"
-  },
-  "pgpubs_country": {
-    "type": "keyword"
-  },
-  "pgpubs_date": {
-    "type": "date"
-  },
-  "pgpubs_document_number": {
-    "type": "keyword"
-  },
-  "pgpubs_invention_abstract": {
-    "type": "text"
-  },
-  "pgpubs_invention_title": {
-    "type": "text"
-  },
-  "pgpubs_kind": {
-    "type": "keyword"
-  },
-  "pgpubs_rule_47_flag": {
-    "type": "boolean"
-  },
-  "pgpubs_series_code": {
-    "type": "keyword"
-  },
-  "pgpubs_type": {
-    "type": "keyword"
-  },
-  "pgpubs_year": {
-    "type": "long"
-  },
   "pct_data": {
     "properties": {
       "application_kind": {
         "type": "keyword"
       },
-      "pct_102_date": {
+      "pct_371c124_date": {
         "type": "date"
       },
-      "pct_371_date": {
+      "pct_371c12_date": {
         "type": "date"
       },
       "pct_doc_number": {
@@ -572,6 +331,80 @@
       },
       "published_filed_date": {
         "type": "date"
+      }
+    },
+    "type": "nested"
+  },
+  "publication_abstract": {
+    "type": "text"
+  },
+  "publication_date": {
+    "type": "date"
+  },
+  "publication_kind": {
+    "type": "keyword"
+  },
+  "publication_title": {
+    "type": "text"
+  },
+  "publication_type": {
+    "type": "keyword"
+  },
+  "publication_year": {
+    "type": "long"
+  },
+  "rule_47_flag": {
+    "type": "keyword"
+  },
+  "series_code": {
+    "type": "keyword"
+  },
+  "us_parties": {
+    "properties": {
+      "us_party_type": {
+        "type": "keyword"
+      },
+      "us_party_designation": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "location_id": {
+        "type": "keyword"
+      },
+      "us_party_name_first": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "us_party_name_last": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "us_party_organization": {
+        "fields": {
+          "keyword": {
+            "ignore_above": 256,
+            "type": "keyword"
+          }
+        },
+        "type": "text"
+      },
+      "us_party_sequence": {
+        "type": "long"
       }
     },
     "type": "nested"
@@ -590,66 +423,7 @@
       "related_doc_published_date": {
         "type": "date"
       },
-      "related_doc_sequence": {
-        "type": "long"
-      },
-      "related_doc_status": {
-        "type": "keyword"
-      },
       "related_doc_type": {
-        "type": "keyword"
-      },
-      "wipo_kind": {
-        "type": "keyword"
-      }
-    },
-    "type": "nested"
-  },
-  "us_parties": {
-    "properties": {
-      "party_designation": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "party_applicant_type": {
-        "type": "keyword"
-      },
-      "party_name_first": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "party_name_last": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "party_organization": {
-        "fields": {
-          "keyword": {
-            "ignore_above": 256,
-            "type": "keyword"
-          }
-        },
-        "type": "text"
-      },
-      "party_sequence": {
-        "type": "long"
-      },
-      "party_location_id": {
         "type": "keyword"
       }
     },
@@ -688,11 +462,5 @@
       }
     },
     "type": "nested"
-  },
-  "wipo_kind": {
-    "type": "keyword"
-  },
-  "patent_zero_prefix": {
-    "type": "keyword"
   }
 }
