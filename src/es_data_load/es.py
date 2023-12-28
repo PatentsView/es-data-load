@@ -3,7 +3,6 @@ import logging
 import sys
 import typing
 
-import elastic_transport
 from elasticsearch import Elasticsearch
 
 logger = logging.getLogger("es-data-load")
@@ -99,7 +98,6 @@ class ElasticsearchWrapper:
                 if test == 1:
                     yield []
                 else:
-                    logger.info("Sending current batch to Elasticsearch")
                     r = self.es.bulk(operations=action_data_pairs, refresh=True)
                     yield r
                 action_data_pairs = []
@@ -111,6 +109,6 @@ class ElasticsearchWrapper:
         if test == 1:
             yield []
         else:
-            logger.info("Sending final batch to Elasticsearch")
-            r = self.es.bulk(operations=action_data_pairs, refresh=True)
-            yield r
+            if len(action_data_pairs)>1:
+                r = self.es.bulk(operations=action_data_pairs, refresh=True)
+                yield r
