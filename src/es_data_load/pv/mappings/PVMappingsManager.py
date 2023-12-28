@@ -26,7 +26,8 @@ AVAILABLE_MAPPING_FILES = {
         "draw_desc_text.json",
     ],
     "pregrant": [
-        'publications.json'
+        "publications.json",
+        "rel_app_text.json"
     ],
 }
 
@@ -58,7 +59,7 @@ class PVLoadConfiguration(LoadConfiguration):
         pregrant_files=None,
         elastic_source_patent="elastic_production",
         elastic_source_pregrant="elastic_production",
-        reporting_source="PatentsView_",
+        reporting_source_patent="PatentsView_",
     ):
         if granted_files is None:
             granted_files = AVAILABLE_MAPPING_FILES["granted"]
@@ -100,7 +101,7 @@ class PVLoadConfiguration(LoadConfiguration):
                     source_settings = partially_inject_databases(
                         source_settings,
                         elastic_source=elastic_source,
-                        reporting_source=reporting_source,
+                        reporting_source=reporting_source_patent,
                     )
                     if "nested_fields" in source_settings:
                         for nested_operation_key in source_settings["nested_fields"]:
@@ -109,7 +110,7 @@ class PVLoadConfiguration(LoadConfiguration):
                             ] = partially_inject_databases(
                                 source_settings["nested_fields"][nested_operation_key],
                                 elastic_source=elastic_source,
-                                reporting_source=reporting_source,
+                                reporting_source=reporting_source_patent,
                             )
                     current_operation["source_setting"] = source_settings
                     current_operation["target_setting"]["index"] = index
