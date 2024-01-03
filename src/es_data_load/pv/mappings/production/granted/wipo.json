@@ -3,9 +3,9 @@
     "source": "select id, sector_title,field_title from {elastic_production_source}.wipo_field where id > '{{offset}}' order by id limit {{limit}};",
     "field_mapping": {
       "uuid": 0,
-      "wipo_id": 0,
-      "sector_title": 1,
-      "field_title": 2
+      "wipo_id": 1,
+      "sector_title": 2,
+      "field_title": 3
     },
     "count_source": "SELECT count(1) from   {elastic_production_source}.wipo_field",
     "chunksize": 10000,
