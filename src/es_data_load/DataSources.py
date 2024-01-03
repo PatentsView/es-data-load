@@ -9,7 +9,7 @@ from pymysql import Connection, Error as PyMySQLError, connect as pymysql_connec
 
 from es_data_load.lib.utilities import csv_lines
 
-from typing import Generator, Tuple
+from typing import Generator
 
 logger = logging.getLogger("es-data-load")
 
@@ -134,7 +134,7 @@ class MySQLDataSource(TabularDataSource):
                 self.connect()
                 continue
             except PyMySQLError as e:
-                print(query)
+                logger.debug(query)
                 raise e
 
     def __init__(self, **kwargs) -> None:
