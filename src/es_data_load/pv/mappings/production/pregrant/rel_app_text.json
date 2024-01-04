@@ -1,0 +1,18 @@
+{
+    "source_setting": {
+      "source": "select id, document_number, text from {elastic_production_source}.rel_app_text where id > '{{offset}}' order by id limit {{limit}};",
+      "field_mapping": {
+        "id": 0,
+        "document_number": 1,
+        "related_text": 2
+      },
+      "key_field": "id",
+      "count_source": "SELECT count(1) FROM {elastic_production_source}.rel_app_text",
+      "chunksize": 100000
+    },
+    "target_setting": {
+      "index": "rel_app_text_publications",
+      "indexing_batch_size": 7500,
+      "id_field": "id"
+    }
+  }

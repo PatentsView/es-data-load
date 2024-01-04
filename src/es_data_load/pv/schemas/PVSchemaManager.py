@@ -28,7 +28,10 @@ AVAILABLE_SCHEMA_FILES = {
         "detail_desc_text.json": "brf_sum_text{suffix}",
         "draw_desc_text.json": "brf_sum_text{suffix}",
     },
-    "pregrant": {},
+    "pregrant": {
+        "publication_fields.json": "publications{suffix}",
+        "rel_app_text_fields.json": "rel_app_text_publications{suffix}"
+    },
 }
 logger = logging.getLogger("es-data-load")
 

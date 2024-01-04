@@ -25,7 +25,8 @@ def test_pv_mappings():
                 for fl in AVAILABLE_MAPPING_FILES["granted"]
             ]
     ):
-        current_operation = json.load(open(fname, "r"))
+        with fname as fname:
+            current_operation = json.load(open(fname, "r"))
         validate_mapping_structure(current_operation)
         key_field = current_operation["source_setting"]["key_field"]
         assert key_field in current_operation["source_setting"]["key_field"]

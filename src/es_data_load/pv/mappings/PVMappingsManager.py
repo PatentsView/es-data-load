@@ -25,7 +25,10 @@ AVAILABLE_MAPPING_FILES = {
         "detail_desc_text.json",
         "draw_desc_text.json",
     ],
-    "pregrant": [],
+    "pregrant": [
+        "publications.json",
+        "rel_app_text.json"
+    ],
 }
 
 
@@ -54,8 +57,9 @@ class PVLoadConfiguration(LoadConfiguration):
         suffix="",
         granted_files=None,
         pregrant_files=None,
-        elastic_source="elastic_production",
-        reporting_source="PatentsView_",
+        elastic_source_patent="elastic_production",
+        elastic_source_pregrant="elastic_production",
+        reporting_source_patent="PatentsView_",
     ):
         if granted_files is None:
             granted_files = AVAILABLE_MAPPING_FILES["granted"]
@@ -77,12 +81,18 @@ class PVLoadConfiguration(LoadConfiguration):
 
         configs = {}
         for source_type, files in package_files.items():
+            if source_type == 'granted_package_files':
+                elastic_source = elastic_source_patent
+                files_list = granted_files
+            else:
+                elastic_source = elastic_source_pregrant
+                files_list = pregrant_files
             for idx, fname in enumerate(files):
                 with fname as fname:
                     config_name = "{dname}-{stype}-{fname}".format(
                         dname="es_data_load/pv/mappings/production",
                         stype=source_type,
-                        fname=".".join(granted_files[idx].split(".")[:-1]),
+                        fname=".".join(files_list[idx].split(".")[:-1]),
                     )
                     current_operation = json.load(open(fname, "r"))
                     index_w_o_suffix = current_operation["target_setting"]["index"]
@@ -91,7 +101,7 @@ class PVLoadConfiguration(LoadConfiguration):
                     source_settings = partially_inject_databases(
                         source_settings,
                         elastic_source=elastic_source,
-                        reporting_source=reporting_source,
+                        reporting_source=reporting_source_patent,
                     )
                     if "nested_fields" in source_settings:
                         for nested_operation_key in source_settings["nested_fields"]:
@@ -100,7 +110,7 @@ class PVLoadConfiguration(LoadConfiguration):
                             ] = partially_inject_databases(
                                 source_settings["nested_fields"][nested_operation_key],
                                 elastic_source=elastic_source,
-                                reporting_source=reporting_source,
+                                reporting_source=reporting_source_patent,
                             )
                     current_operation["source_setting"] = source_settings
                     current_operation["target_setting"]["index"] = index

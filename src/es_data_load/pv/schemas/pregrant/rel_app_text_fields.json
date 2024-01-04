@@ -1,0 +1,5 @@
+{
+    "uuid": {"type": "keyword"},
+    "document_number": {"type": "keyword"},
+    "related_text": {"type": "text"}
+}

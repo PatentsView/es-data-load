@@ -97,7 +97,7 @@ def generate_load_statistics(responses):
         if "items" in response:
             record_count = record_count + len(response["items"])
             total_duration += response["took"]
-            if response["errors"]:
+            if response.get("errors", None):
                 for error_items in response["items"]:
                     if "error" in error_items["create"]:
                         errors.add(error_items["create"]["error"]["type"])
