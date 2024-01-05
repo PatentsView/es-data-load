@@ -28,8 +28,7 @@ CREATE TABLE `inventors`
     `last_seen_date`                   date                                    DEFAULT NULL,
     `years_active`                     smallint(5) unsigned                    NOT NULL,
     `persistent_inventor_id`           varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `male_flag`                        int(11)                                 DEFAULT NULL,
-    `attribution_status`               int(11)                                 DEFAULT NULL,
+    `gender_code`                      varchar(5) COLLATE utf8mb4_unicode_ci   DEFAULT NULL,
     PRIMARY KEY (`inventor_id`),
     KEY `ix_inventor_lastknown_location_id` (`lastknown_location_id`),
     KEY `ix_inventor_first_seen_date` (`first_seen_date`),
@@ -48,8 +47,7 @@ insert into elastic_production.inventors( inventor_id, name_first, name_last, nu
                                         , lastknown_location_id, lastknown_persistent_location_id, lastknown_city
                                         , lastknown_state, lastknown_country, lastknown_latitude, lastknown_longitude
                                         , first_seen_date, last_seen_date, years_active, persistent_inventor_id
-                                        , male_flag
-                                        , attribution_status)
+                                        , gender_code)
 select distinct
     i.inventor_id
   , i.name_first
@@ -67,8 +65,7 @@ select distinct
   , i.last_seen_date
   , i.years_active
   , i.persistent_inventor_id
-  , i2.male_flag
-  , i2.attribution_status
+  , i2.gender_code
 from
     PatentsView_20220630.inventor i
         lEft join PatentsView_20220630.temp_id_mapping_location timl on timl.new_location_id = i.lastknown_location_id
