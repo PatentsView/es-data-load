@@ -18,7 +18,7 @@ def validate_jinja_sql(sql_template, variable):
 
 def test_pv_mappings():
     assert len(AVAILABLE_MAPPING_FILES["granted"]) == 21
-    assert len(AVAILABLE_MAPPING_FILES["pregrant"]) == 0
+    assert len(AVAILABLE_MAPPING_FILES["pregrant"]) == 2
     for idx, fname in enumerate(
             [
                 pkg_resources.path("es_data_load.pv.mappings.production.granted", fl)
@@ -51,8 +51,9 @@ def test_pv_load_configuration():
     pv_configuration = PVLoadConfiguration.load_default_pv_configuration(
         suffix="_test",
         granted_files=random.sample(AVAILABLE_MAPPING_FILES["granted"], k=5),
+        pregrant_files=random.sample(AVAILABLE_MAPPING_FILES["pregrant"], k=2),
     )
-    assert len(pv_configuration.get_load_operation_names()) == 5
+    assert len(pv_configuration.get_load_operation_names()) == 7
     for setting_name in pv_configuration.get_load_operation_names():
         setting = pv_configuration.get_load_operation(setting_name)
         validate_mapping_structure(setting)

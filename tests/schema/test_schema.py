@@ -32,9 +32,10 @@ def test_pv_schema_load(search):
     random_choices = random.sample(list(AVAILABLE_SCHEMA_FILES["granted"].keys()), k=3)
     print("Random choices are {c}".format(c=", ".join(random_choices)))
     sm = PVSchemaManager.load_default_pv_schema(
-        suffix="_test", search_wrapper=search, granted_schema_files=random_choices
+        suffix="_test", search_wrapper=search, granted_schema_files=random_choices, 
+        pregrant_schema_files=AVAILABLE_SCHEMA_FILES["pregrant"]
     )
-    assert len(sm.schemas) == 3
+    assert len(sm.schemas) == 5
     for file_name in sm.schemas.keys():
         index_name = sm.schemas[file_name]["index_name"]
         print(f"Deleting :{index_name}")
@@ -61,7 +62,8 @@ def test_go_live(search):
     live_flag_name = "_test_live"
     suffix_name = "_test"
     sm = PVSchemaManager.load_default_pv_schema(
-        suffix=suffix_name, search_wrapper=search, granted_schema_files=random_choices
+        suffix=suffix_name, search_wrapper=search, granted_schema_files=random_choices,
+        pregrant_schema_files=[]
     )
 
     for file_name in random_choices:
