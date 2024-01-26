@@ -27,7 +27,7 @@ AVAILABLE_MAPPING_FILES = {
     ],
     "pregrant": [
         "publications.json",
-        "rel_app_text.json"
+        "rel_app_text_publications.json"
     ],
 }
 
