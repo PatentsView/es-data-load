@@ -58,16 +58,20 @@ def test_pv_schema_load(search):
 
 def test_go_live(search):
     random_choices = random.sample(list(AVAILABLE_SCHEMA_FILES["granted"].keys()), k=3)
+    choices_pgpub = AVAILABLE_SCHEMA_FILES["pregrant"].keys()
     print("Random choices are {c}".format(c=", ".join(random_choices)))
     live_flag_name = "_test_live"
     suffix_name = "_test"
     sm = PVSchemaManager.load_default_pv_schema(
         suffix=suffix_name, search_wrapper=search, granted_schema_files=random_choices,
-        pregrant_schema_files=[]
+        pregrant_schema_files=choices_pgpub
     )
 
-    for file_name in random_choices:
-        pattern = AVAILABLE_SCHEMA_FILES["granted"][file_name]
+    for file_name in list(random_choices) + list(choices_pgpub):
+        try:
+            pattern = AVAILABLE_SCHEMA_FILES["granted"][file_name]
+        except KeyError:
+            pattern = AVAILABLE_SCHEMA_FILES["pregrant"][file_name]
         alias_name = pattern.format(suffix=live_flag_name)
         index_name = pattern.format(suffix=suffix_name)
         print(f"Verifying :{alias_name}")
@@ -76,15 +80,20 @@ def test_go_live(search):
             search.es.indices.get_alias(index=index_name, name=alias_name)
     sm.create_es_indices()
     sm.go_live(live_pattern=live_flag_name)
-    for file_name in random_choices:
-        pattern = AVAILABLE_SCHEMA_FILES["granted"][file_name]
+    for file_name in list(random_choices) + list(choices_pgpub):
+        try:
+            pattern = AVAILABLE_SCHEMA_FILES["granted"][file_name]
+            prefix = 'granted'
+        except KeyError:
+            pattern = AVAILABLE_SCHEMA_FILES["pregrant"][file_name]
+            prefix = 'pregrant'
         alias_name = pattern.format(suffix=live_flag_name)
         index_name = pattern.format(suffix=suffix_name)
         print(f"Verifying :{alias_name}")
         search.es.indices.get_alias(index=index_name, name=alias_name)
         mapping_from_es = search.es.indices.get_mapping(index=alias_name)
         assert (
-                sm.schemas[f"granted_{file_name}"]["field_mapping"]
+                sm.schemas[f"{prefix}_{file_name}"]["field_mapping"]
                 == mapping_from_es[index_name]["mappings"]["properties"]
         )
         search.es.indices.delete_alias(index=index_name, name=alias_name)

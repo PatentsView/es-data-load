@@ -30,7 +30,7 @@ AVAILABLE_SCHEMA_FILES = {
     },
     "pregrant": {
         "publication_fields.json": "publications{suffix}",
-        "rel_app_text_fields.json": "rel_app_text_publications{suffix}"
+        "rel_app_text_publications_fields.json": "rel_app_text_publications{suffix}"
     },
 }
 logger = logging.getLogger("es-data-load")

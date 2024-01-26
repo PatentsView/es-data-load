@@ -51,7 +51,7 @@ def test_pv_load_configuration():
     pv_configuration = PVLoadConfiguration.load_default_pv_configuration(
         suffix="_test",
         granted_files=random.sample(AVAILABLE_MAPPING_FILES["granted"], k=5),
-        pregrant_files=random.sample(AVAILABLE_MAPPING_FILES["pregrant"], k=2),
+        pregrant_files=['publications.json', 'rel_app_text_publications.json'],
     )
     assert len(pv_configuration.get_load_operation_names()) == 7
     for setting_name in pv_configuration.get_load_operation_names():
