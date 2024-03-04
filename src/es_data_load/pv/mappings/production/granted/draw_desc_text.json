@@ -5,17 +5,17 @@
       "uuid": 0,
       "patent_id": 1,
       "description_text": 2,
-      "description_sequence": 1,
+      "description_sequence": 3,
       "patent_zero_prefix": 4,
       "document_number": 5
     },
     "count_source": "select count(1) from {elastic_production_source}.draw_desc_text",
     "key_field": "uuid",
-    "chunksize": 1000
+    "chunksize": 100000
   },
   "target_setting": {
-    "index": "draw_desc_text_test",
-    "indexing_batch_size": 100,
+    "index": "draw_desc_text",
+    "indexing_batch_size": 15000,
     "id_field": "uuid"
   }
 }

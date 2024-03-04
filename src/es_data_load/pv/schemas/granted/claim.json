@@ -14,9 +14,6 @@
   "claim_dependent": {
     "type": "keyword"
   },
-  "claim_exemplary": {
-    "type": "integer"
-  },
   "patent_zero_prefix": {
     "type": "keyword"
   }
