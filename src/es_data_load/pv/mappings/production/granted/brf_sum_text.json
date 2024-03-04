@@ -10,11 +10,11 @@
     },
     "count_source": "select count(1) from {elastic_production_source}.brf_sum_text",
     "key_field": "uuid",
-    "chunksize": 1000
+    "chunksize": 100000
   },
   "target_setting": {
-    "index": "brf_sum_texts",
-    "indexing_batch_size": 100,
+    "index": "brf_sum_text",
+    "indexing_batch_size": 5000,
     "id_field": "uuid"
   }
 }

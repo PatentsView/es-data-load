@@ -8,16 +8,19 @@
   "claim_text": {
     "type": "text"
   },
+  "exemplary": {
+    "type": "integer"
+  },
   "claim_sequence": {
     "type": "integer"
   },
   "claim_dependent": {
     "type": "keyword"
   },
-  "claim_exemplary": {
-    "type": "integer"
-  },
   "patent_zero_prefix": {
+    "type": "keyword"
+  },
+  "uuid": {
     "type": "keyword"
   }
 }
