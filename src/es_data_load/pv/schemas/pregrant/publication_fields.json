@@ -104,6 +104,9 @@
       },
       "cpc_type": {
         "type": "keyword"
+      },
+      "action_date": {
+        "type": "date"
       }
     },
     "type": "nested"
@@ -156,6 +159,9 @@
       },
       "priority_claim_kind": {
         "type": "keyword"
+      },
+      "priority_claim_sequence": {
+        "type": "long"
       }
     },
     "type": "nested"
@@ -211,6 +217,12 @@
       },
       "patent_id": {
         "type": "keyword"
+      },
+      "current_document_number_flag": {
+        "type": "long"
+      },
+      "current_patent_id_flag": {
+        "type": "long"
       }
     },
     "type": "nested"
@@ -308,6 +320,12 @@
       },
       "ipc_symbol_position": {
         "type": "keyword"
+      },
+      "ipc_class_level": {
+        "type": "keyword"
+      },
+      "ipc_class_status": {
+        "type": "keyword"
       }
     },
     "type": "nested"
@@ -317,10 +335,10 @@
       "application_kind": {
         "type": "keyword"
       },
-      "pct_371c124_date": {
+      "pct_371_date": {
         "type": "date"
       },
-      "pct_371c12_date": {
+      "pct_102_date": {
         "type": "date"
       },
       "pct_doc_number": {
@@ -331,6 +349,9 @@
       },
       "published_filed_date": {
         "type": "date"
+      },
+      "filed_country": {
+        "type": "keyword"
       }
     },
     "type": "nested"
@@ -405,6 +426,9 @@
       },
       "us_party_sequence": {
         "type": "long"
+      },
+      "applicant_authority": {
+        "type": "keyword"
       }
     },
     "type": "nested"
@@ -425,6 +449,9 @@
       },
       "related_doc_type": {
         "type": "keyword"
+      },
+      "related_doc_sequence": {
+        "type": "long"
       }
     },
     "type": "nested"
@@ -452,6 +479,9 @@
   "wipo": {
     "properties": {
       "wipo_field": {
+        "type": "keyword"
+      },
+      "wipo_sector_title": {
         "type": "keyword"
       },
       "wipo_field_id": {
