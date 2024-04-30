@@ -3,7 +3,7 @@ import logging
 import sys
 from abc import ABC
 
-from tqdm import tqdm
+# from tqdm import tqdm
 import configparser
 from pymysql import Connection, Error as PyMySQLError, connect as pymysql_connect
 
@@ -31,8 +31,8 @@ class TabularDataSource(ABC):
         last_id = 0
         nested_field_source_settings = kwargs.get("nested_fields", {})
         # Get count to show progress bar
-        total_count = self.get_document_count(count_source=kwargs.get("count_source"))
-        pbar = tqdm(total=total_count, desc=kwargs.get("load_name", "Load:"))
+        # total_count = self.get_document_count(count_source=kwargs.get("count_source"))
+        # pbar = tqdm(total=total_count, desc=kwargs.get("load_name", "Load:"))
         key_field = kwargs.get("key_field")
         # Repeat until data source is exhausted
         while True:
@@ -65,7 +65,7 @@ class TabularDataSource(ABC):
                 for nested_field, nested_records in sub_documents.items():
                     if key_data in nested_records:
                         data_row[nested_field] = nested_records[key_data]
-                pbar.update(1)
+                # pbar.update(1)
                 last_id = data_row[key_field]
                 yield data_row
             if not exists or chunksize is None:
