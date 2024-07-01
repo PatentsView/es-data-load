@@ -1,15 +1,14 @@
 {
   "source_setting": {
-    "source": "select     c.uuid, patent_id, description_text, description_length,  CONCAT(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+'), LPAD(REGEXP_SUBSTR(patent_id, '[0-9]+$'), 8-LENGTH(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+')), '0')) as patent_zero_prefix, document_number from (select uuid from {elastic_production_source}.detail_desc_text where uuid > '{{offset}}' order by uuid limit {{limit}}) inner_q join {elastic_production_source}.detail_desc_text c on c.uuid=inner_q.uuid",
+    "source": "select     c.uuid, patent_id, description_text, description_length,  CONCAT(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+'), LPAD(REGEXP_SUBSTR(patent_id, '[0-9]+$'), 8-LENGTH(REGEXP_SUBSTR(patent_id, '^[a-zA-Z]+')), '0')) as patent_zero_prefix from (select uuid from {elastic_production_source}.g_detail_desc_text where uuid > '{{offset}}' order by uuid limit {{limit}}) inner_q join {elastic_production_source}.g_detail_desc_text c on c.uuid=inner_q.uuid",
     "field_mapping": {
       "uuid": 0,
       "patent_id": 1,
       "description_text": 2,
       "description_length": 3,
-      "patent_zero_prefix": 4,
-      "document_number": 5
+      "patent_zero_prefix": 4
     },
-    "count_source": "select count(1) from {elastic_production_source}.detail_desc_text",
+    "count_source": "select count(1) from {elastic_production_source}.g_detail_desc_text",
     "key_field": "uuid",
     "chunksize": 100000
   },
