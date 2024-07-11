@@ -2,16 +2,13 @@
   "uuid": {
     "type": "keyword"
   },
-  "patent_id": {
+  "document_number": {
     "type": "keyword"
-  },
+   },
   "description_text": {
     "type": "text"
   },
   "description_sequence": {
     "type": "integer"
-  },
-  "patent_zero_prefix": {
-    "type": "keyword"
-  }
+ }
 }

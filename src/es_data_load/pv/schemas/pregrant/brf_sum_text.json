@@ -2,13 +2,10 @@
   "uuid": {
     "type": "keyword"
   },
-  "patent_id": {
+  "document_number": {
     "type": "keyword"
   },
   "summary_text": {
     "type": "text"
-  },
-  "patent_zero_prefix": {
-    "type": "keyword"
   }
 }

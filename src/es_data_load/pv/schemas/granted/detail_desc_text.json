@@ -1,4 +1,7 @@
 {
+  "uuid": {
+    "type": "keyword"
+  },
   "patent_id": {
     "type": "keyword"
   },
@@ -9,9 +12,6 @@
     "type": "integer"
   },
   "patent_zero_prefix": {
-    "type": "keyword"
-  },
-  "document_number": {
     "type": "keyword"
   }
 }
