@@ -50,12 +50,16 @@ class LoadConfiguration:
 
 class LoadJob:
     def __init__(
-        self, load_configuration: LoadConfiguration, data_source, search_wrapper, test
+        self, 
+        load_configuration: LoadConfiguration, 
+        data_source, 
+        search_wrapper, 
+        test
     ):
-        self.test = test
-        self.search_wrapper = search_wrapper
-        self.data_source = data_source
         self.load_configuration = load_configuration
+        self.data_source = data_source
+        self.search_wrapper = search_wrapper
+        self.test = test
         self.load_results = {}
 
     def process_load_operation(self, load_name):
