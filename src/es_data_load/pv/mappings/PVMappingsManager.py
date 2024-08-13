@@ -1,5 +1,8 @@
 import json
 from es_data_load.specification import LoadConfiguration
+import logging
+
+logger = logging.getLogger("es-data-load")
 
 AVAILABLE_MAPPING_FILES = {
     "granted": [
@@ -63,8 +66,20 @@ class PVLoadConfiguration(LoadConfiguration):
     ):
         if granted_files is None:
             granted_files = AVAILABLE_MAPPING_FILES["granted"]
+            logger.info("Loading configs for all available granted files...")
+        elif len(granted_files) == 0:
+            logger.info("Skipping granted configs...")
+        else:
+            logger.info(f"Loading configs for specified subset of granted files:\n{granted_files}")
+
         if pregrant_files is None:
             pregrant_files = AVAILABLE_MAPPING_FILES["pregrant"]
+            logger.info("Loading configs for all available pregrant files...")
+        elif len(pregrant_files) == 0:
+            logger.info("Skipping pregrant configs...")
+        else:
+            logger.info(f"Loading configs for specified subset of pregrant files:\n{granted_files}")
+
         import importlib.resources as pkg_resources
 
         # schema_file =
