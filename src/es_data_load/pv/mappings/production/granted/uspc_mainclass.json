@@ -2,7 +2,6 @@
   "source_setting": {
     "source": "select id, id, title, num_patents, num_inventors, num_assignees, first_seen_date, last_seen_date, years_active from {reporting_data_source}.uspc_mainclass where id > '{{offset}}' order by id limit {{limit}};",
     "field_mapping": {
-      "uuid": 0,
       "uspc_mainclass_id": 1,
       "uspc_mainclass_title": 2,
       "uspc_mainclass_num_assignees": 5,
