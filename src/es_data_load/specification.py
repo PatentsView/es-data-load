@@ -1,5 +1,7 @@
 import logging
 from typing import List
+from es import ElasticsearchWrapper
+from DataSources import MySQLDataSource
 
 from es_data_load.lib.utilities import (
     load_config_dict_from_json_files,
@@ -52,9 +54,9 @@ class LoadJob:
     def __init__(
         self, 
         load_configuration: LoadConfiguration, 
-        data_source, 
-        search_wrapper, 
-        test
+        data_source: MySQLDataSource, 
+        search_wrapper: ElasticsearchWrapper, 
+        test: bool
     ):
         self.load_configuration = load_configuration
         self.data_source = data_source
