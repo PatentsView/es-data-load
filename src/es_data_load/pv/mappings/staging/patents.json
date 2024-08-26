@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "SELECT patent_id, type  , date  , year  , title  , abstract  , kind  , detail_desc_length  , num_foreign_documents_cited  , num_us_patents_cited  , num_us_applications_cited  , num_total_documents_cited  , num_times_cited_by_us_patents  , cpc_current_group_average_patent_processing_days  , uspc_current_mainclass_average_patent_processing_days  , patent_processing_days  , earliest_application_date  , term_extension, gi_statement, patent_zero_prefix from elastic_staging.patents order by patent_id limit {limit} offset {offset};",
+    "source": "SELECT patent_id, type , date , year , title , abstract , kind , detail_desc_length , num_foreign_documents_cited , num_us_patents_cited , num_us_applications_cited , num_total_documents_cited , num_times_cited_by_us_patents , cpc_current_group_average_patent_processing_days , uspc_current_mainclass_average_patent_processing_days , patent_processing_days , earliest_application_date , term_extension, gi_statement, patent_zero_prefix from elastic_staging.patents order by patent_id limit {limit} offset {offset};",
     "field_mapping": {
       "patent_id": 0,
       "patent_title": 4,
@@ -26,7 +26,7 @@
     "key_field": "patent_id",
     "nested_fields": {
       "application": {
-        "source": "select a.application_id, a.type, a.date,a.series_code,case when a.rule_47_flag=0 then 'false' else 'true' end,a.type, a.patent_id from elastic_staging.patent_application a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=a.patent_id",
+        "source": "select a.application_id, a.type, a.date, a.series_code, case when a.rule_47_flag=0 then 'false' else 'true' end, a.type, a.patent_id from elastic_staging.patent_application a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=a.patent_id",
         "field_mapping": {
           "application_id": 0,
           "application_type": 1,
@@ -38,7 +38,7 @@
         }
       },
       "attorneys": {
-        "source": "select a.persistent_lawyer_id, a.name_first, a.name_last,a.organization,a.sequence, a.patent_id from elastic_staging.patent_attorneys a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=a.patent_id",
+        "source": "select a.persistent_lawyer_id, a.name_first, a.name_last, a.organization, a.sequence, a.patent_id from elastic_staging.patent_attorneys a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=a.patent_id",
         "field_mapping": {
           "attorney_id": 0,
           "attorney_name_first": 1,
@@ -57,7 +57,7 @@
         }
       },
       "cpc_at_issue": {
-        "source": "select c.sequence, c.cpc_section, c.cpc_class,c.cpc_class,c.cpc_subclass,c.cpc_subclass, c.cpc_group,c.cpc_group,c.cpc_type, c.patent_id from elastic_staging.patent_cpc_at_issue c join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=c.patent_id",
+        "source": "select c.sequence, c.cpc_section, c.cpc_class, c.cpc_class, c.cpc_subclass, c.cpc_subclass, c.cpc_group, c.cpc_group, c.cpc_type, c.patent_id from elastic_staging.patent_cpc_at_issue c join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=c.patent_id",
         "field_mapping": {
           "cpc_sequence": 0,
           "cpc_section": 1,
@@ -72,7 +72,7 @@
         }
       },
       "examiners": {
-        "source": "select e.persistent_examiner_id,e.name_first,e.name_last,e.role,e.`group`,e.patent_id from elastic_staging.patent_examiner e join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=e.patent_id",
+        "source": "select e.persistent_examiner_id, e.name_first, e.name_last, e.role, e.`group`,e.patent_id from elastic_staging.patent_examiner e join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=e.patent_id",
         "field_mapping": {
           "examiner_id": 0,
           "examiner_first_name": 1,
@@ -83,7 +83,7 @@
         }
       },
       "granted_pregrant_crosswalk": {
-        "source": "select g.patent_id,g.document_number,g.document_number,g.application_number from elastic_staging.granted_pregrant_crosswalk g join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=g.patent_id",
+        "source": "select g.patent_id, g.document_number, g.document_number, g.application_number from elastic_staging.granted_pregrant_crosswalk g join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=g.patent_id",
         "field_mapping": {
           "patent_id": 0,
           "document_number": 1,
@@ -100,7 +100,7 @@
         }
       },
       "foreign_priority": {
-        "source": "select f.sequence,f.kind,f.foreign_doc_number,f.date,f.country,f.patent_id from elastic_staging.patent_foreign_priority f join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=f.patent_id",
+        "source": "select f.sequence, f.kind, f.foreign_doc_number, f.date, f.country, f.patent_id from elastic_staging.patent_foreign_priority f join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=f.patent_id",
         "field_mapping": {
           "priority_claim_sequence": 0,
           "priority_claim_kind": 1,
@@ -111,14 +111,14 @@
         }
       },
       "gov_interest_contract_award_numbers": {
-        "source": "select c.award_number,c.patent_id   from elastic_staging.patent_gov_contract c join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on c.patent_id = p.patent_id;",
+        "source": "select c.award_number, c.patent_id from elastic_staging.patent_gov_contract c join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on c.patent_id = p.patent_id;",
         "field_mapping": {
           "award_number": 0,
           "patent_id": 1
         }
       },
       "gov_interest_organizations": {
-        "source": "select c.name,c.level_one,c.level_two,c.level_three,c.patent_id  from elastic_staging.patent_gov_interest_organizations c join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on c.patent_id = p.patent_id;",
+        "source": "select c.name, c.level_one, c.level_two, c.level_three, c.patent_id from elastic_staging.patent_gov_interest_organizations c join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on c.patent_id = p.patent_id;",
         "field_mapping": {
           "fedagency_name": 0,
           "level_one": 1,
@@ -145,7 +145,7 @@
         }
       },
       "applicants": {
-        "source": "select a.fname,a.lname,a.organization,a.sequence,a.designation,a.applicant_type,a.persistent_location_id,a.patent_id from elastic_staging.patent_applicant  a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on p.patent_id = a.patent_id;",
+        "source": "select a.fname, a.lname, a.organization, a.sequence, a.designation, a.applicant_type, a.persistent_location_id, a.patent_id from elastic_staging.patent_applicant a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on p.patent_id = a.patent_id;",
         "field_mapping": {
           "applicant_name_first": 0,
           "applicant_name_last": 1,
@@ -158,7 +158,7 @@
         }
       },
       "pct_data": {
-        "source": "select p.date,p.`102_date`,p.`371_date`,p.kind,p.doc_number,p.doc_type, p.patent_id from elastic_staging.patent_pct_data  p join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p2 on p.patent_id = p2.patent_id;",
+        "source": "select p.date, p.`102_date`,p.`371_date`,p.kind, p.doc_number, p.doc_type, p.patent_id from elastic_staging.patent_pct_data p join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p2 on p.patent_id = p2.patent_id;",
         "field_mapping": {
           "published_filed_date": 0,
           "pct_102_date": 1,
@@ -170,7 +170,7 @@
         }
       },
       "us_related_documents": {
-        "source": "select u.doctype,u.kind,u.reldocno,u.country,u.date,u.status,u.sequence,u.kind,u.patent_id   from elastic_staging.patent_us_related_documents u join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on u.patent_id = p.patent_id;",
+        "source": "select u.doctype, u.kind, u.reldocno, u.country, u.date, u.status, u.sequence, u.kind, u.patent_id from elastic_staging.patent_us_related_documents u join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on u.patent_id = p.patent_id;",
         "field_mapping": {
           "related_doc_type": 0,
           "related_doc_kind": 1,
@@ -184,7 +184,7 @@
         }
       },
       "us_term_of_grant": {
-        "source": "select u.term_grant,u.term_extension,u.term_disclaimer,u.disclaimer_date,u.patent_id from elastic_staging.patent_us_term_of_grant  u join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on u.patent_id = p.patent_id;",
+        "source": "select u.term_grant, u.term_extension, u.term_disclaimer, u.disclaimer_date, u.patent_id from elastic_staging.patent_us_term_of_grant u join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on u.patent_id = p.patent_id;",
         "field_mapping": {
           "term_grant": 0,
           "term_extension": 1,
@@ -194,7 +194,7 @@
         }
       },
       "uspc_at_issue": {
-        "source": "select u.mainclass_id,u.mainclass_id,u.subclass_id,u.subclass_id,u.sequence,u.patent_id from elastic_staging.patent_uspc_at_issue  u join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on u.patent_id = p.patent_id;",
+        "source": "select u.mainclass_id, u.mainclass_id, u.subclass_id, u.subclass_id, u.sequence, u.patent_id from elastic_staging.patent_uspc_at_issue u join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on u.patent_id = p.patent_id;",
         "field_mapping": {
           "uspc_mainclass": 0,
           "uspc_mainclass_id": 1,
@@ -205,7 +205,7 @@
         }
       },
       "wipo": {
-        "source": "select w.field_id,w.field_id,w.sequence,w.patent_id from elastic_staging.patent_wipo  w join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on w.patent_id = p.patent_id;",
+        "source": "select w.field_id, w.field_id, w.sequence, w.patent_id from elastic_staging.patent_wipo w join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset}) p on w.patent_id = p.patent_id;",
         "field_mapping": {
           "wipo_field_id": 0,
           "wipo_field": 1,
@@ -214,7 +214,7 @@
         }
       },
       "assignees": {
-        "source": "SELECT  persistent_assignee_id  , name_first  , name_last  , organization  , sequence  , type  , city  , state  , country  , a.patent_id  , persistent_location_id from elastic_staging.patent_assignee a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=a.patent_id",
+        "source": "SELECT persistent_assignee_id , name_first , name_last , organization , sequence , type , city , state , country , a.patent_id , persistent_location_id from elastic_staging.patent_assignee a join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=a.patent_id",
         "field_mapping": {
           "assignee_id": 0,
           "assignee_type": 5,
@@ -230,7 +230,7 @@
         }
       },
       "inventors": {
-        "source": "select persistent_inventor_id, name_first, name_last, sequence,city, state, country, i.patent_id, persistent_location_id from elastic_staging.patent_inventor i join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=i.patent_id",
+        "source": "select persistent_inventor_id, name_first, name_last, sequence, city, state, country, i.patent_id, persistent_location_id from elastic_staging.patent_inventor i join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=i.patent_id",
         "field_mapping": {
           "inventor_id": 0,
           "inventor_name_first": 1,
@@ -244,7 +244,7 @@
         }
       },
       "cpc_current": {
-        "source": "select c.sequence, c.cpc_section, c.cpc_class,c.cpc_class,c.cpc_subclass,c.cpc_subclass, c.cpc_group,c.cpc_group,c.cpc_type, c.patent_id from elastic_staging.patent_cpc_current as c join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=c.patent_id",
+        "source": "select c.sequence, c.cpc_section, c.cpc_class, c.cpc_class, c.cpc_subclass, c.cpc_subclass, c.cpc_group, c.cpc_group, c.cpc_type, c.patent_id from elastic_staging.patent_cpc_current as c join (select patent_id from elastic_staging.patents order by patent_id limit {limit} offset {offset})p on p.patent_id=c.patent_id",
         "field_mapping": {
           "cpc_sequence": 0,
           "cpc_section": 1,

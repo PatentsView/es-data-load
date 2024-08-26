@@ -16,7 +16,7 @@
     },
         "key_field": "uuid",
 
-    "count_source": "SELECT count(1) from  elastic_staging.us_patent_citations",
+    "count_source": "SELECT count(1) from elastic_staging.us_patent_citations",
     "chunksize": 10000
   },
   "target_setting": {

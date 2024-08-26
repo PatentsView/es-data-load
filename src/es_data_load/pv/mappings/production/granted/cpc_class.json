@@ -14,7 +14,7 @@
       "cpc_class_years_active": 8
     },
     "key_field": "uuid",
-    "count_source": "SELECT count(1) from  {elastic_production_source}.cpc_class",
+    "count_source": "SELECT count(1) from {elastic_production_source}.cpc_class",
     "chunksize": 1000000
   },
   "target_setting": {

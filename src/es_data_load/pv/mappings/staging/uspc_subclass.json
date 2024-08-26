@@ -10,7 +10,7 @@
     },
       "key_field": "uuid",
 
-    "count_source": "SELECT count(1) from  PatentsView_20211230.uspc_subclass",
+    "count_source": "SELECT count(1) from PatentsView_20211230.uspc_subclass",
     "chunksize": 10000
   },
   "target_setting": {
