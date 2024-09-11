@@ -27,7 +27,7 @@ AVAILABLE_SCHEMA_FILES = {
         "claim.json": "claim{suffix}",
         "detail_desc_text.json": "detail_desc_text{suffix}",
         "draw_desc_text.json": "draw_desc_text{suffix}",
-        "rawapplicants.json": "rawapplicants{suffix}",
+        "rawapplicants_fields.json": "rawapplicants{suffix}",
     },
     "pregrant": {
         "publication_fields.json": "publications{suffix}",
