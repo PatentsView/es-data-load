@@ -1,0 +1,92 @@
+{
+    "uuid": {
+        "type": "keyword"
+    },
+    "patent_id": {
+        "type": "keyword"
+    },
+    "sequence": {
+        "type": "integer"
+    },
+    "name_first": {
+        "type": "text",
+        "fields": {
+            "keyword": {
+                "ignore_above": 256,
+                "type": "keyword"
+              }
+        }
+    },
+    "name_last": {
+        "type": "text",
+        "fields": {
+            "keyword": {
+                "ignore_above": 256,
+                "type": "keyword"
+              }
+        }
+    },
+    "organization": {
+        "type": "text",
+        "fields": {
+            "keyword": {
+                "ignore_above": 256,
+                "type": "keyword"
+              }
+        }
+    },
+    "applicant_type": {
+        "type": "keyword"
+    },
+    "applicant_authority": {
+        "type": "keyword"
+    },
+    "patent_title": {
+        "type": "text",
+        "fields": {
+            "keyword": {
+                "ignore_above": 256,
+                "type": "keyword"
+              }
+        }
+    },
+    "abstract": {
+        "type": "text",
+        "fields": {
+            "keyword": {
+                "ignore_above": 256,
+                "type": "keyword"
+              }
+        }
+    },
+    "patent_date": {
+        "type": "date"
+    },
+    "subsection_id": {
+        "type": "keyword"
+    },
+    "subsection_title": {
+        "type": "text",
+        "fields": {
+            "keyword": {
+                "ignore_above": 256,
+                "type": "keyword"
+              }
+        }
+    },
+    "city": {
+        "type": "text",
+        "fields": {
+            "keyword": {
+                "ignore_above": 256,
+                "type": "keyword"
+              }
+        }
+    },
+    "state": {
+        "type": "keyword"
+    },
+    "country": {
+        "type": "keyword"
+    }
+}

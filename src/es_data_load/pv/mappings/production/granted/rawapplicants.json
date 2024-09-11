@@ -1,0 +1,31 @@
+{
+    "source_setting": {
+        "source": "select `uuid`, `patent_id`, `sequence`, `name_first`, `name_last`, `organization`, `applicant_type`, `applicant_authority`, `patent_title`, `abstract`, `patent_date`, `subsection_id`, `subsection_title`, `city`, `state`, `country` from {elastic_production_source}.rawapplicants where uuid > '{{offset}}' order by uuid limit {{limit}};",
+        "field_mapping": {
+            "uuid":0,
+            "patent_id":1,
+            "sequence":2,
+            "name_first":3,
+            "name_last":4,
+            "organization":5,
+            "applicant_type":6,
+            "applicant_authority":7,
+            "patent_title":8,
+            "abstract":9,
+            "patent_date":10,
+            "subsection_id":11,
+            "subsection_title":12,
+            "city":13,
+            "state":14,
+            "country":15
+        },
+        "key_field": "uuid",
+        "count_source":"SELECT COUNT(*) FROM {elastic_production_source}.rawapplicants",
+        "chunksize": 1000000
+    },
+    "target_setting": {
+        "index": "rawapplicants",
+        "indexing_batch_size": 7500,
+        "id_field": "uuid"
+    }
+}
