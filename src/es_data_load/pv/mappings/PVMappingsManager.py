@@ -27,6 +27,7 @@ AVAILABLE_MAPPING_FILES = {
         "brf_sum_text.json",
         "detail_desc_text.json",
         "draw_desc_text.json",
+        "rawapplicants.json",
     ],
     "pregrant": [
         "publications.json",
