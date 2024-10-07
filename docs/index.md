@@ -85,6 +85,7 @@ The specification for the mapping allows for the following:
 * Mapping between SQL select columns and elastic index field names
 * Specify key fields
 * Specify batch processing settings
+    * NB: If a chunksize is provided for batch processing, {offset} and {limit} placeholders must be provided in the source SQL to prevent an infinite loop.
 
 # Specifications
 
