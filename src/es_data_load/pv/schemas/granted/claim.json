@@ -22,5 +22,8 @@
   },
   "patent_zero_prefix": {
     "type": "keyword"
+  },
+  "document_date": {
+    "type": "date"
   }
 }

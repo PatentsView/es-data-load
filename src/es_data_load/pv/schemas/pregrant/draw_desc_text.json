@@ -5,10 +5,13 @@
   "document_number": {
     "type": "keyword"
    },
-  "description_text": {
+  "draw_desc_text": {
     "type": "text"
   },
-  "description_sequence": {
+  "draw_desc_sequence": {
     "type": "integer"
- }
+  },
+  "document_date": {
+    "type": "date"
+  }
 }

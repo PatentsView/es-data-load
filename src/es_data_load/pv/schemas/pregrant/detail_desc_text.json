@@ -10,5 +10,8 @@
   },
   "description_length": {
     "type": "integer"
- }
+  },
+  "document_date": {
+    "type": "date"
+  }
 }

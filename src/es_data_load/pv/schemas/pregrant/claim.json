@@ -16,5 +16,8 @@
   },
   "claim_dependent": {
     "type": "keyword"
+  },
+  "document_date": {
+    "type": "date"
   }
 }
