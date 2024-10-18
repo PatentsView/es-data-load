@@ -23,14 +23,18 @@ AVAILABLE_SCHEMA_FILES = {
         "uspc_mainclasses_fields.json": "uspc_mainclasses{suffix}",
         "uspc_subclasses_fields.json": "uspc_subclasses{suffix}",
         "wipo_fields.json": "wipo{suffix}",
-        "brf_sum_text.json": "brf_sum_text{suffix}",
-        "claim.json": "claim{suffix}",
-        "detail_desc_text.json": "detail_desc_text{suffix}",
-        "draw_desc_text.json": "draw_desc_text{suffix}",
+        "brf_sum_text.json": "g_brf_sum_texts{suffix}",
+        "claim.json": "g_claims{suffix}",
+        "detail_desc_text.json": "g_detail_desc_texts{suffix}",
+        "draw_desc_text.json": "g_draw_desc_texts{suffix}",
     },
     "pregrant": {
         "publication_fields.json": "publications{suffix}",
-        "rel_app_text_publications_fields.json": "rel_app_text_publications{suffix}"
+        "rel_app_text_publications_fields.json": "rel_app_text_publications{suffix}",
+        "brf_sum_text.json": "pg_brf_sum_texts{suffix}",
+        "claim.json": "pg_claims{suffix}",
+        "detail_desc_text.json": "pg_detail_desc_texts{suffix}",
+        "draw_desc_text.json": "pg_draw_desc_texts{suffix}",
     },
 }
 logger = logging.getLogger("es-data-load")
