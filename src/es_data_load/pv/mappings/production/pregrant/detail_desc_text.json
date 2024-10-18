@@ -1,18 +1,19 @@
 {
   "source_setting": {
-    "source": "select c.uuid, document_number, description_text, description_length from (select uuid from {elastic_production_source}pg_detail_desc_text where uuid > '{{offset}}' order by uuid limit {{limit}}) inner_q join {elastic_production_source}pg_detail_desc_text c on c.uuid=inner_q.uuid",
+    "source": "select c.uuid, document_number, description_text, description_length, document_date from {elastic_production_source}.pg_detail_desc_text_delta where uuid > '{{offset}}' order by uuid limit {{limit}}",
     "field_mapping": {
       "uuid": 0,
       "document_number": 1,
       "description_text": 2,
-      "description_length": 3
+      "description_length": 3,
+      "document_date": 4
     },
-    "count_source": "select count(1) from {elastic_production_source}pg_detail_desc_text",
+    "count_source": "select count(1) from {elastic_production_source}.pg_detail_desc_text_delta",
     "key_field": "uuid",
     "chunksize": 100000
   },
   "target_setting": {
-    "index": "pg_detail_desc_text",
+    "index": "pg_detail_desc_texts",
     "indexing_batch_size": 1000,
     "id_field": "uuid"
   }

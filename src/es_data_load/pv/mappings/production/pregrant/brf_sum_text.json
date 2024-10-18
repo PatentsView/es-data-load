@@ -1,17 +1,18 @@
 {
   "source_setting": {
-    "source": "select c.uuid, document_number, summary_text from (select uuid from {elastic_production_source}.pg_brf_sum_text where uuid > '{{offset}}' order by uuid limit {{limit}}) inner_q join {elastic_production_source}.pg_brf_sum_text c on c.uuid=inner_q.uuid",
+    "source": "select c.uuid, document_number, summary_text, document_date from {elastic_production_source}.pg_brf_sum_text_delta where uuid > '{{offset}}' order by uuid limit {{limit}}",
     "field_mapping": {
       "uuid": 0,
       "document_number": 1,
-      "summary_text": 2
+      "summary_text": 2,
+      "document_date": 3
     },
-    "count_source": "select count(1) from {elastic_production_source}.pg_brf_sum_text",
+    "count_source": "select count(1) from {elastic_production_source}.pg_brf_sum_text_delta",
     "key_field": "uuid",
     "chunksize": 100000
   },
   "target_setting": {
-    "index": "pg_brf_sum_text",
+    "index": "pg_brf_sum_texts",
     "indexing_batch_size": 5000,
     "id_field": "uuid"
   }

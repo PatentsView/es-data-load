@@ -1,20 +1,21 @@
 {
   "source_setting": {
-    "source": "select c.uuid, document_number, claim_number, claim_text, claim_sequence, dependent from (select uuid from {elastic_production_source}pg_claims where uuid > '{{offset}}' order by uuid limit {{limit}}) inner_q join {elastic_production_source}pg_claims c on c.uuid=inner_q.uuid",
+    "source": "select c.uuid, document_number, claim_number, claim_text, claim_sequence, dependent, document_date from {elastic_production_source}.pg_claim_delta where uuid > '{{offset}}' order by uuid limit {{limit}}",
     "field_mapping": {
       "uuid": 0,
       "document_number": 1,
       "claim_number": 2,
       "claim_text": 3,
       "claim_sequence": 4,
-      "claim_dependent": 5
+      "claim_dependent": 5,
+      "document_date": 6
     },
     "key_field": "uuid",
-    "count_source": "select count(1) from {elastic_production_source}pg_claims",
+    "count_source": "select count(1) from {elastic_production_source}.pg_claim_delta",
     "chunksize": 1000000
   },
   "target_setting": {
-    "index": "pg_claim",
+    "index": "pg_claims",
     "indexing_batch_size": 100000,
     "id_field": "uuid"
   }
