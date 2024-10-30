@@ -30,7 +30,11 @@ AVAILABLE_MAPPING_FILES = {
     ],
     "pregrant": [
         "publications.json",
-        "rel_app_text_publications.json"
+        "rel_app_text_publications.json",
+        "claim.json",
+        "brf_sum_text.json",
+        "detail_desc_text.json",
+        "draw_desc_text.json",
     ],
 }
 

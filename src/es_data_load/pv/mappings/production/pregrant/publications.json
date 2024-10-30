@@ -31,7 +31,7 @@
           "assignee_type": 5,
           "document_number": 9
         },
-        "source": "SELECT  assignee_id  , name_first  , name_last  , organization  , sequence  , type  , city  , state  , country  , a.document_number  , location_id from {elastic_production_source}.publication_assignee a inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = a.document_number;"
+        "source": "SELECT assignee_id , name_first , name_last , organization , sequence , type , city , state , country , a.document_number , location_id from {elastic_production_source}.publication_assignee a inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = a.document_number;"
       },
       "cpc_at_issue": {
         "field_mapping": {
@@ -47,10 +47,10 @@
           "action_date": 10,
           "document_number": 9
         },
-        "source": "select c.sequence, c.cpc_section, c.cpc_class,c.cpc_class,c.cpc_subclass,c.cpc_subclass, c.cpc_group,c.cpc_group,c.cpc_type, c.document_number, c.action_date from {elastic_production_source}.publication_cpc_at_issue c inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = c.document_number;"
+        "source": "select c.sequence, c.cpc_section, c.cpc_class, c.cpc_class, c.cpc_subclass, c.cpc_subclass, c.cpc_group, c.cpc_group, c.cpc_type, c.document_number, c.action_date from {elastic_production_source}.publication_cpc_at_issue c inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = c.document_number;"
       },
       "cpc_current": {
-        "source": "select c.sequence, c.cpc_section, c.cpc_class,c.cpc_class,c.cpc_subclass,c.cpc_subclass, c.cpc_group,c.cpc_group,c.cpc_type, c.document_number from {elastic_production_source}.publication_cpc_current as c join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}})p on p.document_number=c.document_number;",
+        "source": "select c.sequence, c.cpc_section, c.cpc_class, c.cpc_class, c.cpc_subclass, c.cpc_subclass, c.cpc_group, c.cpc_group, c.cpc_type, c.document_number from {elastic_production_source}.publication_cpc_current as c join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}})p on p.document_number=c.document_number;",
         "field_mapping": {
           "cpc_sequence": 0,
           "cpc_section": 1,
@@ -73,7 +73,7 @@
           "priority_claim_kind": 0,
           "priority_claim_sequence": 5
         },
-        "source": "select f.kind,f.foreign_doc_number,f.date,f.country,f.document_number,f.sequence from {elastic_production_source}.foreign_priority f inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = f.document_number;"
+        "source": "select f.kind, f.foreign_doc_number, f.date, f.country, f.document_number, f.sequence from {elastic_production_source}.foreign_priority f inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = f.document_number;"
       },
       "gov_interest_organizations": {
         "field_mapping": {
@@ -83,7 +83,7 @@
           "level_three": 3,
           "level_two": 2
         },
-        "source": "select c.name,c.level_one,c.level_two,c.level_three,c.document_number  from {elastic_production_source}.publication_gov_interest_organizations c inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = c.document_number;"
+        "source": "select c.name, c.level_one, c.level_two, c.level_three, c.document_number from {elastic_production_source}.publication_gov_interest_organizations c inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = c.document_number;"
       },
       "granted_pregrant_crosswalk": {
         "field_mapping": {
@@ -93,7 +93,7 @@
           "current_document_number_flag": 3,
           "current_patent_id_flag": 4
         },
-        "source": "select g.document_number,g.patent_id,g.application_number,g.current_pgpub_id_flag,g.current_patent_id_flag from {elastic_production_source}.granted_pregrant_crosswalk g inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = g.document_number;"
+        "source": "select g.document_number, g.patent_id, g.application_number, g.current_pgpub_id_flag, g.current_patent_id_flag from {elastic_production_source}.granted_pregrant_crosswalk g inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = g.document_number;"
       },
       "inventors": {
         "field_mapping": {
@@ -107,7 +107,7 @@
           "inventor_sequence": 3,
           "inventor_state": 5
         },
-        "source": "select inventor_id, name_first, name_last, sequence,city, state, country, i.document_number, location_id from {elastic_production_source}.publication_inventor i inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = i.document_number;"
+        "source": "select inventor_id, name_first, name_last, sequence, city, state, country, i.document_number, location_id from {elastic_production_source}.publication_inventor i inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = i.document_number;"
       },
       "ipcr": {
         "field_mapping": {
@@ -139,7 +139,7 @@
           "filed_country": 7,
           "published_filed_date": 0
         },
-        "source": "select p.date,p.371_date,p.102_date,p.kind,p.pct_doc_number,p.doc_type, p.document_number,p.country from {elastic_production_source}.publication_pct_data  p inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) pb on pb.document_number = p.document_number;"
+        "source": "select p.date, p.371_date, p.102_date, p.kind, p.pct_doc_number, p.doc_type, p.document_number, p.country from {elastic_production_source}.publication_pct_data p inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) pb on pb.document_number = p.document_number;"
       },
       "us_parties": {
         "field_mapping": {
@@ -165,7 +165,7 @@
           "related_doc_type": 0,
           "related_doc_sequence": 6
         },
-        "source": "select u.doc_type,u.relkind,u.related_doc_number,u.country,u.date,u.document_number,u.sequence   from {elastic_production_source}.publication_us_related_documents u inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = u.document_number;"
+        "source": "select u.doc_type, u.relkind, u.related_doc_number, u.country, u.date, u.document_number, u.sequence from {elastic_production_source}.publication_us_related_documents u inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = u.document_number;"
       },
       "uspc_at_issue": {
         "field_mapping": {
@@ -176,7 +176,7 @@
           "uspc_subclass": 2,
           "uspc_subclass_id": 3
         },
-        "source": "select u.mainclass_id,u.mainclass_id,u.subclass_id,u.subclass_id,u.sequence,u.document_number from {elastic_production_source}.publication_uspc_at_issue  u inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = u.document_number;"
+        "source": "select u.mainclass_id, u.mainclass_id, u.subclass_id, u.subclass_id, u.sequence, u.document_number from {elastic_production_source}.publication_uspc_at_issue u inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = u.document_number;"
       },
       "wipo": {
         "field_mapping": {
@@ -186,10 +186,10 @@
           "wipo_field_id": 0,
           "wipo_sequence": 2
         },
-        "source": "select w.field_id,w.field_title,w.sequence,w.document_number,w.sector_title from {elastic_production_source}.publication_wipo  w inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = w.document_number;"
+        "source": "select w.field_id, w.field_title, w.sequence, w.document_number, w.sector_title from {elastic_production_source}.publication_wipo w inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = w.document_number;"
       }
     },
-    "source": "SELECT p.document_number, type  , date  , year  , title  , abstract  , kind  , country  , application_number  , series_code  , rule_47_flag from {elastic_production_source}.publication p where document_number > '{{offset}}' order by document_number limit {{limit}};"
+    "source": "SELECT p.document_number, type , date , year , title , abstract , kind , country , application_number , series_code , rule_47_flag from {elastic_production_source}.publication p where document_number > '{{offset}}' order by document_number limit {{limit}};"
   },
   "target_setting": {
     "id_field": "document_number",

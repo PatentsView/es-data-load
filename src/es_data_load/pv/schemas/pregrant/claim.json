@@ -2,16 +2,19 @@
   "uuid": {
     "type": "keyword"
   },
-  "patent_id": {
+  "document_number": {
+    "type": "keyword"
+   },
+  "claim_number": {
     "type": "keyword"
   },
-  "description_text": {
+  "claim_text": {
     "type": "text"
   },
-  "description_length": {
+  "claim_sequence": {
     "type": "integer"
   },
-  "patent_zero_prefix": {
+  "claim_dependent": {
     "type": "keyword"
   },
   "document_date": {

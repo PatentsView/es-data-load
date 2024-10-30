@@ -10,7 +10,7 @@
     },
       "key_field": "uuid",
 
-    "count_source": "SELECT count(1) from  {reporting_data_source}.uspc_subclass",
+    "count_source": "SELECT count(1) from {reporting_data_source}.uspc_subclass",
     "chunksize": 1000000
   },
   "target_setting": {

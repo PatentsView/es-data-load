@@ -2,17 +2,14 @@
   "uuid": {
     "type": "keyword"
   },
-  "patent_id": {
+  "document_number": {
     "type": "keyword"
-  },
-  "description_text": {
+   },
+  "draw_desc_text": {
     "type": "text"
   },
-  "description_length": {
+  "draw_desc_sequence": {
     "type": "integer"
-  },
-  "patent_zero_prefix": {
-    "type": "keyword"
   },
   "document_date": {
     "type": "date"

@@ -15,7 +15,7 @@
     },
         "key_field": "uuid",
 
-    "count_source": "SELECT count(1) from  {elastic_production_source}.us_application_citations",
+    "count_source": "SELECT count(1) from {elastic_production_source}.us_application_citations",
     "chunksize": 10000
   },
   "target_setting": {
