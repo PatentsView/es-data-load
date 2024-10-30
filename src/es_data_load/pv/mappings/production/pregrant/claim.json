@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select uuid, document_number, claim_number, claim_text, claim_sequence, dependent, document_date from {elastic_production_source}.pg_claim_delta where uuid > '{{offset}}' order by uuid limit {{limit}}",
+    "source": "select uuid, document_number, claim_number, claim_text, claim_sequence, claim_dependent, document_date from {elastic_production_source}.pg_claim_delta where uuid > '{{offset}}' order by uuid limit {{limit}}",
     "field_mapping": {
       "uuid": 0,
       "document_number": 1,
