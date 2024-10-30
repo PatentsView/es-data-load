@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "select c.uuid, document_number, description_text, description_length, document_date from {elastic_production_source}.pg_detail_desc_text_delta where uuid > '{{offset}}' order by uuid limit {{limit}}",
+    "source": "select uuid, document_number, description_text, description_length, document_date from {elastic_production_source}.pg_detail_desc_text_delta where uuid > '{{offset}}' order by uuid limit {{limit}}",
     "field_mapping": {
       "uuid": 0,
       "document_number": 1,
