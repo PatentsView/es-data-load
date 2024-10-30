@@ -1,7 +1,7 @@
 import logging
 from typing import List
-from es import ElasticsearchWrapper
-from DataSources import MySQLDataSource
+from es_data_load.es import ElasticsearchWrapper
+from es_data_load.DataSources import MySQLDataSource
 
 from es_data_load.lib.utilities import (
     load_config_dict_from_json_files,
