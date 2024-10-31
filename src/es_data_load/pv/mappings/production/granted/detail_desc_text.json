@@ -14,7 +14,7 @@
     "chunksize": 100000
   },
   "target_setting": {
-    "index": "detail_desc_texts",
+    "index": "g_detail_desc_texts",
     "indexing_batch_size": 1000,
     "id_field": "uuid"
   }
