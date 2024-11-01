@@ -2,6 +2,7 @@
   "source_setting": {
     "source": "select id, id, title, num_assignees, num_inventors, num_patents, first_seen_date, last_seen_date, years_active from {elastic_production_source}.cpc_class where id > '{{offset}}' order by id limit {{limit}};",
     "field_mapping": {
+      "uuid": 0,
       "cpc_class_id": 1,
       "cpc_class_title": 2,
       "cpc_class": 1,

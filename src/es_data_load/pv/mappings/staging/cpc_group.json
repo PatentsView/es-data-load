@@ -2,6 +2,7 @@
   "source_setting": {
     "source": "select id, id, SUBSTR(id, 1, 3) class, SUBSTR(id, 1, 4) subclass, title from elastic_staging.cpc_group order by id limit {limit} offset {offset};",
     "field_mapping": {
+      "uuid": 0,
       "cpc_class": 2,
       "cpc_class_id": 2,
       "cpc_subclass_id": 3,
