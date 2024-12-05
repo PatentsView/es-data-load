@@ -97,6 +97,7 @@ class DelimitedDataSource(TabularDataSource):
         csv.field_size_limit(sys.maxsize)
         with open(filename) as fp:
             reader = csv.reader(fp, delimiter=self.delimiter, quoting=self.quote_style)
+            next(reader, None)
             for line in reader:
                 yield {
                     field_name: line[idx] for field_name, idx in field_mapping.items()
