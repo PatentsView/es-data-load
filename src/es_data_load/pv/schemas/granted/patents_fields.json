@@ -613,6 +613,9 @@
     },
     "type": "nested"
   },
+  "withdrawn": {
+    "type": "boolean"
+  },
   "wipo": {
     "properties": {
       "wipo_field": {

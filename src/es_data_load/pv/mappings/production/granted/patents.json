@@ -1,6 +1,6 @@
 {
   "source_setting": {
-    "source": "SELECT p.patent_id, type , date , year , title , abstract , kind , detail_desc_length , num_foreign_documents_cited , num_us_patents_cited , num_us_applications_cited , num_total_documents_cited , num_times_cited_by_us_patents , cpc_current_group_average_patent_processing_days , uspc_current_mainclass_average_patent_processing_days , patent_processing_days , earliest_application_date , term_extension, gi_statement, patent_zero_prefix from {elastic_production_source}.patents p join (select patent_id from {elastic_production_source}.patents where patent_id > '{{offset}}' order by patent_id limit {{limit}}) p2 on p2.patent_id=p.patent_id;",
+    "source": "SELECT p.patent_id, type , date , year , title , abstract , kind , detail_desc_length , num_foreign_documents_cited , num_us_patents_cited , num_us_applications_cited , num_total_documents_cited , num_times_cited_by_us_patents , cpc_current_group_average_patent_processing_days , uspc_current_mainclass_average_patent_processing_days , patent_processing_days , earliest_application_date , term_extension, gi_statement, patent_zero_prefix, withdrawn from {elastic_production_source}.patents p join (select patent_id from {elastic_production_source}.patents where patent_id > '{{offset}}' order by patent_id limit {{limit}}) p2 on p2.patent_id=p.patent_id;",
     "field_mapping": {
       "patent_id": 0,
       "patent_title": 4,
@@ -21,7 +21,8 @@
       "patent_term_extension": 17,
       "patent_detail_desc_length": 7,
       "gov_interest_statement": 18,
-      "patent_zero_prefix": 19
+      "patent_zero_prefix": 19,
+      "withdrawn": 20
     },
     "key_field": "patent_id",
     "nested_fields": {
