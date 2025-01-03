@@ -231,7 +231,7 @@
         }
       },
       "inventors": {
-        "source": "select persistent_inventor_id, name_first, name_last, sequence, city, state, country, i.patent_id, persistent_location_id from {elastic_production_source}.patent_inventor i join (select patent_id from {elastic_production_source}.patents where patent_id > '{{offset}}' order by patent_id limit {{limit}})p on p.patent_id=i.patent_id",
+        "source": "select persistent_inventor_id, name_first, name_last, sequence, city, state, country, i.patent_id, persistent_location_id, i.gender_code from {elastic_production_source}.patent_inventor i join (select patent_id from {elastic_production_source}.patents where patent_id > '{{offset}}' order by patent_id limit {{limit}})p on p.patent_id=i.patent_id",
         "field_mapping": {
           "inventor_id": 0,
           "inventor_name_first": 1,
@@ -241,7 +241,8 @@
           "inventor_state": 5,
           "inventor_country": 6,
           "patent_id": 7,
-          "inventor_location_id": 8
+          "inventor_location_id": 8,
+          "inventor_gender_code": 9
         }
       },
       "cpc_current": {

@@ -282,6 +282,9 @@
           }
         },
         "type": "text"
+      },
+      "inventor_gender_code": {
+      "type": "keyword"
       }
     },
     "type": "nested"
