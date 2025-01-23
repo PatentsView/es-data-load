@@ -99,6 +99,8 @@ def generate_load_statistics(responses):
             total_duration += response["took"]
             if response.get("errors", None):
                 for error_items in response["items"]:
+                    if "create" not in error_items:
+                        logger.info(str(error_items))
                     if "error" in error_items["create"]:
                         errors.add(error_items["create"]["error"]["type"])
                 error_status = True
