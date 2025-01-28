@@ -213,16 +213,16 @@
         "type": "keyword"
       },
       "document_number": {
-        "type": "long"
+        "type": "keyword"
       },
       "patent_id": {
         "type": "keyword"
       },
       "current_document_number_flag": {
-        "type": "long"
+        "type": "boolean"
       },
       "current_patent_id_flag": {
-        "type": "long"
+        "type": "boolean"
       }
     },
     "type": "nested"
@@ -375,7 +375,7 @@
     "type": "long"
   },
   "rule_47_flag": {
-    "type": "keyword"
+    "type": "boolean"
   },
   "series_code": {
     "type": "keyword"

@@ -371,7 +371,7 @@
         "type": "keyword"
       },
       "document_number": {
-        "type": "long"
+        "type": "keyword"
       },
       "patent_id": {
         "type": "keyword"
