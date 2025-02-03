@@ -93,7 +93,7 @@
           "current_document_number_flag": 3,
           "current_patent_id_flag": 4
         },
-        "source": "select g.document_number, g.patent_id, g.application_number, CASE WHEN g.current_pgpub_id_flag=1 THEN 'true' ELSE 'false END, CASE WHEN g.current_patent_id_flag=1 THEN 'true' ELSE 'false' END from {elastic_production_source}.granted_pregrant_crosswalk g inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = g.document_number;"
+        "source": "select g.document_number, g.patent_id, g.application_number, CASE WHEN g.current_pgpub_id_flag=1 THEN 'true' ELSE 'false' END, CASE WHEN g.current_patent_id_flag=1 THEN 'true' ELSE 'false' END from {elastic_production_source}.granted_pregrant_crosswalk g inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = g.document_number;"
       },
       "inventors": {
         "field_mapping": {
