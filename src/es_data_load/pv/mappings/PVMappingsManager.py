@@ -82,7 +82,7 @@ class PVLoadConfiguration(LoadConfiguration):
         elif len(pregrant_files) == 0:
             logger.info("Skipping pregrant configs...")
         else:
-            logger.info(f"Loading configs for specified subset of pregrant files:\n{granted_files}")
+            logger.info(f"Loading configs for specified subset of pregrant files:\n{pregrant_files}")
 
         import importlib.resources as pkg_resources
 

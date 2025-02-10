@@ -27,7 +27,7 @@
     "key_field": "patent_id",
     "nested_fields": {
       "application": {
-        "source": "select a.application_id, a.type, a.date, a.series_code, case when a.rule_47_flag=0 then 'false' else 'true' end, a.type, a.patent_id from {elastic_production_source}.patent_application a join (select patent_id from {elastic_production_source}.patents where patent_id > '{{offset}}' order by patent_id limit {{limit}})p on p.patent_id=a.patent_id",
+        "source": "select a.application_id, a.type, a.date, a.series_code, LOWER(a.rule_47_flag), a.type, a.patent_id from {elastic_production_source}.patent_application a join (select patent_id from {elastic_production_source}.patents where patent_id > '{{offset}}' order by patent_id limit {{limit}})p on p.patent_id=a.patent_id",
         "field_mapping": {
           "application_id": 0,
           "application_type": 1,
