@@ -85,7 +85,7 @@ class DelimitedDataSource(TabularDataSource):
 
     @classmethod
     def from_config(cls, config):
-        return cls(delimiter=config["DELIMITED_SETUP"]["DELIMITER"])
+        return cls(delimiter="\t")
 
     def get_document_count(self, count_source):
         filename = count_source
