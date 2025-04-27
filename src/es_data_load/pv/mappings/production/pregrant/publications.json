@@ -190,7 +190,7 @@
         "source": "select w.field_id, w.field_title, w.sequence, w.document_number, w.sector_title from {elastic_production_source}.publication_wipo w inner join (select document_number from {elastic_production_source}.publication where document_number > '{{offset}}' order by document_number limit {{limit}}) p on p.document_number = w.document_number;"
       }
     },
-    "source": "SELECT p.document_number, type , date , year , title , abstract , kind , country , application_number , series_code , LOWER(rule_47_flag) from {elastic_production_source}.publication p where document_number > '{{offset}}' order by document_number limit {{limit}};"
+    "source": "SELECT p.document_number, type , date , year , title , abstract , kind , country , application_number , series_code , CASE WHEN rule_47_flag = 1 OR rule_47_flag = '1' OR rule_47_flag = 'TRUE' THEN 'true' ELSE 'false' END from {elastic_production_source}.publication p where document_number > '{{offset}}' order by document_number limit {{limit}};"
   },
   "target_setting": {
     "id_field": "document_number",
