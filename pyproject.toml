@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "es_data_load"
+version = "0.0.0"
 authors = [
     { name = "Sarvo Madhavan", email = "smadhavan@air.org" },
     { name = "Craig Soule", email = "csoule@air.org" },
