@@ -1,0 +1,62 @@
+repos:
+
+  # Code hygiene and file formatting checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0  # Use a specific stable version for consistent behavior
+    hooks:
+      - id: trailing-whitespace  # Removes any trailing whitespace in files
+      - id: mixed-line-ending  # Ensures consistent line endings across files
+      - id: end-of-file-fixer  # Adds a newline at the end of files, if missing
+      - id: check-json  # Validates JSON files for correct syntax
+      - id: check-merge-conflict  # Detects unresolved merge conflict markers in files
+      - id: check-yaml  # Validates YAML syntax; '--allow-multiple-documents' allows multiple YAML docs in one file
+        args: [ "--allow-multiple-documents", "--unsafe" ] # '--unsafe' is required to allow some compose syntax
+      - id: check-xml  # Ensures XML files are well-formed
+      - id: check-case-conflict  # Detects files that differ only in case (for cross-platform compatibility)
+      - id: check-docstring-first  # Ensures the first statement in a function yor class is a docstring
+      - id: check-added-large-files  # Warns if newly added files are above a certain size
+      - id: check-symlinks  # Checks that all symlinks are valid and not broken
+      - id: pretty-format-json  # Formats JSON files for consistency and readability
+        args:
+          - --autofix  # Automatically formats JSON files without requiring user intervention
+          - --no-sort-keys  # Preserves the original key order in JSON files, rather than sorting
+
+  # Ruff for linting and code quality checks
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.0  # Set the Ruff version to ensure compatibility
+    hooks:
+      - id: ruff  # Runs Ruff linter for style, syntax, and code quality checks
+        args: [ --fix ]  # Automatically fixes issues where possible
+      - id: ruff-format  # Applies Ruff's formatting standards to Python files
+
+  # # Bandit for security checks
+  # - repo: https://github.com/PyCQA/bandit
+  #   rev: 1.7.10  # Use the latest stable release of Bandit
+  #   hooks:
+  #   - id: bandit  # Scans Python files for common security issues, such as hardcoded secrets and insecure imports
+
+  # Black for code formatting
+  - repo: https://github.com/psf/black
+    rev: 24.10.0  # Use the latest stable version to ensure consistent formatting
+    hooks:
+      - id: black
+        language_version: python3  # Specifies the Python version for compatibility with the Black formatter
+
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 24.10.0
+    hooks:
+      - id: black-jupyter
+        language_version: python3
+
+  # isort for import sorting
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2  # Use the latest stable release of isort
+    hooks:
+      - id: isort
+        args: [ "--profile", "black" ]  # Configures isort to match Black's import sorting style for consistency
+
+  # TruffleHog scanning for high-entropy secrets
+  - repo: https://github.com/trufflesecurity/trufflehog
+    rev: v3.82.11  # Specify a version for consistent secret scanning
+    hooks:
+      - id: trufflehog  # Scans for high-entropy strings and potential secrets within code files

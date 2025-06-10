@@ -5,11 +5,11 @@ import re
 
 import pytest
 
-from es_data_load.specification import validate_mapping_structure
 from es_data_load.pv.mappings.PVMappingsManager import (
-    PVLoadConfiguration,
     AVAILABLE_MAPPING_FILES,
+    PVLoadConfiguration,
 )
+from es_data_load.specification import validate_mapping_structure
 
 
 def validate_jinja_sql(sql_template, variable):
@@ -18,12 +18,12 @@ def validate_jinja_sql(sql_template, variable):
 
 def test_pv_mappings():
     assert len(AVAILABLE_MAPPING_FILES["granted"]) == 21
-    assert len(AVAILABLE_MAPPING_FILES["pregrant"]) == 2
+    assert len(AVAILABLE_MAPPING_FILES["pregrant"]) == 6
     for idx, fname in enumerate(
-            [
-                pkg_resources.path("es_data_load.pv.mappings.production.granted", fl)
-                for fl in AVAILABLE_MAPPING_FILES["granted"]
-            ]
+        [
+            pkg_resources.path("es_data_load.pv.mappings.production.granted", fl)
+            for fl in AVAILABLE_MAPPING_FILES["granted"]
+        ]
     ):
         with fname as fname:
             current_operation = json.load(open(fname, "r"))
@@ -44,14 +44,14 @@ def test_pv_mappings():
 
 @pytest.mark.skip()
 def test_pv_mapping_queries():
-    all_configs = PVLoadConfiguration.load_default_pv_configuration()
+    PVLoadConfiguration.load_default_pv_configuration()
 
 
 def test_pv_load_configuration():
     pv_configuration = PVLoadConfiguration.load_default_pv_configuration(
         suffix="_test",
         granted_files=random.sample(AVAILABLE_MAPPING_FILES["granted"], k=5),
-        pregrant_files=['publications.json', 'rel_app_text_publications.json'],
+        pregrant_files=["publications.json", "rel_app_text_publications.json"],
     )
     assert len(pv_configuration.get_load_operation_names()) == 7
     for setting_name in pv_configuration.get_load_operation_names():
