@@ -1,25 +1,30 @@
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
 [project]
 name = "es_data_load"
-version = "0.2"
+version = "0.0.0"
 authors = [
     { name = "Sarvo Madhavan", email = "smadhavan@air.org" },
     { name = "Craig Soule", email = "csoule@air.org" },
+    { name = "Heaven Klair", email = "hklair@air.org" },
+    { name = "Jack Butler", email = "jbutler@air.org" },
 ]
 description = "Python package to load data into elastic search"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
 dependencies = [
     "elasticsearch",
-    "tqdm",
-    "pymysql>=1.0",
+    "PyMySQL",
+    "sqlglot",
+    "tqdm"
 ]
+
 [tool.setuptools.package-data]
 "es_data_load.pv.schemas.granted" = ["*.json"]
 "es_data_load.pv.mappings.production.granted" = ["*.json"]

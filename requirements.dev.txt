@@ -1,0 +1,4 @@
+-r requirements/base.txt
+-r requirements/test.txt
+-r requirements/lint.txt
+-r requirements/docs.txt
