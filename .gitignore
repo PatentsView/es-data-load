@@ -134,3 +134,4 @@ resources/config.ini
 **/__pycache__/
 **/.DS_Store
 **/.pytest_cache
+*.code-workspace

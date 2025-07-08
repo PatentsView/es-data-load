@@ -57,12 +57,21 @@ class ElasticsearchWrapper:
         Returns:
             ElasticsearchWrapper object
         """
-        return cls(
-            hoststring=config["ELASTICSEARCH"]["HOST"],
-            timeout=int(config["ELASTICSEARCH"].get("TIMEOUT", "120")),
-            username=config["ELASTICSEARCH"].get("USER", None),
-            password=config["ELASTICSEARCH"].get("PASSWORD", None),
-        )
+        params = {
+            "hoststring": config["ELASTICSEARCH"]["HOST"],
+            "port": config["ELASTICSEARCH"].get("PORT", "9243"),
+            "timeout": int(config["ELASTICSEARCH"].get("TIMEOUT", "120")),
+        }
+        if "USER" in config["ELASTICSEARCH"] and config["ELASTICSEARCH"]["USER"] > "":
+            params["username"] = config["ELASTICSEARCH"]["USER"]
+            params["password"] = config["ELASTICSEARCH"].get("PASSWORD", None)
+        elif "API_KEY" in config["ELASTICSEARCH"]:
+            params["api_key"] = config["ELASTICSEARCH"]["API_KEY"]
+        else:
+            logger.warning(
+                "No username/password or api_key found in config. Using anonymous connection."
+            )
+        return cls(**params)
 
     @classmethod
     def with_api_key(cls, config: configparser.ConfigParser) -> "ElasticsearchWrapper":
