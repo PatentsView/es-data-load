@@ -98,9 +98,9 @@ class DelimitedDataSource(TabularDataSource):
         csv.field_size_limit(sys.maxsize)
         with open(filename) as fp:
             reader = csv.reader(fp, delimiter=self.delimiter, quoting=self.quote_style)
+            if self.header and self.header == 0:
+                next(reader)
             for idx, line in enumerate(reader):
-                if self.header and idx == self.header:
-                    continue
                 yield {
                     field_name: line[idx] for field_name, idx in field_mapping.items()
                 }
