@@ -28,22 +28,27 @@ class ElasticsearchWrapper:
         username: str = None,
         password: str = None,
         api_key: str = None,
+        **kwargs,
     ):
         if username is not None:
             self.es = Elasticsearch(
-                hosts=hoststring, basic_auth=(username, password), timeout=timeout
+                hosts=hoststring,
+                basic_auth=(username, password),
+                request_timeout=timeout,
+                **kwargs,
             )
             logger.debug("Connecting with credentials")
         elif api_key is not None:
             self.es = Elasticsearch(
                 hosts=f"{hoststring}:{port}",
                 api_key=api_key,
-                timeout=timeout,
+                request_timeout=timeout,
+                **kwargs,
             )
             logger.debug("Connecting with API key")
         else:
             logger.debug("Connecting without credentials")
-            self.es = Elasticsearch(hosts=hoststring, timeout=timeout)
+            self.es = Elasticsearch(hosts=hoststring, request_timeout=timeout, **kwargs)
         logger.info(self.es.info())
 
     @classmethod
@@ -62,15 +67,29 @@ class ElasticsearchWrapper:
             "port": config["ELASTICSEARCH"].get("PORT", "9243"),
             "timeout": int(config["ELASTICSEARCH"].get("TIMEOUT", "120")),
         }
+
+        # Provide authentication to params
         if "USER" in config["ELASTICSEARCH"] and config["ELASTICSEARCH"]["USER"] > "":
             params["username"] = config["ELASTICSEARCH"]["USER"]
             params["password"] = config["ELASTICSEARCH"].get("PASSWORD", None)
-        elif "API_KEY" in config["ELASTICSEARCH"]:
+        elif (
+            "API_KEY" in config["ELASTICSEARCH"]
+            and config["ELASTICSEARCH"]["API_KEY"] > ""
+        ):
             params["api_key"] = config["ELASTICSEARCH"]["API_KEY"]
         else:
             logger.warning(
                 "No username/password or api_key found in config. Using anonymous connection."
             )
+
+        # Provide ca certificate to params
+        if (
+            "CA_CERTS" in config["ELASTICSEARCH"]
+            and config["ELASTICSEARCH"]["CA_CERTS"] > ""
+        ):
+            params["ca_certs"] = config["ELASTICSEARCH"]["CA_CERTS"]
+
+        # Provide CA certs to params (if available)
         return cls(**params)
 
     @classmethod

@@ -99,8 +99,7 @@ class DelimitedDataSource(TabularDataSource):
         with open(filename) as fp:
             reader = csv.reader(fp, delimiter=self.delimiter, quoting=self.quote_style)
             for idx, line in enumerate(reader):
-                if idx == self.header:
-                    next(reader, None)
+                if self.header and idx == self.header:
                     continue
                 yield {
                     field_name: line[idx] for field_name, idx in field_mapping.items()
