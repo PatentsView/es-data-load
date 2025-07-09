@@ -23,24 +23,79 @@ class ElasticsearchWrapper:
     def __init__(
         self,
         hoststring: str,
+        port: str = "9243",
         timeout: int = None,
         username: str = None,
         password: str = None,
+        api_key: str = None,
+        **kwargs,
     ):
         if username is not None:
             self.es = Elasticsearch(
-                hosts=hoststring, basic_auth=(username, password), timeout=timeout
+                hosts=hoststring,
+                basic_auth=(username, password),
+                request_timeout=timeout,
+                **kwargs,
             )
             logger.debug("Connecting with credentials")
+        elif api_key is not None:
+            self.es = Elasticsearch(
+                hosts=f"{hoststring}:{port}",
+                api_key=api_key,
+                request_timeout=timeout,
+                **kwargs,
+            )
+            logger.debug("Connecting with API key")
         else:
             logger.debug("Connecting without credentials")
-            self.es = Elasticsearch(hosts=hoststring, timeout=timeout)
+            self.es = Elasticsearch(hosts=hoststring, request_timeout=timeout, **kwargs)
         logger.info(self.es.info())
 
     @classmethod
     def from_config(cls, config: configparser.ConfigParser) -> "ElasticsearchWrapper":
         """
-        Build ElasticsearchWrapper object from config(ini)file
+        Build ElasticsearchWrapper object from config.ini file using username/password
+
+        Args:
+            config: config object loaded from configparser
+
+        Returns:
+            ElasticsearchWrapper object
+        """
+        params = {
+            "hoststring": config["ELASTICSEARCH"]["HOST"],
+            "port": config["ELASTICSEARCH"].get("PORT", "9243"),
+            "timeout": int(config["ELASTICSEARCH"].get("TIMEOUT", "120")),
+        }
+
+        # Provide authentication to params
+        if "USER" in config["ELASTICSEARCH"] and config["ELASTICSEARCH"]["USER"] > "":
+            params["username"] = config["ELASTICSEARCH"]["USER"]
+            params["password"] = config["ELASTICSEARCH"].get("PASSWORD", None)
+        elif (
+            "API_KEY" in config["ELASTICSEARCH"]
+            and config["ELASTICSEARCH"]["API_KEY"] > ""
+        ):
+            params["api_key"] = config["ELASTICSEARCH"]["API_KEY"]
+        else:
+            logger.warning(
+                "No username/password or api_key found in config. Using anonymous connection."
+            )
+
+        # Provide ca certificate to params
+        if (
+            "CA_CERTS" in config["ELASTICSEARCH"]
+            and config["ELASTICSEARCH"]["CA_CERTS"] > ""
+        ):
+            params["ca_certs"] = config["ELASTICSEARCH"]["CA_CERTS"]
+
+        # Provide CA certs to params (if available)
+        return cls(**params)
+
+    @classmethod
+    def with_api_key(cls, config: configparser.ConfigParser) -> "ElasticsearchWrapper":
+        """
+        Build ElasticsearchWrapper object from config.ini file using an API key
 
         Args:
             config: config object loaded from configparser
@@ -50,9 +105,8 @@ class ElasticsearchWrapper:
         """
         return cls(
             hoststring=config["ELASTICSEARCH"]["HOST"],
-            timeout=int(config["ELASTICSEARCH"].get("TIMEOUT", "120")),
-            username=config["ELASTICSEARCH"].get("USER", None),
-            password=config["ELASTICSEARCH"].get("PASSWORD", None),
+            api_key=config["ELASTICSEARCH"]["API_KEY"],
+            port=config["ELASTICSEARCH"].get("PORT", "9243"),
         )
 
     @classmethod
@@ -109,6 +163,6 @@ class ElasticsearchWrapper:
         if test == 1:
             yield []
         else:
-            if len(action_data_pairs)>1:
+            if len(action_data_pairs) > 1:
                 r = self.es.bulk(operations=action_data_pairs, refresh=True)
                 yield r

@@ -1,15 +1,16 @@
+# from tqdm import tqdm
+import configparser
 import csv
 import logging
 import sys
 from abc import ABC
+from typing import Generator
 
-# from tqdm import tqdm
-import configparser
-from pymysql import Connection, Error as PyMySQLError, connect as pymysql_connect
+from pymysql import Connection
+from pymysql import Error as PyMySQLError
+from pymysql import connect as pymysql_connect
 
 from es_data_load.lib.utilities import csv_lines
-
-from typing import Generator
 
 logger = logging.getLogger("es-data-load")
 
@@ -97,7 +98,9 @@ class DelimitedDataSource(TabularDataSource):
         csv.field_size_limit(sys.maxsize)
         with open(filename) as fp:
             reader = csv.reader(fp, delimiter=self.delimiter, quoting=self.quote_style)
-            for line in reader:
+            if self.header and self.header == 0:
+                next(reader)
+            for idx, line in enumerate(reader):
                 yield {
                     field_name: line[idx] for field_name, idx in field_mapping.items()
                 }
